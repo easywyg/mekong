@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <title>Easywyg Edge</title>
+  <style>
+    textarea { height: 250px; width: 50%; display: none; }
+    div#easywyg-container { width: 50%; min-height: 1em; border: 1px solid red; }
+    div#easywyg-container div { border: 1px solid #000; margin: 2px;  min-height: 1em; }
+    blockquote {
+      border-left: 3px solid #34807E;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<textarea id="easywyg"></textarea>
+<script src="../build/easywyg.js"></script>
+
+<div id="easywyg-container"></div>
+
+<script>
+  window.editor = new Easywyg(document.getElementById('easywyg'));
+  var root = document.getElementById('easywyg-container');
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Подложка
+  var substrate = editor.insertEntity('Substrate', root);
+  var p1 = editor.insertEntity('Paragraph', substrate, { text: 'Once upon a time in America' });
+
+  setTimeout(function() {
+    editor.operation('Update', p1, {
+      tag: 'blockquote',
+      text: 'Russia is Scary!',
+      attrs: {
+        class: 'one', // Только 1 класс
+      },
+      markup: [
+        ['strong', 5, 9, { }],
+        ['strong', 1, 2, { }],
+        ['em', 5, 9, { }]
+      ]
+    })
+  }, 3000)
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Грид с колонками
+  var grid = editor.insertEntity('Grid', root);
+  var columnLeft = editor.insertEntity('Container', grid.appendedNode);
+  var columnRight = editor.insertEntity('Container', grid.appendedNode);
+
+  // Параграф в колонке
+  var p2 = editor.insertEntity('Paragraph', columnRight, { text: 'Once upon a time in America' });
+
+  setTimeout(function() {
+    editor.operation('Update', p2, { text: 'Fuck off nigga!' })
+  }, 4000)
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Картинка
+  var img = editor.insertEntity('Image', root, {
+    caption: 'This is a caption',
+    attrs: {
+      figure: {
+
+      },
+      img: {
+        src: 'http://i.telegraph.co.uk/multimedia/archive/02372/bird-of-prey_2372049b.jpg'
+      },
+      a: {
+        href: 'http://e1.ru'
+      }
+    }
+  });
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Перемещаем картинку в колонку
+  setTimeout(function() {
+    editor.operation('Move', img, columnLeft);
+
+    // и удаляем картинку
+    setTimeout(function() {
+      //editor.operation('Delete', img);
+    }, 1000);
+  }, 1000);
+
+/*
+  // 1. Вставить параграф
+  var p = (new Easywyg.Entity.Paragraph).update({
+    tag: 'p',
+    text: 'Once upon a time in America',
+    attrs: {
+      class: 'one', // Только 1 класс
+    },
+    markup: [
+      ['strong', 5, 9, { attrs }],
+      ['strong', 1, 2, { attrs }],
+      ['em', 5, 9, { attrs }]
+    ]
+  });
+*/
+
+/*
+  // 2. После него вставить картинку
+  var img = new Easywyg.Entity.Image({
+    text: 'Black bird',
+    attrs: {
+      src: 'http://i1.mirror.co.uk/incoming/article7194926.ece/ALTERNATES/s615b/What-type-of-bird-is-this.jpg',
+      href: 'http://e1.ru',
+      class: 'some',
+      width: 445,
+      height: 297
+    }
+  });
+
+  // Команда. Вставить новую сущность.
+  // 2 аргумент - индекс позициию.
+  var pIndex = editor.execute(pOperation);
+  var imgOperation = new Easywyg.Operation.Insert(img, pIndex);
+
+  // 3. Переименовать первый параграф в blockquote
+  var blockquote = new Easywyg.Entity.Paragraph({ tag: 'blockquote' });
+  new Easywyg.Operation.Replace(p, blockquote);
+
+  // 4. Переместить первый параграф после картинки
+  var imgIndex = editor.execute(imgOperation);
+  new Easywyg.Operation.Move(blockquote, imgIndex);
+*/
+</script>
+</body>
+</html>
