@@ -1,40 +1,14 @@
 'use strict';
 
-// UI
+// Core extensions
+require('./ext.es6');
+
 import EditZone from './ui/edit_zone.es6';
-
-// Entities
 import Entities from './entities.es6';
-import ParagraphEntity from './entities/paragraph.es6';
-import ImageEntity from './entities/image.es6';
-import GridEntity from './entities/grid.es6';
-import ContainerEntity from './entities/container.es6';
-import SubstrateEntity from './entities/substrate.es6';
+import OperationMap from './operation_map.es6';
+import Serialize from './serialize.es6';
 
-// Operations
-import InsertOperation from './operations/insert.es6';
-import UpdateOperation from './operations/update.es6';
-import ReplaceOperation from './operations/replace.es6';
-import MoveOperation from './operations/move.es6';
-import DeleteOperation from './operations/delete.es6';
-
-const ENTITY_MAP = {
-  Paragraph : ParagraphEntity,
-  Image     : ImageEntity,
-  Grid      : GridEntity,
-  Container : ContainerEntity,
-  Substrate : SubstrateEntity
-};
-
-const OPERATION_MAP = {
-  Insert  : InsertOperation,
-  Update  : UpdateOperation,
-  Replace : ReplaceOperation,
-  Move    : MoveOperation,
-  Delete  : DeleteOperation
-};
-
-window.Easywyg = class {
+class Easywyg {
   constructor(el) {
     this.el = el;
     this.editZone = new EditZone();
@@ -47,26 +21,33 @@ window.Easywyg = class {
     this.editZone.render()
   }
 
-  insertEntity(entityName, container, opts = {}) {
-    const entity = (new ENTITY_MAP[entityName](container)).update(opts);
-    this.execute(new OPERATION_MAP['Insert'](entity));
+  on(event) {
 
-    return entity;
   }
 
-  operation(operationName, entity, ...args) {
-    return this.execute(new OPERATION_MAP[operationName](entity, ...args));
+  fire(event, ...args) {
+
   }
 
-  execute(operation) {
-    return operation.execute(this.entities);
+  operate(operationName, ...args) {
+    const operation = new OperationMap[operationName](...args);
+
+    this.fire('operate', operation);
+    const serializer = Serialize(operation);
+    //console.log(serializer.serialize());
+
+    // Откат операции
+    const result = operation.execute(this.entities);
+    operation.reverse(this.entities);
+
+    // ТУДУ: Результатом работы операции можно сделать специальный объект,
+    // который будет включать в себя ссылки на операцию и на результат выполнения операции.
+    return result;
   }
 }
 
-//// Exports
+export default Easywyg;
 
-// Entities
-window.Easywyg.Entity = ENTITY_MAP;
-
-// Operations
-window.Easywyg.Operation = OPERATION_MAP;
+if (window) {
+  window.Easywyg = Easywyg;
+}

@@ -18,6 +18,10 @@ export default class extends Entity {
     this.view = new View();
   }
 
+  get type() {
+    return 'paragraph'
+  }
+
   get text() {
     return this.opts.text
   }

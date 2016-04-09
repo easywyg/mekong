@@ -1669,218 +1669,15 @@ function appendPatch(apply, patch) {
 },{"../vnode/handle-thunk":24,"../vnode/is-thunk":25,"../vnode/is-vnode":27,"../vnode/is-vtext":28,"../vnode/is-widget":29,"../vnode/vpatch":32,"./diff-props":34,"x-is-array":12}],36:[function(require,module,exports){
 'use strict';
 
-// UI
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-// Entities
-
-
-// Operations
-
-
-var _edit_zone = require('./ui/edit_zone.es6');
-
-var _edit_zone2 = _interopRequireDefault(_edit_zone);
-
-var _entities = require('./entities.es6');
-
-var _entities2 = _interopRequireDefault(_entities);
-
-var _paragraph = require('./entities/paragraph.es6');
-
-var _paragraph2 = _interopRequireDefault(_paragraph);
-
-var _image = require('./entities/image.es6');
-
-var _image2 = _interopRequireDefault(_image);
-
-var _grid = require('./entities/grid.es6');
-
-var _grid2 = _interopRequireDefault(_grid);
-
-var _container = require('./entities/container.es6');
-
-var _container2 = _interopRequireDefault(_container);
-
-var _substrate = require('./entities/substrate.es6');
-
-var _substrate2 = _interopRequireDefault(_substrate);
-
-var _insert = require('./operations/insert.es6');
-
-var _insert2 = _interopRequireDefault(_insert);
-
-var _update = require('./operations/update.es6');
-
-var _update2 = _interopRequireDefault(_update);
-
-var _replace = require('./operations/replace.es6');
-
-var _replace2 = _interopRequireDefault(_replace);
-
-var _move = require('./operations/move.es6');
-
-var _move2 = _interopRequireDefault(_move);
-
-var _delete = require('./operations/delete.es6');
-
-var _delete2 = _interopRequireDefault(_delete);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var ENTITY_MAP = {
-  Paragraph: _paragraph2.default,
-  Image: _image2.default,
-  Grid: _grid2.default,
-  Container: _container2.default,
-  Substrate: _substrate2.default
-};
-
-var OPERATION_MAP = {
-  Insert: _insert2.default,
-  Update: _update2.default,
-  Replace: _replace2.default,
-  Move: _move2.default,
-  Delete: _delete2.default
-};
-
-window.Easywyg = function () {
-  function _class(el) {
-    _classCallCheck(this, _class);
-
-    this.el = el;
-    this.editZone = new _edit_zone2.default();
-    this.entities = new _entities2.default();
-
-    this.render();
-  }
-
-  _createClass(_class, [{
-    key: 'render',
-    value: function render() {
-      this.editZone.render();
-    }
-  }, {
-    key: 'insertEntity',
-    value: function insertEntity(entityName, container) {
-      var opts = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-
-      var entity = new ENTITY_MAP[entityName](container).update(opts);
-      this.execute(new OPERATION_MAP['Insert'](entity));
-
-      return entity;
-    }
-  }, {
-    key: 'operation',
-    value: function operation(operationName, entity) {
-      for (var _len = arguments.length, args = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-        args[_key - 2] = arguments[_key];
-      }
-
-      return this.execute(new (Function.prototype.bind.apply(OPERATION_MAP[operationName], [null].concat([entity], args)))());
-    }
-  }, {
-    key: 'execute',
-    value: function execute(operation) {
-      return operation.execute(this.entities);
-    }
-  }]);
-
-  return _class;
-}();
-
-//// Exports
-
-// Entities
-window.Easywyg.Entity = ENTITY_MAP;
-
-// Operations
-window.Easywyg.Operation = OPERATION_MAP;
-
-},{"./entities.es6":37,"./entities/container.es6":38,"./entities/grid.es6":39,"./entities/image.es6":40,"./entities/paragraph.es6":41,"./entities/substrate.es6":42,"./operations/delete.es6":45,"./operations/insert.es6":46,"./operations/move.es6":47,"./operations/replace.es6":48,"./operations/update.es6":49,"./ui/edit_zone.es6":50}],37:[function(require,module,exports){
-"use strict";
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-// An entities collection class
-
-var _class = function () {
-  function _class() {
-    _classCallCheck(this, _class);
-
-    // Массив инстансов классов Entity
-    this.entities = [];
-    this.modified = false;
-  }
-
-  // Добавляем entity в массив entities
-  // Функция должна возвращать индекс вставленного элемента.
-  //add(entity, atIndex = null) {
-
-  _createClass(_class, [{
-    key: "add",
-    value: function add(entity) {
-      this.entities.push(entity);
-      this.modified = true;
-      this.render();
-      return this;
-    }
-  }, {
-    key: "move",
-    value: function move(index) {
-      var container = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-    } // ???
-
-    // Рендерим в html
-    // Тк юзаем virtual-dom, то при изменении состояния он сразу перерендеривает
-    // соответствующий кусок DOM. Нам походу не нужет этот метод ощпе.
-
-  }, {
-    key: "render",
-    value: function render() {
-      //console.log(this.modified)
-      //if (this.modified == false) {
-      //  return this;
-      //}
-
-      this.entities.map(function (entity) {
-        entity.render();
-      });
-      this.modified = false;
-      return this;
-    }
-  }]);
-
-  return _class;
-}();
-
-exports.default = _class;
-
-},{}],38:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _entity = require('../entity.es6');
+var _entity = require('./entity.es6');
 
 var _entity2 = _interopRequireDefault(_entity);
-
-var _container = require('../views/container.es6');
-
-var _container2 = _interopRequireDefault(_container);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1909,15 +1706,13 @@ var _class = function (_Entity) {
       tag: 'div',
       attrs: {}
     };
-
-    _this.view = new _container2.default();
     return _this;
   }
 
   _createClass(_class, [{
     key: 'appendChild',
     value: function appendChild(node) {
-      return this.appendedNode.appendChild(node);
+      return this.node.appendChild(node);
     }
   }, {
     key: 'tag',
@@ -1931,18 +1726,145 @@ var _class = function (_Entity) {
 
 exports.default = _class;
 
-},{"../entity.es6":43,"../views/container.es6":52}],39:[function(require,module,exports){
+},{"./entity.es6":45}],37:[function(require,module,exports){
+'use strict';
+
+// Core extensions
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _edit_zone = require('./ui/edit_zone.es6');
+
+var _edit_zone2 = _interopRequireDefault(_edit_zone);
+
+var _entities = require('./entities.es6');
+
+var _entities2 = _interopRequireDefault(_entities);
+
+var _operation_map = require('./operation_map.es6');
+
+var _operation_map2 = _interopRequireDefault(_operation_map);
+
+var _serialize = require('./serialize.es6');
+
+var _serialize2 = _interopRequireDefault(_serialize);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+require('./ext.es6');
+
+var Easywyg = function () {
+  function Easywyg(el) {
+    _classCallCheck(this, Easywyg);
+
+    this.el = el;
+    this.editZone = new _edit_zone2.default();
+    this.entities = new _entities2.default();
+
+    this.render();
+  }
+
+  _createClass(Easywyg, [{
+    key: 'render',
+    value: function render() {
+      this.editZone.render();
+    }
+  }, {
+    key: 'on',
+    value: function on(event) {}
+  }, {
+    key: 'fire',
+    value: function fire(event) {}
+  }, {
+    key: 'operate',
+    value: function operate(operationName) {
+      for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        args[_key - 1] = arguments[_key];
+      }
+
+      var operation = new (Function.prototype.bind.apply(_operation_map2.default[operationName], [null].concat(args)))();
+
+      this.fire('operate', operation);
+      var serializer = (0, _serialize2.default)(operation);
+      //console.log(serializer.serialize());
+
+      // Откат операции
+      var result = operation.execute(this.entities);
+      operation.reverse(this.entities);
+
+      // ТУДУ: Результатом работы операции можно сделать специальный объект,
+      // который будет включать в себя ссылки на операцию и на результат выполнения операции.
+      return result;
+    }
+  }]);
+
+  return Easywyg;
+}();
+
+exports.default = Easywyg;
+
+
+if (window) {
+  window.Easywyg = Easywyg;
+}
+
+},{"./entities.es6":38,"./ext.es6":47,"./operation_map.es6":49,"./serialize.es6":58,"./ui/edit_zone.es6":69}],38:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+// An entities collection class
+
+var _class = function () {
+  function _class() {
+    _classCallCheck(this, _class);
+
+    // Массив инстансов классов Entity
+    this.entities = [];
+  }
+
+  // Рендерим в html
+  // Тк юзаем virtual-dom, то при изменении состояния он сразу перерендеривает
+  // соответствующий кусок DOM. Нам походу не нужет этот метод ощпе.
+
+
+  _createClass(_class, [{
+    key: "render",
+    value: function render() {
+      this.entities.map(function (entity) {
+        entity.render();
+      });
+      return this;
+    }
+  }]);
+
+  return _class;
+}();
+
+exports.default = _class;
+
+},{}],39:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _entity = require('../entity.es6');
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _entity2 = _interopRequireDefault(_entity);
-
-var _container = require('./container.es6');
+var _container = require('../container.es6');
 
 var _container2 = _interopRequireDefault(_container);
 
@@ -1956,12 +1878,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } //import Entity from '../entity.es6';
+
 
 // A Grid Entity
 
-var _class = function (_Entity) {
-  _inherits(_class, _Entity);
+var _class = function (_ContainerEntity) {
+  _inherits(_class, _ContainerEntity);
 
   function _class() {
     var container = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
@@ -1976,34 +1899,84 @@ var _class = function (_Entity) {
       }
     };
 
-    // Определение контейнеров Entity.
-    // Entity может содержать внутри себя один или несколько контейнеров.
-    // В этих контейнерах могут находиться другие entities.
-    //columns: []
-    //  { attrs: { class: 'easywyg-grid-column' }, entities: [] }, // Первый контейнер
-    //  { attrs: { class: 'easywyg-grid-column' }, entities: [] }  // Второй контейнер
-    //]
     _this.view = new _grid2.default();
     return _this;
   }
 
-  // Добавляет контейнер колонки
-  /*addColumn() {
-    const column = new ContainerEntity();
-    this.containers.push(column);
-     return column;
-  }
-   // Возвращает контейнер колонки
-  getColumn(index = 0) {
-   }*/
-
+  _createClass(_class, [{
+    key: 'type',
+    get: function get() {
+      return 'grid';
+    }
+  }]);
 
   return _class;
-}(_entity2.default);
+}(_container2.default);
 
 exports.default = _class;
 
-},{"../entity.es6":43,"../views/grid.es6":53,"./container.es6":38}],40:[function(require,module,exports){
+},{"../container.es6":36,"../views/grid.es6":71}],40:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _container = require('../container.es6');
+
+var _container2 = _interopRequireDefault(_container);
+
+var _grid_column = require('../views/grid_column.es6');
+
+var _grid_column2 = _interopRequireDefault(_grid_column);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// A Grid Column Entity
+// This is an container entity.
+
+var _class = function (_ContainerEntity) {
+  _inherits(_class, _ContainerEntity);
+
+  function _class() {
+    var container = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+
+    _classCallCheck(this, _class);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, container));
+
+    _this.view = new _grid_column2.default();
+
+    _this.opts = {
+      tag: 'div',
+      attrs: {
+        class: 'easywyg-grid-column'
+      }
+    };
+    return _this;
+  }
+
+  _createClass(_class, [{
+    key: 'type',
+    get: function get() {
+      return 'grid_column';
+    }
+  }]);
+
+  return _class;
+}(_container2.default);
+
+exports.default = _class;
+
+},{"../container.es6":36,"../views/grid_column.es6":72}],41:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2058,6 +2031,11 @@ var _class = function (_Entity) {
   }
 
   _createClass(_class, [{
+    key: 'type',
+    get: function get() {
+      return 'image';
+    }
+  }, {
     key: 'caption',
     get: function get() {
       return this.opts.caption;
@@ -2074,7 +2052,7 @@ var _class = function (_Entity) {
 
 exports.default = _class;
 
-},{"../entity.es6":43,"../views/image.es6":54}],41:[function(require,module,exports){
+},{"../entity.es6":45,"../views/image.es6":73}],42:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2125,6 +2103,11 @@ var _class = function (_Entity) {
   }
 
   _createClass(_class, [{
+    key: 'type',
+    get: function get() {
+      return 'paragraph';
+    }
+  }, {
     key: 'text',
     get: function get() {
       return this.opts.text;
@@ -2146,16 +2129,76 @@ var _class = function (_Entity) {
 
 exports.default = _class;
 
-},{"../entity.es6":43,"../views/paragraph.es6":55}],42:[function(require,module,exports){
+},{"../entity.es6":45,"../views/paragraph.es6":74}],43:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _container = require('./container.es6');
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _container = require('../container.es6');
 
 var _container2 = _interopRequireDefault(_container);
+
+var _root_container = require('../views/root_container.es6');
+
+var _root_container2 = _interopRequireDefault(_root_container);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// A Root Container Entity
+
+var _class = function (_ContainerEntity) {
+  _inherits(_class, _ContainerEntity);
+
+  function _class() {
+    var container = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+
+    _classCallCheck(this, _class);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, container));
+
+    _this.view = new _root_container2.default();
+    _this.opts = {};
+    return _this;
+  }
+
+  _createClass(_class, [{
+    key: 'type',
+    get: function get() {
+      return 'root_container';
+    }
+  }]);
+
+  return _class;
+}(_container2.default);
+
+exports.default = _class;
+
+},{"../container.es6":36,"../views/root_container.es6":75}],44:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _container = require('../container.es6');
+
+var _container2 = _interopRequireDefault(_container);
+
+var _substrate = require('../views/substrate.es6');
+
+var _substrate2 = _interopRequireDefault(_substrate);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2178,6 +2221,8 @@ var _class = function (_ContainerEntity) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, container));
 
+    _this.view = new _substrate2.default();
+
     _this.opts = {
       tag: 'div',
       attrs: {
@@ -2187,12 +2232,19 @@ var _class = function (_ContainerEntity) {
     return _this;
   }
 
+  _createClass(_class, [{
+    key: 'type',
+    get: function get() {
+      return 'substrate';
+    }
+  }]);
+
   return _class;
 }(_container2.default);
 
 exports.default = _class;
 
-},{"./container.es6":38}],43:[function(require,module,exports){
+},{"../container.es6":36,"../views/substrate.es6":76}],45:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2203,8 +2255,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-//import Container from './container.es6';
-
 // Entity abstract class
 // Note: this class cannot be instantiated directly
 
@@ -2214,9 +2264,14 @@ var _class = function () {
 
     _classCallCheck(this, _class);
 
-    this.container = container; // || new Container(document.body);
-    this.appendedNode = null;
+    this.container = container;
+    this.node = null;
     this.modified = false;
+    this.deleted = false;
+    this.index = null;
+    this.mutable = true;
+    this.id = this.identity();
+
     this.opts = {
       attrs: {}
     };
@@ -2227,13 +2282,13 @@ var _class = function () {
 
   _createClass(_class, [{
     key: "sync",
-    value: function sync(appendedNode) {
-      if (appendedNode) {
-        this.appendedNode = appendedNode;
-        this.appendedNode.easywygEntity = this;
+    value: function sync(node) {
+      if (node) {
+        this.node = node;
+        this.node.easywygEntity = this;
       } else {
-        delete this.appendedNode.easywygEntity;
-        delete this.appendedNode;
+        delete this.node.easywygEntity;
+        delete this.node;
       }
 
       this.modified = false;
@@ -2241,44 +2296,13 @@ var _class = function () {
   }, {
     key: "isSynced",
     value: function isSynced() {
-      return this.appendedNode != null;
+      return this.node != null;
     }
   }, {
-    key: "update",
-    value: function update(opts) {
-      this.opts = this.merge(this.opts, opts);
-      this.modified = true;
-
-      return this;
+    key: "identity",
+    value: function identity() {
+      return Math.random().toString(36).slice(2);
     }
-
-    // Переместить в указанный контейнер (переместит в конец).
-    // NOTE: Похоже что сам entity не должен уметь перемещать или удалять себя.
-    // Эти методы должны быть внутри соотв. команд, ибо только команда должна что-то делать подобное.
-
-  }, {
-    key: "transfer",
-    value: function transfer(container) {
-      this.container = container;
-      this.view.transfer(this, container);
-      return this;
-    }
-  }, {
-    key: "delete",
-    value: function _delete() {
-      // ???
-      this.view.delete(this);
-      return this;
-    }
-  }, {
-    key: "replace",
-    value: function replace() {
-      this.view.replace(this);
-      return this;
-    }
-  }, {
-    key: "select",
-    value: function select() {}
 
     // Entity должно уметь рендерить себя
     // Этот метод должен вызывать метод render() у соответствующего View
@@ -2295,18 +2319,17 @@ var _class = function () {
       }
     }
   }, {
-    key: "merge",
-    value: function merge(dest, source) {
-      for (var prop in source) {
-        dest[prop] = source[prop];
-      }
-
-      return dest;
-    }
-  }, {
     key: "attrs",
     get: function get() {
       return this.opts.attrs;
+    }
+
+    // Тип сущности
+
+  }, {
+    key: "type",
+    get: function get() {
+      return null;
     }
   }]);
 
@@ -2315,8 +2338,88 @@ var _class = function () {
 
 exports.default = _class;
 
-},{}],44:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _paragraph = require('./entities/paragraph.es6');
+
+var _paragraph2 = _interopRequireDefault(_paragraph);
+
+var _image = require('./entities/image.es6');
+
+var _image2 = _interopRequireDefault(_image);
+
+var _grid = require('./entities/grid.es6');
+
+var _grid2 = _interopRequireDefault(_grid);
+
+var _grid_column = require('./entities/grid_column.es6');
+
+var _grid_column2 = _interopRequireDefault(_grid_column);
+
+var _substrate = require('./entities/substrate.es6');
+
+var _substrate2 = _interopRequireDefault(_substrate);
+
+var _root_container = require('./entities/root_container.es6');
+
+var _root_container2 = _interopRequireDefault(_root_container);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+  Paragraph: _paragraph2.default,
+  Image: _image2.default,
+  Grid: _grid2.default,
+  Substrate: _substrate2.default,
+  RootContainer: _root_container2.default,
+  GridColumn: _grid_column2.default
+};
+
+},{"./entities/grid.es6":39,"./entities/grid_column.es6":40,"./entities/image.es6":41,"./entities/paragraph.es6":42,"./entities/root_container.es6":43,"./entities/substrate.es6":44}],47:[function(require,module,exports){
 "use strict";
+
+Element.prototype.appendBefore = function (element) {
+  return element.parentNode.insertBefore(this, element);
+}, false;
+
+Element.prototype.appendAfter = function (element) {
+  return element.parentNode.insertBefore(this, element.nextSibling);
+}, false;
+
+Object.defineProperty(Object.prototype, "merge", {
+  enumerable: false,
+  value: function value(from) {
+    var props = Object.getOwnPropertyNames(from);
+    var dest = this;
+
+    props.forEach(function (name) {
+      if (name in dest) {
+        var destination = Object.getOwnPropertyDescriptor(from, name);
+        Object.defineProperty(dest, name, destination);
+      }
+    });
+    return this;
+  }
+});
+
+Object.defineProperty(Object.prototype, "clone", {
+  enumerable: false,
+  value: function value() {
+    return this.merge({});
+  }
+});
+
+String.prototype.capitalize = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+};
+
+},{}],48:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -2332,13 +2435,32 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var _class = function () {
   function _class() {
     _classCallCheck(this, _class);
+
+    // Операция может откатываться?
+    this.reversible = true;
   }
 
-  _createClass(_class, [{
-    key: "execute",
+  // Выполняет команду. Этим меняет массив Entities
 
-    // Выполняет команду. Этим меняет массив Entities
-    value: function execute() {}
+
+  _createClass(_class, [{
+    key: 'execute',
+    value: function execute() {
+      throw new Error('Should be implemented');
+    }
+
+    // Откат команды. Выполняет действие, противоположное execute.
+
+  }, {
+    key: 'reverse',
+    value: function reverse() {
+      throw new Error('Should be implemented');
+    }
+  }, {
+    key: 'type',
+    get: function get() {
+      throw new Error('Should be implemented');
+    }
   }]);
 
   return _class;
@@ -2346,7 +2468,60 @@ var _class = function () {
 
 exports.default = _class;
 
-},{}],45:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _insert = require('./operations/insert.es6');
+
+var _insert2 = _interopRequireDefault(_insert);
+
+var _update = require('./operations/update.es6');
+
+var _update2 = _interopRequireDefault(_update);
+
+var _replace = require('./operations/replace.es6');
+
+var _replace2 = _interopRequireDefault(_replace);
+
+var _move = require('./operations/move.es6');
+
+var _move2 = _interopRequireDefault(_move);
+
+var _delete = require('./operations/delete.es6');
+
+var _delete2 = _interopRequireDefault(_delete);
+
+var _select = require('./operations/select.es6');
+
+var _select2 = _interopRequireDefault(_select);
+
+var _transfer = require('./operations/transfer.es6');
+
+var _transfer2 = _interopRequireDefault(_transfer);
+
+var _undo = require('./operations/undo.es6');
+
+var _undo2 = _interopRequireDefault(_undo);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Operations
+exports.default = {
+  Insert: _insert2.default,
+  Update: _update2.default,
+  Replace: _replace2.default,
+  Move: _move2.default,
+  Delete: _delete2.default,
+  Select: _select2.default,
+  Transfer: _transfer2.default,
+  Undo: _undo2.default
+};
+
+},{"./operations/delete.es6":50,"./operations/insert.es6":51,"./operations/move.es6":52,"./operations/replace.es6":53,"./operations/select.es6":54,"./operations/transfer.es6":55,"./operations/undo.es6":56,"./operations/update.es6":57}],50:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2358,6 +2533,10 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _operation = require('../operation.es6');
 
 var _operation2 = _interopRequireDefault(_operation);
+
+var _insert = require('../operations/insert.es6');
+
+var _insert2 = _interopRequireDefault(_insert);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2383,9 +2562,45 @@ var _class = function (_Operation) {
 
   _createClass(_class, [{
     key: 'execute',
+
+
+    // Удалить указанный entity
     value: function execute(entities) {
-      this.entity.delete();
-      console.log('exec delete');
+      if (this.reversible) {
+        this.deletedEntity = entity.clone(); // Clone
+      }
+
+      entities.entities.splice(this.entity.index, 1);
+
+      // Обновляем индекс у всех entities
+      entities.entities.map(function (entity, index) {
+        entity.index = index;
+      });
+
+      this.entity.modified = true;
+      this.entity.index = null;
+
+      // Помечена как удаленная. entity.render должен удалить такую помеченную сущность
+      this.entity.deleted = true;
+
+      return entities.render();
+    }
+  }, {
+    key: 'reverse',
+    value: function reverse(entities) {
+      // Если операция помечена как неоткатываемая, выходим
+      if (!this.reversible) {
+        return false;
+      }
+
+      var operation = new _insert2.default(entityName, this.deletedEntity.opts, this.deletedEntity.container);
+
+      return operation.execute(entities);
+    }
+  }, {
+    key: 'type',
+    get: function get() {
+      return 'delete';
     }
   }]);
 
@@ -2394,7 +2609,7 @@ var _class = function (_Operation) {
 
 exports.default = _class;
 
-},{"../operation.es6":44}],46:[function(require,module,exports){
+},{"../operation.es6":48,"../operations/insert.es6":51}],51:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2406,6 +2621,18 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _operation = require('../operation.es6');
 
 var _operation2 = _interopRequireDefault(_operation);
+
+var _transfer = require('../operations/transfer.es6');
+
+var _transfer2 = _interopRequireDefault(_transfer);
+
+var _delete = require('../operations/delete.es6');
+
+var _delete2 = _interopRequireDefault(_delete);
+
+var _entity_map = require('../entity_map.es6');
+
+var _entity_map2 = _interopRequireDefault(_entity_map);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2420,22 +2647,79 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var _class = function (_Operation) {
   _inherits(_class, _Operation);
 
-  //constructor(entity, index = null) {
-  function _class(entity) {
+  function _class(entityName, opts, container) {
     _classCallCheck(this, _class);
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this));
 
-    _this.entity = entity;
-    //this.index = index;
+    _this.entityName = entityName;
+    _this.opts = opts;
+    _this.container = container;
+
+    // Созданный entity
+    _this.insertedEntity = null;
+
+    // При инициализации операции нужно назначать ей ID
     return _this;
   }
 
   _createClass(_class, [{
     key: 'execute',
     value: function execute(entities) {
-      //return entities.add(this.entity, this.index);
-      return entities.add(this.entity);
+      var klass = _entity_map2.default[this.entityName];
+      var entity = void 0;
+
+      try {
+        entity = new klass();
+      } catch (e) {
+        if (e.name == 'TypeError') {
+          throw new Error('Incorrect entity name ' + this.entityName + '!');
+        }
+      }
+
+      var length = entities.entities.push(entity);
+
+      entity.opts.merge(this.opts);
+      entity.index = length;
+      entity.modified = true;
+      entities.render();
+
+      // Вставка в контейнер
+      var transfer = new _transfer2.default(entity, this.container);
+      transfer.execute(entities);
+
+      // Записываем данные для отката операции
+      if (this.reversible) {
+        this.insertedEntity = entity; // Clone
+      }
+
+      return entity;
+    }
+
+    // Чтобы выполнить противоположное действие, команда должна
+    // знать, что было сделано.
+    // Здесь есть фишка. Выполняемая команда в методе reverse не должна
+    // записывать данные внутри себя для отката команды, иначе будет бесконечный цикл.
+    // Нужен какой-то флаг, который пометит вновь созданную операцию как неоткатываемую.
+
+  }, {
+    key: 'reverse',
+    value: function reverse(entities) {
+      // Если операция помечена как неоткатываемая, выходим
+      if (!this.reversible) {
+        return false;
+      }
+
+      var operation = new _delete2.default(this.insertedEntity);
+
+      // Данные для отката операции нужно запоминать во время вополнения метода execute.
+      operation.reversible = false;
+      return operation.execute(entities);
+    }
+  }, {
+    key: 'type',
+    get: function get() {
+      return 'insert';
     }
   }]);
 
@@ -2444,7 +2728,7 @@ var _class = function (_Operation) {
 
 exports.default = _class;
 
-},{"../operation.es6":44}],47:[function(require,module,exports){
+},{"../entity_map.es6":46,"../operation.es6":48,"../operations/delete.es6":50,"../operations/transfer.es6":55}],52:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2470,22 +2754,50 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var _class = function (_Operation) {
   _inherits(_class, _Operation);
 
-  function _class(entity, container) {
+  function _class(entity) {
+    var anotherEntity = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+    var pos = arguments.length <= 2 || arguments[2] === undefined ? 'after' : arguments[2];
+
     _classCallCheck(this, _class);
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this));
 
     _this.entity = entity;
-    _this.container = container;
+    _this.anotherEntity = anotherEntity;
     return _this;
   }
 
   _createClass(_class, [{
     key: 'execute',
+
+
+    // Переместить entity после anotherEntity.
+    // Если anotherEntity не указан (null), то entity будет перемещен
+    // в самое начало списка entities.
     value: function execute(entities) {
-      this.entity.transfer(this.container);
-      console.log('exec move');
-      //return entities.add(this.entity);
+      if (this.anotherEntity == null) {
+        entities.entities.splice(0, 0, this.entity);
+      } else {
+        entities.entities.splice(this.anotherEntity.index, 0, this.entity);
+      }
+
+      // Переносим ноду
+      this.entity.node.appendAfter(this.anotherEntity.node);
+
+      // Обновляем индекс у всех entities
+      entities.entities.map(function (entity, index) {
+        entity.index = index;
+      });
+
+      this.entity.modified = true;
+
+      // Нужно ли пеперендеривать?
+      return entities.render();
+    }
+  }, {
+    key: 'type',
+    get: function get() {
+      return 'move';
     }
   }]);
 
@@ -2494,7 +2806,7 @@ var _class = function (_Operation) {
 
 exports.default = _class;
 
-},{"../operation.es6":44}],48:[function(require,module,exports){
+},{"../operation.es6":48}],53:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2520,16 +2832,35 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var _class = function (_Operation) {
   _inherits(_class, _Operation);
 
-  function _class() {
+  function _class(entity, anotherEntity) {
     _classCallCheck(this, _class);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this));
+
+    _this.entity = entity;
+    _this.anotherEntity = anotherEntity;
+    return _this;
   }
 
   _createClass(_class, [{
     key: 'execute',
-    value: function execute() {
-      // ...
+
+
+    // Заменить указанный entity на anotherEntity.
+    // В данном случае, anotherEntity не должен быть вставлен в DOM.
+    value: function execute(entities) {
+      entities.entities[this.entity.index] = this.anotherEntity;
+      this.anotherEntity.modified = true;
+      this.anotherEntity.index = this.entity.index;
+
+      //this.el.parentNode.replaceChild(otherEntity.view.el, this.el);
+
+      return entities.render();
+    }
+  }, {
+    key: 'type',
+    get: function get() {
+      return 'replace';
     }
   }]);
 
@@ -2538,7 +2869,155 @@ var _class = function (_Operation) {
 
 exports.default = _class;
 
-},{"../operation.es6":44}],49:[function(require,module,exports){
+},{"../operation.es6":48}],54:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _operation = require('../operation.es6');
+
+var _operation2 = _interopRequireDefault(_operation);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// A Select Operation
+
+var _class = function (_Operation) {
+  _inherits(_class, _Operation);
+
+  function _class() {
+    _classCallCheck(this, _class);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this));
+  }
+
+  _createClass(_class, [{
+    key: 'type',
+    get: function get() {
+      return 'select';
+    }
+  }]);
+
+  return _class;
+}(_operation2.default);
+
+exports.default = _class;
+
+},{"../operation.es6":48}],55:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _operation = require('../operation.es6');
+
+var _operation2 = _interopRequireDefault(_operation);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// A Transfer Operation
+
+var _class = function (_Operation) {
+  _inherits(_class, _Operation);
+
+  function _class(entity, container) {
+    _classCallCheck(this, _class);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this));
+
+    _this.entity = entity;
+    _this.container = container;
+    return _this;
+  }
+
+  _createClass(_class, [{
+    key: 'execute',
+    value: function execute(entities) {
+      if (this.entity.type == 'root_container') {
+        this.entity.sync(this.container);
+      } else {
+        //console.log(this.container, this.entity)
+        this.entity.sync(this.container.appendChild(this.entity.view.el));
+      }
+
+      return entities.render();
+    }
+  }, {
+    key: 'type',
+    get: function get() {
+      return 'transfer';
+    }
+  }]);
+
+  return _class;
+}(_operation2.default);
+
+exports.default = _class;
+
+},{"../operation.es6":48}],56:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _operation = require('../operation.es6');
+
+var _operation2 = _interopRequireDefault(_operation);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// A Undo Operation
+
+var _class = function (_Operation) {
+  _inherits(_class, _Operation);
+
+  function _class() {
+    _classCallCheck(this, _class);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this));
+  }
+
+  _createClass(_class, [{
+    key: 'type',
+    get: function get() {
+      return 'undo';
+    }
+  }]);
+
+  return _class;
+}(_operation2.default);
+
+exports.default = _class;
+
+},{"../operation.es6":48}],57:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2576,11 +3055,19 @@ var _class = function (_Operation) {
 
   _createClass(_class, [{
     key: 'execute',
-    value: function execute(entities) {
-      var result = this.entity.update(this.opts);
-      entities.render();
 
-      return result;
+
+    // Обновить указанный entity
+    value: function execute(entities) {
+      this.entity.opts.merge(this.opts);
+      this.entity.modified = true;
+
+      return entities.render();
+    }
+  }, {
+    key: 'type',
+    get: function get() {
+      return 'update';
     }
   }]);
 
@@ -2589,7 +3076,504 @@ var _class = function (_Operation) {
 
 exports.default = _class;
 
-},{"../operation.es6":44}],50:[function(require,module,exports){
+},{"../operation.es6":48}],58:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _serializer_map = require('./serializer_map.es6');
+
+var _serializer_map2 = _interopRequireDefault(_serializer_map);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Serialize entities to JSON
+// Фабрика. Создает инстанс сериалайзера.
+
+exports.default = function (operation) {
+  var type = operation.type.capitalize();
+  var klass = _serializer_map2.default[type];
+
+  return new klass(operation);
+};
+
+},{"./serializer_map.es6":60}],59:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+// Serializer Abstract class
+
+var _class = function () {
+  function _class(operation) {
+    _classCallCheck(this, _class);
+
+    this.operation = operation;
+  }
+
+  _createClass(_class, [{
+    key: 'serialize',
+    value: function serialize() {
+      throw new Error('Should be implemented');
+    }
+  }]);
+
+  return _class;
+}();
+
+exports.default = _class;
+
+},{}],60:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _insert = require('./serializers/insert.es6');
+
+var _insert2 = _interopRequireDefault(_insert);
+
+var _update = require('./serializers/update.es6');
+
+var _update2 = _interopRequireDefault(_update);
+
+var _replace = require('./serializers/replace.es6');
+
+var _replace2 = _interopRequireDefault(_replace);
+
+var _move = require('./serializers/move.es6');
+
+var _move2 = _interopRequireDefault(_move);
+
+var _delete = require('./serializers/delete.es6');
+
+var _delete2 = _interopRequireDefault(_delete);
+
+var _select = require('./serializers/select.es6');
+
+var _select2 = _interopRequireDefault(_select);
+
+var _transfer = require('./serializers/transfer.es6');
+
+var _transfer2 = _interopRequireDefault(_transfer);
+
+var _undo = require('./serializers/undo.es6');
+
+var _undo2 = _interopRequireDefault(_undo);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Serializers
+exports.default = {
+  Insert: _insert2.default,
+  Update: _update2.default,
+  Replace: _replace2.default,
+  Move: _move2.default,
+  Delete: _delete2.default,
+  Select: _select2.default,
+  Transfer: _transfer2.default,
+  Undo: _undo2.default
+};
+
+},{"./serializers/delete.es6":61,"./serializers/insert.es6":62,"./serializers/move.es6":63,"./serializers/replace.es6":64,"./serializers/select.es6":65,"./serializers/transfer.es6":66,"./serializers/undo.es6":67,"./serializers/update.es6":68}],61:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _serializer = require('../serializer.es6');
+
+var _serializer2 = _interopRequireDefault(_serializer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// Delete Serializer
+
+var _class = function (_Serializer) {
+  _inherits(_class, _Serializer);
+
+  function _class() {
+    _classCallCheck(this, _class);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+  }
+
+  _createClass(_class, [{
+    key: 'serialize',
+
+    // Return JSON
+    value: function serialize() {}
+  }]);
+
+  return _class;
+}(_serializer2.default);
+
+exports.default = _class;
+
+},{"../serializer.es6":59}],62:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _serializer = require('../serializer.es6');
+
+var _serializer2 = _interopRequireDefault(_serializer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// Insert Serializer
+
+var _class = function (_Serializer) {
+  _inherits(_class, _Serializer);
+
+  function _class() {
+    _classCallCheck(this, _class);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+  }
+
+  _createClass(_class, [{
+    key: 'serialize',
+
+    // Return JSON
+    value: function serialize() {
+      var containerId = null;
+
+      if (this.operation.entityName != "RootContainer") {
+        containerId = this.operation.container.id;
+      }
+
+      console.log(this.operation);
+
+      return {
+        type: 'Insert',
+        id: 'zzz',
+        entity: this.operation.entityName,
+        containerId: containerId,
+        opts: this.operation.opts
+      };
+    }
+  }]);
+
+  return _class;
+}(_serializer2.default);
+
+exports.default = _class;
+
+},{"../serializer.es6":59}],63:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _serializer = require('../serializer.es6');
+
+var _serializer2 = _interopRequireDefault(_serializer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// Move Serializer
+
+var _class = function (_Serializer) {
+  _inherits(_class, _Serializer);
+
+  function _class() {
+    _classCallCheck(this, _class);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+  }
+
+  _createClass(_class, [{
+    key: 'serialize',
+
+    // Return JSON
+    value: function serialize() {
+      return {
+        type: 'Move',
+        id: '',
+        entityId: '',
+        afterEntityId: ''
+      };
+    }
+  }]);
+
+  return _class;
+}(_serializer2.default);
+
+exports.default = _class;
+
+},{"../serializer.es6":59}],64:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _serializer = require('../serializer.es6');
+
+var _serializer2 = _interopRequireDefault(_serializer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// Replace Serializer
+
+var _class = function (_Serializer) {
+  _inherits(_class, _Serializer);
+
+  function _class() {
+    _classCallCheck(this, _class);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+  }
+
+  _createClass(_class, [{
+    key: 'serialize',
+
+    // Return JSON
+    value: function serialize() {}
+  }]);
+
+  return _class;
+}(_serializer2.default);
+
+exports.default = _class;
+
+},{"../serializer.es6":59}],65:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _serializer = require('../serializer.es6');
+
+var _serializer2 = _interopRequireDefault(_serializer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// Select Serializer
+
+var _class = function (_Serializer) {
+  _inherits(_class, _Serializer);
+
+  function _class() {
+    _classCallCheck(this, _class);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+  }
+
+  _createClass(_class, [{
+    key: 'serialize',
+
+    // Return JSON
+    value: function serialize() {}
+  }]);
+
+  return _class;
+}(_serializer2.default);
+
+exports.default = _class;
+
+},{"../serializer.es6":59}],66:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _serializer = require('../serializer.es6');
+
+var _serializer2 = _interopRequireDefault(_serializer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// Transfer Serializer
+
+var _class = function (_Serializer) {
+  _inherits(_class, _Serializer);
+
+  function _class() {
+    _classCallCheck(this, _class);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+  }
+
+  _createClass(_class, [{
+    key: 'serialize',
+
+    // Return JSON
+    value: function serialize() {
+      return {
+        type: 'Transfer',
+        id: '',
+        containerId: '',
+        opts: this.operation.opts
+      };
+    }
+  }]);
+
+  return _class;
+}(_serializer2.default);
+
+exports.default = _class;
+
+},{"../serializer.es6":59}],67:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _serializer = require('../serializer.es6');
+
+var _serializer2 = _interopRequireDefault(_serializer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// Undo Serializer
+
+var _class = function (_Serializer) {
+  _inherits(_class, _Serializer);
+
+  function _class() {
+    _classCallCheck(this, _class);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+  }
+
+  _createClass(_class, [{
+    key: 'serialize',
+
+    // Return JSON
+    value: function serialize() {}
+  }]);
+
+  return _class;
+}(_serializer2.default);
+
+exports.default = _class;
+
+},{"../serializer.es6":59}],68:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _serializer = require('../serializer.es6');
+
+var _serializer2 = _interopRequireDefault(_serializer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// Update Serializer
+
+var _class = function (_Serializer) {
+  _inherits(_class, _Serializer);
+
+  function _class() {
+    _classCallCheck(this, _class);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+  }
+
+  _createClass(_class, [{
+    key: 'serialize',
+
+    // Return JSON
+    value: function serialize() {
+      return {
+        type: 'Update',
+        id: '',
+        entityId: '',
+        opts: this.operation.opts
+      };
+    }
+  }]);
+
+  return _class;
+}(_serializer2.default);
+
+exports.default = _class;
+
+},{"../serializer.es6":59}],69:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2619,7 +3603,7 @@ var _class = function () {
 
 exports.default = _class;
 
-},{}],51:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2662,44 +3646,29 @@ var _class = function () {
       return new (Function.prototype.bind.apply(_virtualDom.VText, [null].concat(args)))();
     }
   }, {
-    key: 'transfer',
-    value: function transfer(entity, container) {
-      entity.sync(container.appendChild(this.el));
-      return entity.appendedNode;
-    }
-  }, {
-    key: 'delete',
-    value: function _delete(entity) {
-      entity.sync(undefined);
-      this.el.parentNode.removeChild(this.el);
-    }
-  }, {
-    key: 'replace',
-    value: function replace(entity, otherEntity) {
-      this.el.parentNode.replaceChild(otherEntity.view.el, this.el);
-    }
-  }, {
     key: 'render',
     value: function render(entity) {
+      if (entity.deleted) {
+        entity.sync(undefined);
+        this.el.parentNode.removeChild(this.el);
+        return null;
+      }
+
       // Обновляем вставленную ноду
       if (entity.isSynced()) {
         var newVNode = this.build(entity);
         this.el = (0, _virtualDom.patch)(this.el, (0, _virtualDom.diff)(this.vel, newVNode));
         this.vel = newVNode;
-
-        // Обновляем ссылку на элемент DOM
-        entity.sync(this.el);
       }
       // Вставляем ноду впервые
       // На самом деле тут она просто создается, а втавляется в Entities.
       else {
           this.vel = this.build(entity);
           this.el = (0, _virtualDom.create)(this.vel);
-
-          // Entity рендерит себя сам внутрь контейнера
-          var insertedNode = entity.container.appendChild(this.el);
-          entity.sync(insertedNode);
         }
+
+      // Обновляем ссылку на элемент DOM
+      entity.sync(this.el);
 
       return this.el;
     }
@@ -2710,51 +3679,7 @@ var _class = function () {
 
 exports.default = _class;
 
-},{"virtual-dom":5}],52:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _view = require('../view.es6');
-
-var _view2 = _interopRequireDefault(_view);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-// A Container View
-
-var _class = function (_View) {
-  _inherits(_class, _View);
-
-  function _class() {
-    _classCallCheck(this, _class);
-
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
-  }
-
-  _createClass(_class, [{
-    key: 'build',
-    value: function build(entity) {
-      return this.vnode(entity.tag, { attributes: entity.attrs });
-    }
-  }]);
-
-  return _class;
-}(_view2.default);
-
-exports.default = _class;
-
-},{"../view.es6":51}],53:[function(require,module,exports){
+},{"virtual-dom":5}],71:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2809,7 +3734,51 @@ var _class = function (_View) {
 
 exports.default = _class;
 
-},{"../view.es6":51}],54:[function(require,module,exports){
+},{"../view.es6":70}],72:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _view = require('../view.es6');
+
+var _view2 = _interopRequireDefault(_view);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// A Grid Column View
+
+var _class = function (_View) {
+  _inherits(_class, _View);
+
+  function _class() {
+    _classCallCheck(this, _class);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+  }
+
+  _createClass(_class, [{
+    key: 'build',
+    value: function build(entity) {
+      return this.vnode(entity.tag, { attributes: entity.attrs });
+    }
+  }]);
+
+  return _class;
+}(_view2.default);
+
+exports.default = _class;
+
+},{"../view.es6":70}],73:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2861,7 +3830,7 @@ var _class = function (_View) {
 
 exports.default = _class;
 
-},{"../view.es6":51}],55:[function(require,module,exports){
+},{"../view.es6":70}],74:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2907,7 +3876,96 @@ var _class = function (_View) {
 
 exports.default = _class;
 
-},{"../view.es6":51}]},{},[36])
+},{"../view.es6":70}],75:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _view = require('../view.es6');
+
+var _view2 = _interopRequireDefault(_view);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// A Root Container View
+
+var _class = function (_View) {
+  _inherits(_class, _View);
+
+  function _class() {
+    _classCallCheck(this, _class);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+  }
+
+  _createClass(_class, [{
+    key: 'render',
+    value: function render(entity) {
+      // Nothing to do here
+      return null;
+    }
+  }]);
+
+  return _class;
+}(_view2.default);
+
+exports.default = _class;
+
+},{"../view.es6":70}],76:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _view = require('../view.es6');
+
+var _view2 = _interopRequireDefault(_view);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// A Substrate View
+
+var _class = function (_View) {
+  _inherits(_class, _View);
+
+  function _class() {
+    _classCallCheck(this, _class);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+  }
+
+  _createClass(_class, [{
+    key: 'build',
+    value: function build(entity) {
+      return this.vnode(entity.tag, { attributes: entity.attrs });
+    }
+  }]);
+
+  return _class;
+}(_view2.default);
+
+exports.default = _class;
+
+},{"../view.es6":70}]},{},[37])
 
 
 //# sourceMappingURL=easywyg.js.map

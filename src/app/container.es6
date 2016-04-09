@@ -1,5 +1,4 @@
-import Entity from '../entity.es6';
-import View from '../views/container.es6';
+import Entity from './entity.es6';
 
 // Контейнер. Контейнеру можно задать, какие типы Entity он может содержать.
 // Это нужно для того, чтобы в контейнер колонки грида нельзя было добавить другой
@@ -13,12 +12,10 @@ export default class extends Entity {
       tag    : 'div',
       attrs  : {}
     };
-
-    this.view = new View();
   }
 
   appendChild(node) {
-    return this.appendedNode.appendChild(node);
+    return this.node.appendChild(node);
   }
 
   get tag() {

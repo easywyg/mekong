@@ -9,10 +9,15 @@ export default class extends Operation {
     this.opts = opts;
   }
 
-  execute(entities) {
-    const result = this.entity.update(this.opts);
-    entities.render();
+  get type() {
+    return 'update'
+  }
 
-    return result;
+  // Обновить указанный entity
+  execute(entities) {
+    this.entity.opts.merge(this.opts);
+    this.entity.modified = true;
+
+    return entities.render();
   }
 }

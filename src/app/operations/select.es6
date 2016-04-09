@@ -1,8 +1,12 @@
-import Operation from '../opeartion.es6';
+import Operation from '../operation.es6';
 
 // A Select Operation
 export default class extends Operation {
-  execute() {
-    // ...
+  constructor() {
+    super();
+  }
+
+  get type() {
+    return 'select'
   }
 }

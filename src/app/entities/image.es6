@@ -22,6 +22,10 @@ export default class extends Entity {
     this.view = new View();
   }
 
+  get type() {
+    return 'image'
+  }
+
   get caption() {
     return this.opts.caption
   }

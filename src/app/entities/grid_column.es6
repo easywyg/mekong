@@ -1,8 +1,8 @@
 import ContainerEntity from '../container.es6';
-import View from '../views/substrate.es6';
+import View from '../views/grid_column.es6';
 
-// A Substrate Entity
-// This is an container entity!!!
+// A Grid Column Entity
+// This is an container entity.
 export default class extends ContainerEntity {
   constructor(container = null) {
     super(container);
@@ -12,12 +12,12 @@ export default class extends ContainerEntity {
     this.opts = {
       tag    : 'div',
       attrs  : {
-        class: 'easywyg-substrate'
+        class: 'easywyg-grid-column'
       },
     };
   }
 
   get type() {
-    return 'substrate'
+    return 'grid_column'
   }
 }
