@@ -25,10 +25,10 @@
   var root = document.getElementById('easywyg-container');
 
   // Корневой контейнер
-  var rootContainer = editor.operate('Insert', 'RootContainer', {}, root);
+  var oper1 = editor.operate('Insert', 'RootContainer', {}, root);
 
   // Параграф
-  var paragraph = editor.operate('Insert', 'Paragraph', { text: 'Once upon a time in America' }, rootContainer);
+  var oper2 = editor.operate('Insert', 'Paragraph', { text: 'Once upon a time in America' }, oper1.result);
 
 </script>
 </body>

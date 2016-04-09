@@ -34,15 +34,17 @@ class Easywyg {
 
     this.fire('operate', operation);
     const serializer = Serialize(operation);
-    //console.log(serializer.serialize());
 
     // Откат операции
     const result = operation.execute(this.entities);
-    operation.reverse(this.entities);
 
-    // ТУДУ: Результатом работы операции можно сделать специальный объект,
-    // который будет включать в себя ссылки на операцию и на результат выполнения операции.
-    return result;
+    return { 
+      result: result, 
+      reverse: => {
+        operation.reverse(this.entities)
+      },
+      operation: operation
+    };
   }
 }
 
