@@ -1,0 +1,13 @@
+{
+  "launch_in_dev": ["Chrome"],
+  "framework": "mocha+chai",
+  "on_start": "babel --watch test/app --watch src --out-dir tmp",
+  "on_exit": "rm -rf tmp",
+  "test_page": "test/index.mustache",
+  "src_files": [
+    "tmp/**/*_test.js"
+  ],
+  "watch_files": [
+    "src/**/*.js"
+  ]
+}
