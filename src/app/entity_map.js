@@ -1,5 +1,6 @@
 import ParagraphEntity from './entities/paragraph.js';
 import ImageEntity from './entities/image.js';
+import TableEntity from './entities/table.js';
 import GridEntity from './entities/grid.js';
 import GridColumnEntity from './entities/grid_column.js';
 import SubstrateEntity from './entities/substrate.js';
@@ -11,5 +12,6 @@ export default {
   Grid          : GridEntity,
   Substrate     : SubstrateEntity,
   RootContainer : RootContainerEntity,
-  GridColumn    : GridColumnEntity
+  GridColumn    : GridColumnEntity,
+  Table         : TableEntity
 };

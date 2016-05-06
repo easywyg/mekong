@@ -34,7 +34,7 @@ export default class {
     // На самом деле тут она просто создается, а втавляется в Entities.
     else {
       this.vel = this.build(entity);
-      this.el = create(this.vel);
+      this.el = create(this.vel, { document: document });
     }
 
     // Обновляем ссылку на элемент DOM

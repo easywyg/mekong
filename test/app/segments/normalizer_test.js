@@ -1,19 +1,19 @@
-import PointCalc from '../../src/app/point_calc';
+import Normalizer from '../../../src/app/segments/normalizer';
 
-describe('PointCalc', () => {
-  let calc;
+describe('Normalizer', () => {
+  let normalizer;
 
   describe('#calculate', () => {
     // <strong><span>He<s>llo</s></span></strong> <em><s>wo</s>rld</em>
     it('calculates proper data with markup 1', () => {
-      calc = new PointCalc('Hello world', [
+      normalizer = new Normalizer('Hello world', [
         ['strong', 0, 5],
         ['span', 0, 5],
         ['em', 5, 11],
         ['s', 2, 8]
       ]);
 
-      let result = calc.calculate();
+      let result = normalizer.calculate();
       result.sort((a, b) => {
         if (a[1] > b[1] && a[0] > b[0]) return  1;
         if (a[1] < b[1] && a[0] < b[0]) return -1;
@@ -36,11 +36,11 @@ describe('PointCalc', () => {
     });
 
     it('calculates proper data with markup 2', () => {
-      calc = new PointCalc('jelly', [
+      normalizer = new Normalizer('jelly', [
         ['span', 2, 5]
       ]);
 
-      let result = calc.calculate();
+      let result = normalizer.calculate();
       result.sort((a, b) => {
         if (a[1] > b[1] && a[0] > b[0]) return  1;
         if (a[1] < b[1] && a[0] < b[0]) return -1;
@@ -56,8 +56,8 @@ describe('PointCalc', () => {
     });
 
     it('calculates proper data without markup', () => {
-      calc = new PointCalc('Hello world', []);
-      let result = calc.calculate();
+      normalizer = new Normalizer('Hello world', []);
+      let result = normalizer.calculate();
 
       expect(result).to.deep.equal([
         ['Hello world', 0, 11, { type: 3, attrs: {} }]

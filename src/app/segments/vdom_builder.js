@@ -1,17 +1,17 @@
-import TaggerGroup from './tagger_group';
-import PointCalc from './point_calc';
+import Builder from './builder';
+import Normalizer from './normalizer';
 
 export default class {
-  constructor(text, data) {
-    let calc = new PointCalc(text, data);
-    this.data = calc.calculate();
+  constructor(text, markup) {
+    let calc = new Normalizer(text, markup);
+    this.segments = calc.calculate();
 
     this.sort();
   }
 
   // Сортировка отрезков
   sort() {
-    this.data.sort((a, b) => {
+    this.segments.sort((a, b) => {
       // Сортировка по правому значению
       // Большие правые числа идут первее.
       if (a[1] == b[1] && a[2] < b[2]) return 1;
@@ -26,29 +26,29 @@ export default class {
   }
 
   // Находим группы отрезков.
-  // NOTE: Группы будут созданы, если, например, первый отрезок в this.data будет текстовым.
+  // NOTE: Группы будут созданы, если, например, первый отрезок в this.segments будет текстовым.
   findGroups() {
     // Каждый следующий отрезок должен быть спереди предыдущего и самым длинным
     var line = [0, 0];
     var result = [];
 
-    this.data.forEach((x) => {
-      if (x[1] >= line[0] && x[2] > line[1]) {
-        result.push(line = [x[1], x[2]]);
+    this.segments.forEach((segment) => {
+      if (segment[1] >= line[0] && segment[2] > line[1]) {
+        result.push(line = [segment[1], segment[2]]);
       }
     });
 
     return result;
   }
 
-  // Сформировать группы
+  // Сформировать группы отрезков
   group() {
     let result = [];
 
     this.findGroups().forEach((group) => {
       // Находим отрезки внутри группы
-      result.push(this.data.filter((x) => {
-        return x[1] >= group[0] && x[2] <= group[1]
+      result.push(this.segments.filter((segment) => {
+        return segment[1] >= group[0] && segment[2] <= group[1]
       }));
     });
 
@@ -57,8 +57,8 @@ export default class {
 
   // Создать список объектов virtual-dom
   process() {
-    return this.group().map((x) => {
-      return (new TaggerGroup(x)).generate();
+    return this.group().map((segments) => {
+      return (new Builder(segments)).generate();
     });
   }
 }

@@ -1,4 +1,4 @@
-import {VNode, VText, create} from 'virtual-dom';
+import {VNode, VText} from 'virtual-dom';
 
 // Порядок следования тегов в том случае, если у двух тегов
 // одинаковые позиции начала и конца. Чем меньше индекс в массиве, тем тег первее.
@@ -8,20 +8,15 @@ const TAGS = [
   's', 'span'
 ];
 
-// TaggerVTree
+// Создает иерархию виртуальных нод в группе сегментов
 export default class {
-  constructor(data) {
-    this.data = data;
-    this.data.sort(this.sortNodes);
+  constructor(segments) {
+    this.segments = segments;
+    this.segments.sort(this.sortSegments);
   }
 
-  sortTextNodes(a, b) {
-    if (a[1] < b[1] || a[2] < b[2]) return 1;
-    if (a[1] > b[1] || a[2] > b[2]) return -1;
-    return 0;
-  }
-
-  sortNodes(a, b) {
+  // Сортируем отрезки.
+  sortSegments(a, b) {
     if (a[3].type == 3 || b[3].type == 3) return 0;
 
     if (a[1] == b[1] && a[2] == b[2]) {
@@ -46,19 +41,21 @@ export default class {
     return new VText(...args);
   }
 
+  // Создаём иерархию для группы отрезков.
+  // Возвращает VNode.
   generate() {
     let cur = null;
     let result = null;
     let parents = {};
 
-    this.data.forEach((entry, i) => {
-      let type = entry[3].type;
+    this.segments.forEach((segment, i) => {
+      let type = segment[3].type;
 
       if (type == 1) {
-        let newCur = this.vnode(entry[0], entry[3].attrs, []);
+        let newCur = this.vnode(segment[0], { attributes: segment[3].attrs }, []);
 
         if (cur) {
-          parents[JSON.stringify(entry)] = cur;
+          parents[JSON.stringify(segment)] = cur;
           cur.children.push(newCur);
         }
 
@@ -67,15 +64,15 @@ export default class {
       }
       else if (type == 3) {
         if (cur) {
-          cur.children.push(this.vtext(entry[0]));
+          cur.children.push(this.vtext(segment[0]));
 
           // При выходе из тега, нужно находить родительский vnode
-          var prev = this.data[i - 1];
-          if (entry[1] == prev[1] && entry[2] == prev[2]) {
+          var prev = this.segments[i - 1];
+          if (segment[1] == prev[1] && segment[2] == prev[2]) {
             cur = parents[JSON.stringify(prev)]
           }
         } else {
-          result = this.vtext(entry[0]);
+          result = this.vtext(segment[0]);
         }
       }
     });

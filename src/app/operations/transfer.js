@@ -17,7 +17,7 @@ export default class extends Operation {
     if (this.entity.type == 'root_container') {
       this.entity.sync(this.container);
     } else {
-      //console.log(this.container, this.entity)
+      //console.log(this.container, this.entity.view.el)
       this.entity.sync(this.container.appendChild(this.entity.view.el));
     }
 

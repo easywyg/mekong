@@ -29,7 +29,7 @@ describe('Integration: Paragraph', () => {
 
   it('update html, change tag name and attrs', () => {
     let operation = new UpdateOperation(insertedEntity, {
-      tag: 'blockquote', attrs: { id: 'xxx', className: 'yyy' }
+      tag: 'blockquote', attrs: { id: 'xxx', class: 'yyy' }
     });
 
     operation.execute(entities);
@@ -42,7 +42,7 @@ describe('Integration: Paragraph', () => {
       markup: [
         ['span', 0, 5],
         ['em', 2, 3],
-        ['strong', 0, 5, { id: 'xxx', className: 'yyy' }]
+        ['strong', 0, 5, { id: 'xxx', class: 'yyy' }]
       ]
     });
 

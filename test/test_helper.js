@@ -1,29 +1,30 @@
-var chai = require("chai");
-var jsdom = require("jsdom").jsdom;
-var doc = jsdom("<html><body></body></html>", {});
+import chai from 'chai';
+import {jsdom} from 'jsdom';
+import {create, VNode, VText} from 'virtual-dom';
 
-import {create} from 'virtual-dom';
+const doc   = jsdom("<!doctype html><html><head><meta charset='utf-8'></head><body></body></html>", {});
 
 global.window   = doc.defaultView;
 global.document = doc;
-global.Element  = global.window.Element;
+global.Element  = doc.defaultView.Element;
 global.expect   = chai.expect;
+global.create   = create;
 
 // Helper function
-global.taggerGroupHtml = function(taggerGroup) {
+global.builderHtml = (builder) => {
   let div = document.createElement('div');
-  div.appendChild(create(taggerGroup.generate()))
+  let el = create(builder.generate(), { document: document });
 
+  div.appendChild(el);
   return div.innerHTML;
 }
 
 // Helper function
-global.taggerHtml = function(tagger) {
+global.vdomBuilderHtml = (vdomBuilder) => {
   let div = document.createElement('div');
-  tagger.process().forEach((entry) => {
-    div.appendChild(create(entry));
+  vdomBuilder.process().forEach((entry) => {
+    div.appendChild(create(entry, { document: document }));
   });
 
   return div.innerHTML;
 }
-
