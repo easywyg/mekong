@@ -105,8 +105,9 @@ export default class {
   // Рендерим только тогда, когда modified == true
   render() {
     if (this.modified == true) {
+      let result = this.view.render(this);
       this.modified = false;
-      return this.view.render(this);
+      return result;
     } else {
       return null;
     }

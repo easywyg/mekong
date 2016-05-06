@@ -4,7 +4,27 @@
 export default class {
   constructor(text, markup = []) {
     this.text = text;
-    this.markup = this.cloneMarkup(markup);
+
+    // Нужно ли рассчитывать новые отрезки?
+    this.shouldCalcNewSegments = true;
+
+    if (markup.length == 0) {
+      this.markup = this.buildMarkup();
+      this.shouldCalcNewSegments = false;
+    } else {
+      this.markup = this.cloneMarkup(markup);
+
+      // Рассчитывает отрезки, занимаемые текстовыми нодами
+      this.markup = this.markup.concat(this.calcTextNodeSegments());
+    }
+  }
+
+  // Создаем разметку из переданного текста в том случае,
+  // если переданный список разметки пуст.
+  buildMarkup() {
+    return [
+      [this.text, 0, this.text.length, { type: 3, attrs: {} }]
+    ];
   }
 
   // Клонируем разметку
@@ -12,7 +32,13 @@ export default class {
     let result = [];
     markup.forEach((x) => {
       // x[3] - это метаданные отрезка
-      result.push([ x[0], x[1], x[2], (x[3] || {}) ])
+      let meta = { type: null, attrs: {} }
+
+      if (typeof x[3] != 'undefined') {
+        meta.attrs = x[3];
+      }
+
+      result.push([ x[0], x[1], x[2], meta ])
     });
 
     return result;
@@ -20,7 +46,7 @@ export default class {
 
   // Получить граничные точки текстовых нод.
   getPoints() {
-    let result = [];
+    let result = [0]; // Всегда добавляем ноль
     this.markup.forEach((x) => {
       result.push(x[1]);
       result.push(x[2]);
@@ -37,6 +63,8 @@ export default class {
     var segments = [];
     var points = this.getPoints();
     var len = 0;
+
+    //console.log(points, 'X')
 
     for (var i = 0; i < points.length; i++) {
       var point = points[i];
@@ -57,44 +85,45 @@ export default class {
 
   // Рассчитать новые отрезки
   calculate() {
-    // Рассчитывает отрезки, занимаемые текстовыми нодами
-    this.markup = this.markup.concat(this.calcTextNodeSegments());
+    if (!this.shouldCalcNewSegments) {
+      return this.markup;
+    } else {
+      let result = [];
+      let del = []
 
-    let result = [];
-    let del = []
+      this.markup.forEach((a) => {
+        this.markup.forEach((b) => {
+          if (a == b) { return }
 
-    this.markup.forEach((a) => {
-      this.markup.forEach((b) => {
-        if (a == b) { return }
+          let exists = result.some((x) => {
+            return x[0] == a[0] && x[1] == a[1] && x[2] == a[2]
+          });
 
-        let exists = result.some((x) => {
+          if (b.whitespace === true && b[1] >= a[1] && b[2] <= a[2]) {
+            var t1 = Math.min(a[1], b[1]);
+            var t2 = Math.min(a[2], b[2]);
+            var t3 = Math.max(a[1], b[1]);
+            var t4 = Math.max(a[2], b[2]);
+
+            if (t1 != t3) { result.push([a[0], t1, t3, a[3]]) }
+            if (t2 != t4) { result.push([a[0], t2, t4, a[3]]) }
+            del.push(a);
+          } else {
+            if (exists) { return }
+
+            a[3].type = a[3].type || 1;
+            a[3].attrs = a[3].attrs || {};
+
+            result.push(a);
+          }
+        })
+      });
+
+      return result.filter((a) => {
+        return !del.some((x) => {
           return x[0] == a[0] && x[1] == a[1] && x[2] == a[2]
         });
-
-        if (b.whitespace === true && b[1] >= a[1] && b[2] <= a[2]) {
-          var t1 = Math.min(a[1], b[1]);
-          var t2 = Math.min(a[2], b[2]);
-          var t3 = Math.max(a[1], b[1]);
-          var t4 = Math.max(a[2], b[2]);
-
-          if (t1 != t3) { result.push([a[0], t1, t3, a[3]]) }
-          if (t2 != t4) { result.push([a[0], t2, t4, a[3]]) }
-          del.push(a);
-        } else {
-          if (exists) { return }
-
-          a[3].type = a[3].type || 1;
-          a[3].attrs = a[3].attrs || {};
-
-          result.push(a);
-        }
-      })
-    });
-
-    return result.filter((a) => {
-      return !del.some((x) => {
-        return x[0] == a[0] && x[1] == a[1] && x[2] == a[2]
       });
-    });
+    }
   }
 }

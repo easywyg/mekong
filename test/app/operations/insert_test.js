@@ -4,6 +4,8 @@ import Entities from '../../../src/app/entities';
 describe('InsertOperation', () => {
   let entities;
 
+  after(function() { document.body.innerHTML = '' });
+
   beforeEach(function() {
     let container = document.body;
     let operation = new InsertOperation('Paragraph', { text: 'hello' }, container);

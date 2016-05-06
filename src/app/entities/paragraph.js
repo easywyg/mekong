@@ -12,7 +12,7 @@ export default class extends Entity {
       tag    : 'p',
       text   : '',
       attrs  : {},
-      markup : {}
+      markup : []
     };
 
     this.view = new View();
@@ -32,5 +32,9 @@ export default class extends Entity {
 
   get tag() {
     return this.opts.tag
+  }
+
+  set tag(tagName) {
+    return this.opts.tag = tagName
   }
 }

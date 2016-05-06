@@ -1,23 +1,42 @@
-import Operation from '../operation.js';
+import EmbedUpdate from './update/embed.js';
+import FileUpdate from './update/file.js';
+import GridUpdate from './update/grid.js';
+import GridColumnUpdate from './update/grid_column.js';
+import ImageUpdate from './update/image.js';
+import ListUpdate from './update/list.js';
+import ParagraphUpdate from './update/paragraph.js';
+import RootContainerUpdate from './update/root_container.js';
+import SubstrateUpdate from './update/substrate.js';
+import TableUpdate from './update/table.js';
 
-// A Update Operation
-export default class extends Operation {
+// Entity-to-operation mapping
+const MAP = {
+  embed: EmbedUpdate,
+  file: FileUpdate,
+  grid: GridUpdate,
+  grid_column: GridColumnUpdate,
+  image: ImageUpdate,
+  list: ListUpdate,
+  paragraph: ParagraphUpdate,
+  root_container: RootContainerUpdate,
+  substrate: SubstrateUpdate,
+  table: TableUpdate
+}
+
+// Класс-фабрика-прокси для операций Update
+export default class {
+  // Принимает инстанс сущности и опции
   constructor(entity, opts) {
-    super();
+    const klass = MAP[entity.type];
 
-    this.entity = entity;
-    this.opts = opts;
+    if (typeof klass == 'undefined') {
+      throw new Error("Cannot find concrete operation class!");
+    }
+
+    this.operation = new klass(entity, opts);
   }
 
-  get type() {
-    return 'update'
-  }
-
-  // Обновить указанный entity
   execute(entities) {
-    Object.assign(this.entity.opts, this.opts);
-    this.entity.modified = true;
-
-    return entities.render();
+    return this.operation.execute(entities);
   }
 }

@@ -1,87 +1,83 @@
-import UpdateOperation from '../../../src/app/operations/update';
-import InsertOperation from '../../../src/app/operations/insert';
-import Entities from '../../../src/app/entities';
+import Proxy from '../../../src/app/operations/update';
 
-/*
-describe('UpdateOperation', () => {
-  describe('updates plain text', () => {
-    let entities;
-    let insertedEntity;
+import EmbedEntity from '../../../src/app/entities/embed';
+import FileEntity from '../../../src/app/entities/file';
+import GridEntity from '../../../src/app/entities/grid';
+import GridColumnEntity from '../../../src/app/entities/grid_column';
+import ImageEntity from '../../../src/app/entities/image';
+import ListEntity from '../../../src/app/entities/list';
+import ParagraphEntity from '../../../src/app/entities/paragraph';
+import RootContainerEntity from '../../../src/app/entities/root_container';
+import SubstrateEntity from '../../../src/app/entities/substrate';
+import TableEntity from '../../../src/app/entities/table';
 
-    beforeEach(function() {
-      entities = new Entities();
-
-      let container = document.body;
-      let insertOperation = new InsertOperation('Paragraph', { text: 'hello' }, container);
-      insertedEntity = insertOperation.execute(entities);
+describe('Update Operation Proxy', () => {
+  describe('returns Update', () => {
+    it('Embed instance', () => {
+      let entity = new EmbedEntity();
+      let proxy = new Proxy(entity, {});
+      expect(proxy.operation.type).to.be.equal('update');
     });
 
-    it('add new text to point', () => {
-      let operation = new UpdateOperation(insertedEntity, { text: 'y', start: 0, end: 0 });
-      operation.execute(entities);
-      expect(entities.entities[0].opts.text).to.be.equal('phello');
+    it('File instance', () => {
+      let entity = new FileEntity();
+      let proxy = new Proxy(entity, {});
+      expect(proxy.operation.type).to.be.equal('update');
     });
 
-    it('updates text from point to point', () => {
-      let operation = new UpdateOperation(insertedEntity, { text: 'y', start: 0, end: 2 });
-      operation.execute(entities);
-      expect(entities.entities[0].opts.text).to.be.equal('yell');
+    it('Grid instance', () => {
+      let entity = new GridEntity();
+      let proxy = new Proxy(entity, {});
+      expect(proxy.operation.type).to.be.equal('update');
     });
 
-    it('deletes text from point to point', () => {
-      let operation = new UpdateOperation(insertedEntity, { text: '', start: 2, end: 4 });
-      operation.execute(entities);
-      expect(entities.entities[0].opts.text).to.be.equal('ye');
+    it('GridColumn instance', () => {
+      let entity = new GridColumnEntity();
+      let proxy = new Proxy(entity, {});
+      expect(proxy.operation.type).to.be.equal('update');
     });
 
-    it('does nothing with text if start or end is wrong', () => {
-      let operation = new UpdateOperation(insertedEntity, { text: 'lol', start: 200, end: 400 });
-      operation.execute(entities);
-      expect(entities.entities[0].opts.text).to.be.equal('ye');
+    it('Image instance', () => {
+      let entity = new ImageEntity();
+      let proxy = new Proxy(entity, {});
+      expect(proxy.operation.type).to.be.equal('update');
     });
 
-    it('does nothing with text if start or end is null', () => {
-      let operation = new UpdateOperation(insertedEntity, { text: 'yay', start: null, end: null });
-      operation.execute(entities);
-      expect(entities.entities[0].opts.text).to.be.equal('ye');
+    it('List instance', () => {
+      let entity = new ListEntity();
+      let proxy = new Proxy(entity, {});
+      expect(proxy.operation.type).to.be.equal('update');
     });
 
-    it('replaces whole text if start or end is not defined', () => {
-      let operation = new UpdateOperation(insertedEntity, { text: 'yay' });
-      operation.execute(entities);
-      expect(entities.entities[0].opts.text).to.be.equal('yay');
+    it('Paragraph instance', () => {
+      let entity = new ParagraphEntity();
+      let proxy = new Proxy(entity, {});
+      expect(proxy.operation.type).to.be.equal('update');
     });
 
-    it('does nothing at all if opts are empty', () => {
-      let operation = new UpdateOperation(insertedEntity, {});
-      operation.execute(entities);
-      expect(entities.entities[0].opts.text).to.be.equal('yay');
+    it('RootContainer instance', () => {
+      let entity = new RootContainerEntity();
+      let proxy = new Proxy(entity, {});
+      expect(proxy.operation.type).to.be.equal('update');
+    });
+
+    it('SubstrateEntity instance', () => {
+      let entity = new SubstrateEntity();
+      let proxy = new Proxy(entity, {});
+      expect(proxy.operation.type).to.be.equal('update');
+    });
+
+    it('TableEntity instance', () => {
+      let entity = new TableEntity();
+      let proxy = new Proxy(entity, {});
+      expect(proxy.operation.type).to.be.equal('update');
     });
   });
 
-  describe('updates html markup', () => {
-    let entities;
-    let insertedEntity;
-
-    beforeEach(function() {
-      entities = new Entities();
-
-      let container = document.body;
-      let insertOperation = new InsertOperation('Paragraph', { text: 'hello world' }, container);
-      insertedEntity = insertOperation.execute(entities);
-    });
-
-    it('add new text to point', () => {
-      let opts = {
-        markup: [
-          ['strong', 0, 5]
-        ]
-      };
-
-      let operation = new UpdateOperation(insertedEntity, opts);
-      operation.execute(entities);
-      expect(entities.entities[0].opts.text).to.be.equal('phello'); // ???
+  describe('throw', () => {
+    it('error', () => {
+      let entity = function() {};
+      expect(function() { new Proxy(entity, {}); }).to.throw('Cannot find concrete operation class!');
     });
   });
 });
-*/
