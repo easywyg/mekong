@@ -3,7 +3,7 @@ import {create} from 'virtual-dom';
 
 // TODO: Если делаем ссылку в ссылке, то так быть не больжно, аналогично и с другими тегами
 describe('TaggerGroup', () => {
-  describe('#generateVTree', () => {
+  describe('#generate', () => {
     it('works done 1', () => {
       let segments = [];
 

@@ -46,7 +46,7 @@ export default class {
     return new VText(...args);
   }
 
-  generateVTree() {
+  generate() {
     let cur = null;
     let result = null;
     let parents = {};
@@ -80,6 +80,6 @@ export default class {
       }
     });
 
-    return [result];
+    return result;
   }
 }

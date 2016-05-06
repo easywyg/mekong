@@ -1,6 +1,5 @@
 import TaggerGroup from './tagger_group';
 import PointCalc from './point_calc';
-import {create} from 'virtual-dom';
 
 export default class {
   constructor(text, data) {
@@ -27,7 +26,7 @@ export default class {
   }
 
   // Находим группы отрезков.
-  // NOTE: Отрезки будут созданы, если первый отрезок в this.data будет текстовым.
+  // NOTE: Группы будут созданы, если, например, первый отрезок в this.data будет текстовым.
   findGroups() {
     // Каждый следующий отрезок должен быть спереди предыдущего и самым длинным
     var line = [0, 0];
@@ -45,7 +44,6 @@ export default class {
   // Сформировать группы
   group() {
     let result = [];
-    //console.log(this.findGroups());
 
     this.findGroups().forEach((group) => {
       // Находим отрезки внутри группы
@@ -59,30 +57,8 @@ export default class {
 
   // Создать список объектов virtual-dom
   process() {
-    let result = [];
-
-    this.group().forEach((x) => {
-      let taggerGroup = new TaggerGroup(x);
-
-      taggerGroup.generateVTree().forEach((entry) => {
-        if (entry) result.push(entry);
-      });
+    return this.group().map((x) => {
+      return (new TaggerGroup(x)).generate();
     });
-
-    return result;
-
-    /*let div = document.createElement('div');
-
-    this.group().forEach((x) => {
-      let taggerGroup = new TaggerGroup(x);
-
-      taggerGroup.generateVTree().forEach((entry) => {
-        if (entry) { // TODO Этой проверки не должно быть
-          div.appendChild(create(entry));
-        }
-      });
-    });
-
-    return div.innerHTML;*/
   }
 }

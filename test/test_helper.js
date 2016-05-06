@@ -12,9 +12,7 @@ global.expect   = chai.expect;
 // Helper function
 global.taggerGroupHtml = function(taggerGroup) {
   let div = document.createElement('div');
-  taggerGroup.generateVTree().forEach((entry) => {
-    div.appendChild(create(entry))
-  });
+  div.appendChild(create(taggerGroup.generate()))
 
   return div.innerHTML;
 }
@@ -23,7 +21,7 @@ global.taggerGroupHtml = function(taggerGroup) {
 global.taggerHtml = function(tagger) {
   let div = document.createElement('div');
   tagger.process().forEach((entry) => {
-    if (entry) div.appendChild(create(entry));
+    div.appendChild(create(entry));
   });
 
   return div.innerHTML;
