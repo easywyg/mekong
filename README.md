@@ -44,6 +44,7 @@ A container which combines several `Paragraph`, `List`, `Table`, `Image`, `Embed
 A regular HTML table. Cannot have anything than text and inline markup within it cells.
 
 ### Operations
+All actions on the text and HTML markup are made only via operations. You do not have to work with DOM directly, you just execute operations and things are done.
 
 ##### Types of operations
 
@@ -56,4 +57,9 @@ A regular HTML table. Cannot have anything than text and inline markup within it
 * Update - update entity text, markup or another data.
 
 ##### Serialize operation
-...
+
+You can serialize any operation into JSON string then unserialize it and execute operation with that data. It is useful for undo/redo stuff or for example, logging all actions on the server-side and then you can back to previous state in history or moving forward.
+
+##### Virtual DOM
+
+Mekong utilizes virtual DOM to partially update HTML markup.
