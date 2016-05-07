@@ -7,14 +7,13 @@ export default class extends ContainerEntity {
   constructor(container = null) {
     super(container);
 
-    this.view = new View;
-
     this.opts = {
-      tag    : 'div',
-      attrs  : {
+      attrs: {
         class: 'easywyg-grid-column'
       },
     };
+
+    this.view = new View;
   }
 
   get type() {

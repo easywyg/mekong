@@ -14,6 +14,9 @@ export default class extends Operation {
 
   // Обновить указанный entity
   execute(entities) {
+    // Обновляем опции
+    Object.assign(this.entity.opts, this.opts);
+
     this.entity.modified = true;
     return entities.render();
   }

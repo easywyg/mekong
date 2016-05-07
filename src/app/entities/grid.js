@@ -1,15 +1,14 @@
-//import Entity from '../entity.js';
-import ContainerEntity from '../container.js';
+import Entity from '../entity.js';
 import View from '../views/grid.js';
 
 // A Grid Entity
-export default class extends ContainerEntity {
+export default class extends Entity {
   constructor(container = null) {
     super(container);
 
     this.opts = {
       attrs : {
-        class : 'easywyg-grid'
+        class: 'easywyg-grid'
       }
     };
 
