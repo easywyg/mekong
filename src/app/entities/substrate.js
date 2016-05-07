@@ -17,6 +17,13 @@ export default class extends ContainerEntity {
     };
   }
 
+  set options(opts) {
+    this.modified = true;
+
+    // Обновляем опции
+    Object.assign(this.opts, opts);
+  }
+
   get type() {
     return 'substrate'
   }

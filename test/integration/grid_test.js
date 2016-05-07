@@ -1,5 +1,4 @@
-import UpdateGridOperation from '../../src/app/operations/update/grid';
-import UpdateGridColumnOperation from '../../src/app/operations/update/grid_column';
+import UpdateOperation from '../../src/app/operations/update';
 import InsertOperation from '../../src/app/operations/insert';
 import Entities from '../../src/app/entities';
 
@@ -30,13 +29,13 @@ describe('Integration: Grid', () => {
   });
 
   it('update html', () => {
-    let operation = new UpdateGridOperation(grid, {
+    let operation = new UpdateOperation(grid, {
       attrs: { class: "pretty-grid" }
     });
 
     operation.execute(entities);
 
-    (new UpdateGridColumnOperation(gridColumn1, {
+    (new UpdateOperation(gridColumn1, {
       attrs: { class: "pretty-grid-column" }
     })).execute(entities);
 

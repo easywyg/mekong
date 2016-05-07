@@ -96,6 +96,11 @@ export default class {
     return null
   }
 
+  set options(opts) {
+    this.modified = true;
+    Object.assign(this.opts, opts);
+  }
+
   identity() {
     return Math.random().toString(36).slice(2);
   }

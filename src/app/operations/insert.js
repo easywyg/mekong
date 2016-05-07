@@ -36,9 +36,8 @@ export default class extends Operation {
 
     const length = entities.entities.push(entity);
 
-    Object.assign(entity.opts, this.opts);
+    entity.options = this.opts;
     entity.index = length;
-    entity.modified = true;
     entities.render();
 
     // Вставка в контейнер

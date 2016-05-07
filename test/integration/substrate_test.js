@@ -1,4 +1,4 @@
-import UpdateOperation from '../../src/app/operations/update/substrate';
+import UpdateOperation from '../../src/app/operations/update';
 import InsertOperation from '../../src/app/operations/insert';
 import Entities from '../../src/app/entities';
 
