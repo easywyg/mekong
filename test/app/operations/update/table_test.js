@@ -141,12 +141,12 @@ describe('Table Update Operation', () => {
           data: [
             // Row 1
             [
-              { text: 'Hello 1', markup: [['strong', 0, 5]], meta: { tag: 'td', attrs: {} } },
+              { text: 'Hello 1', markup: [['strong', 0, 5]], meta: { _text: 'Hello 1', tag: 'td', attrs: {} } },
               { text: 'Hello 2', markup: [], meta: { tag: 'td', attrs: {} } },
             ],
             // Row 2
             [
-              { text: 'Hello 3', markup: [], meta: { tag: 'td', attrs: {} } },
+              { text: 'Hello 3', markup: [], meta: { _text: 'Hello 3', tag: 'td', attrs: {} } },
               { text: 'Hello 4', markup: [], meta: { tag: 'td', attrs: {} } },
             ],
           ]

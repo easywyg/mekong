@@ -29,10 +29,48 @@ export default class extends Entity {
     this.opts.markup = this.opts.markup.concat(markup);
   }
 
-  // Обновить строки/колонки
-  updateData(data) {
+  // Установить строки/колонки
+  setData(data) {
     if (typeof data == 'undefined') return;
+
+    // Устанавливаем данные впервые
+    if (this.opts.data.length == 0) {
+      this.addData(data);
+    }
+    // Обновляем данные
+    else {
+      this.updateData(data);
+    }
+  }
+
+  addData(data) {
+    this.opts.data = data;
+    this.opts.data.forEach((row) => {
+      row.forEach((cell) => {
+        cell.meta._text = cell.text;
+      })
+    });
+  }
+
+  updateData(data) {
     this.opts.data = merge(this.opts.data, data);
+    this.opts.data.forEach((row) => {
+      row.forEach((cell) => {
+        if (typeof cell.start != 'undefined' && typeof cell.end != 'undefined') {
+          let origText = cell.meta._text;
+
+          // Обновляем текст ячейки
+          cell.text = updateText(
+            origText,
+            cell.text,
+            cell.start,
+            cell.end
+          )
+
+          cell.meta._text = cell.text;
+        }
+      })
+    });
   }
 
   set options(opts) {
@@ -53,7 +91,7 @@ export default class extends Entity {
     this.updateMarkup(opts.markup);
 
     // Обновляем данные строк/колонок
-    this.updateData(opts.data);
+    this.setData(opts.data);
   }
 
   get type() {
