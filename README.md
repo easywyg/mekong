@@ -17,35 +17,35 @@ A Rich text editor Model layer. (not finished yet)
 ```
 
 ### Entities
-#### Embed
+##### Embed
 It represents a built-in HTML code from a website. For example, videos from YouTube, or Twitter's tweet.
 
-#### Grid and GridColumn
+##### Grid and GridColumn
 Responsive grid, as like a Twitter Bootstrap grid. Cannot contain nested grids.
 Grid columns can only have such entities inside: `Paragraph`, `List`, `Table`, `Image`, `Substrate`, `Embed`.
 
-#### Image
+##### Image
 Just an image, always wrapped with `figure` tag. May contain a hyperlink and `figcaption`.
 Figcaption can only have inline markup.
 
-#### List
+##### List
 Unordered or ordered list with nesting. Its items cannot contain anything other than text with some inline markup.
 
-#### Paragraph
+##### Paragraph
 A semantic paragraph. It can be one of `P`, `BLOCKQUOTE`, `PRE`, `H1`, `H2`, `H3`, `H4`, `H5`, `H6`.
 
-#### RootContainer
+##### RootContainer
 This is where all the generated html code is inserted.
 
-#### Substrate
+##### Substrate
 A container which combines several `Paragraph`, `List`, `Table`, `Image`, `Embed` entities.
 
-#### Table
+##### Table
 A regular HTML table. Cannot have anything than text and inline markup within it cells.
 
 ### Operations
 
-#### Types of operations
+##### Types of operations
 
 * Delete - remove entity.
 * Insert - insert entity.
@@ -55,5 +55,5 @@ A regular HTML table. Cannot have anything than text and inline markup within it
 * Transform - transform one entity into another, if it is transformable.
 * Update - update entity text, markup or another data.
 
-#### Serialize operation
+##### Serialize operation
 ...
