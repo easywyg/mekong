@@ -6,7 +6,7 @@ A Rich text editor Model layer. (not finished yet)
 ```js
   // Insert new <p> into document.body
   let api = new Api;
-  let container = document.body;
+  let container = api.operate('Insert', 'RootContainer', {}, document.body).result;
   let entity = api.operate('Insert', 'Paragraph', { text: 'Hello world!' }, container);
 
   // Update paragraph text
