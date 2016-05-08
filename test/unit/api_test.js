@@ -1,4 +1,4 @@
-import Api from '../../src/app/api';
+import Api from '../../src/api';
 
 describe('Api', () => {
   after(function() { document.body.innerHTML = ''; });

@@ -1,5 +1,5 @@
-import InsertOperation from '../../../src/app/operations/insert';
-import Entities from '../../../src/app/entities';
+import InsertOperation from '../../../src/operations/insert';
+import Entities from '../../../src/entities';
 
 describe('InsertOperation', () => {
   after(function() { document.body.innerHTML = '' });

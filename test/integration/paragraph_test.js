@@ -1,6 +1,6 @@
-import UpdateOperation from '../../src/app/operations/update';
-import InsertOperation from '../../src/app/operations/insert';
-import Entities from '../../src/app/entities';
+import UpdateOperation from '../../src/operations/update';
+import InsertOperation from '../../src/operations/insert';
+import Entities from '../../src/entities';
 
 describe('Integration: Paragraph', () => {
   let entities;

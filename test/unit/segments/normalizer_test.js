@@ -1,4 +1,4 @@
-import Normalizer from '../../../src/app/segments/normalizer';
+import Normalizer from '../../../src/segments/normalizer';
 
 describe('Normalizer', () => {
   let normalizer;

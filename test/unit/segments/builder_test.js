@@ -1,4 +1,4 @@
-import Builder from '../../../src/app/segments/builder';
+import Builder from '../../../src/segments/builder';
 
 // TODO: Если делаем ссылку в ссылке, то так быть не больжно, аналогично и с другими тегами
 describe('Builder', () => {

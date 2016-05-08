@@ -1,32 +1,33 @@
-import UpdateOperation from '../../../../src/app/operations/update';
-import InsertOperation from '../../../../src/app/operations/insert';
-import Entities from '../../../../src/app/entities';
+import UpdateOperation from '../../../../src/operations/update';
+import InsertOperation from '../../../../src/operations/insert';
+import Entities from '../../../../src/entities';
 
-// Надо перед каждым тестом создавать контейнер и entities, а после каждого теста очищать боди
-describe('Image Update Operation', () => {
+describe('Table Update Operation', () => {
   after(function() { document.body.innerHTML = '' });
 
-  describe('on Image entity', () => {
+  describe('on Table entity', () => {
     describe('updates plain caption text', () => {
-      let insertedEntity, entities;
+      let entities;
+      let insertedEntity;
 
       beforeEach(function() {
-        entities  = new Entities();
+        entities = new Entities();
+
         let container = (new InsertOperation('RootContainer', {}, document.body)).execute(entities);
-        let insertOperation = new InsertOperation('Image', { caption : 'hello' }, container);
+        let insertOperation = new InsertOperation('Table', { caption : 'hello' }, container);
         insertedEntity = insertOperation.execute(entities);
       });
 
       it('add new caption to point', () => {
         let operation = new UpdateOperation(insertedEntity, { caption: 'p', start: 0, end: 0 });
         operation.execute(entities);
-
         expect(entities.entities[1].opts.caption).to.be.equal('phello');
       });
 
       it('updates caption from point to point', () => {
         let operation = new UpdateOperation(insertedEntity, { caption: 'y', start: 0, end: 2 });
         operation.execute(entities);
+
         expect(entities.entities[1].opts.caption).to.be.equal('yllo');
       });
 
@@ -62,50 +63,62 @@ describe('Image Update Operation', () => {
     });
 
     describe('html markup', () => {
-      let insertedEntity, entities, container;
+      let entities;
+      let insertedEntity;
 
       beforeEach(function() {
-        entities  = new Entities();
-        container = (new InsertOperation('RootContainer', {}, document.body)).execute(entities);
-        let insertOperation = new InsertOperation('Image', {
-          caption : 'Once upon a time',
+        entities = new Entities();
+
+        let container = (new InsertOperation('RootContainer', {}, document.body)).execute(entities);
+        let insertOperation = new InsertOperation('Table', {
+          caption : '',
           attrs   : {
-            figure: {
-              class: 'easywyg-figure'
+            table: {
+              class: 'easywyg-table'
             },
-            img: {},
-            figcaption: {},
-            a: {}
+            caption: {},
           },
-          markup  : [
-            ['strong', 5, 9]
+          markup : [],
+          data: [
+            // Row 1
+            [
+              { text: 'Hello 1', markup: [['strong', 0, 5]], meta: { tag: 'td', attrs: {} } }
+            ],
+            // Row 2
+            [
+              { text: 'Hello 3', markup: [], meta: { tag: 'td', attrs: {} } }
+            ],
           ]
         }, container);
 
         insertedEntity = insertOperation.execute(entities);
       });
 
-      it('updates image options', () => {
+      it('updates table options', () => {
         let opts = {
-          caption : 'Once upon a time!',
+          caption : 'Hello world table',
           attrs   : {
-            figure: {
-              class: 'easywyg-figure easywyg-figure-left'
+            table: {
+              class: 'easywyg-table easywyg-table-zebra'
             },
-            img: {
-              border: 0
+            caption: {
+              id: 'xxx'
             },
-            figcaption: {
-              data: {
-                id: 'xxx'
-              }
-            },
-            a: {
-              href: '#'
-            }
           },
-          markup  : [
-            ['em', 0, 4]
+          markup : [
+            ['strong', 0, 5]
+          ],
+          data: [
+            // Row 1
+            [
+              { text: 'Hello 1', markup: [['strong', 0, 5]], meta: { tag: 'td', attrs: {} } },
+              { text: 'Hello 2', markup: [], meta: { tag: 'td', attrs: {} } },
+            ],
+            // Row 2
+            [
+              { text: 'Hello 3', markup: [], meta: { tag: 'td', attrs: {} } },
+              { text: 'Hello 4', markup: [], meta: { tag: 'td', attrs: {} } },
+            ],
           ]
         };
 
@@ -113,26 +126,29 @@ describe('Image Update Operation', () => {
         operation.execute(entities);
 
         expect(entities.entities[1].opts).to.deep.equal({
-          caption : 'Once upon a time!',
+          caption : 'Hello world table',
           attrs   : {
-            figure: {
-              class: 'easywyg-figure easywyg-figure-left'
+            table: {
+              class: 'easywyg-table easywyg-table-zebra'
             },
-            img: {
-              border: 0
+            caption: {
+              id: 'xxx'
             },
-            figcaption: {
-              data: {
-                id: 'xxx'
-              }
-            },
-            a: {
-              href: '#'
-            }
           },
-          markup  : [
-            ['strong', 5, 9],
-            ['em', 0, 4]
+          markup : [
+            ['strong', 0, 5]
+          ],
+          data: [
+            // Row 1
+            [
+              { text: 'Hello 1', markup: [['strong', 0, 5]], meta: { _text: 'Hello 1', tag: 'td', attrs: {} } },
+              { text: 'Hello 2', markup: [], meta: { tag: 'td', attrs: {} } },
+            ],
+            // Row 2
+            [
+              { text: 'Hello 3', markup: [], meta: { _text: 'Hello 3', tag: 'td', attrs: {} } },
+              { text: 'Hello 4', markup: [], meta: { tag: 'td', attrs: {} } },
+            ],
           ]
         });
       });

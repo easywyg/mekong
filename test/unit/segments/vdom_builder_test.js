@@ -1,4 +1,4 @@
-import VdomBuilder from '../../../src/app/segments/vdom_builder';
+import VdomBuilder from '../../../src/segments/vdom_builder';
 
 describe('VdomBuilder', () => {
   let vdomBuilder;
