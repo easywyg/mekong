@@ -1,5 +1,5 @@
-import View from '../view.js';
-//import Container from '../container.js';
+import View from '../view';
+//import Container from '../container';
 
 // A Grid View
 export default class extends View {

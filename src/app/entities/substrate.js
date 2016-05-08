@@ -1,5 +1,5 @@
-import ContainerEntity from '../container.js';
-import View from '../views/substrate.js';
+import ContainerEntity from '../container';
+import View from '../views/substrate';
 
 // A Substrate Entity
 // This is an container entity!!!

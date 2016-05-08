@@ -1,5 +1,5 @@
-import Operation from '../operation.js';
-import InsertOperation from '../operations/insert.js';
+import Operation from '../operation';
+import InsertOperation from '../operations/insert';
 
 // A Delete Operation
 export default class extends Operation {

@@ -1,4 +1,4 @@
-import View from '../view.js';
+import View from '../view';
 import VdomBuilder from '../segments/vdom_builder';
 
 // A Paragraph View

@@ -1,4 +1,4 @@
-import View from '../view.js';
+import View from '../view';
 
 // A Substrate View
 export default class extends View {

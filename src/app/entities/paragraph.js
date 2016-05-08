@@ -1,5 +1,5 @@
-import Entity from '../entity.js';
-import View from '../views/paragraph.js';
+import Entity from '../entity';
+import View from '../views/paragraph';
 import {updateText} from './lib/utils';
 
 // A Paragraph Entity

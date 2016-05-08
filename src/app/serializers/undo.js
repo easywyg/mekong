@@ -1,4 +1,4 @@
-import Serializer from '../serializer.js'
+import Serializer from '../serializer'
 
 // Undo Serializer
 export default class extends Serializer {

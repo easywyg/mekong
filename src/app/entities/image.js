@@ -1,5 +1,5 @@
-import Entity from '../entity.js';
-import View from '../views/image.js';
+import Entity from '../entity';
+import View from '../views/image';
 import {updateText} from './lib/utils';
 
 // A Image Entity

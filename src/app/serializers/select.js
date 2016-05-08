@@ -1,4 +1,4 @@
-import Serializer from '../serializer.js'
+import Serializer from '../serializer'
 
 // Select Serializer
 export default class extends Serializer {

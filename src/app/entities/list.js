@@ -1,4 +1,4 @@
-import Entity from '../entity.js';
+import Entity from '../entity';
 
 // A List Entity
 export default class extends Entity {

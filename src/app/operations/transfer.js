@@ -1,4 +1,4 @@
-import Operation from '../operation.js';
+import Operation from '../operation';
 
 // A Transfer Operation
 export default class extends Operation {

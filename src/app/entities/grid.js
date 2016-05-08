@@ -1,5 +1,5 @@
-import Entity from '../entity.js';
-import View from '../views/grid.js';
+import Entity from '../entity';
+import View from '../views/grid';
 
 // A Grid Entity
 export default class extends Entity {

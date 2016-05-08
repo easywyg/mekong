@@ -1,4 +1,4 @@
-import View from '../view.js';
+import View from '../view';
 
 // A Grid Column View
 export default class extends View {

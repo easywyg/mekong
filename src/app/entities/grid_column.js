@@ -1,5 +1,5 @@
-import ContainerEntity from '../container.js';
-import View from '../views/grid_column.js';
+import ContainerEntity from '../container';
+import View from '../views/grid_column';
 
 // A Grid Column Entity
 // This is an container entity.

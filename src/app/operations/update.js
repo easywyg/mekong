@@ -1,4 +1,4 @@
-import Operation from '../operation.js';
+import Operation from '../operation';
 
 export default class extends Operation {
   // Принимает инстанс сущности и опции
