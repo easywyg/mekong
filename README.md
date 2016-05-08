@@ -14,7 +14,7 @@ A Rich text editor Model layer. (not finished yet)
     text: 'Yellow',
     start: 0,
     end: 5,
-    attrs: { class: 'headline' }
+    attrs: { class: 'headline' },
     markup: [
       ['em', 0, 6],
       ['strong', 0, 6, { class: 'yay' }]
