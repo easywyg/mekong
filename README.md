@@ -53,7 +53,7 @@ A container which combines several `Paragraph`, `List`, `Table`, `Image`, `Embed
 A regular HTML table. It can't have anything other than text and inline markup within it cells.
 
 ### Operations
-All actions on the text and HTML markup are made only via operations. You do not have to work with DOM directly, you just execute operations and things are done.
+All actions on the text and HTML markup are made only via operations. You don't have to work with DOM directly, you just execute operations and things are done.
 
 ##### Types of operations
 
@@ -67,7 +67,7 @@ All actions on the text and HTML markup are made only via operations. You do not
 
 ##### Serialize operation
 
-You can serialize any operation into JSON string then unserialize it and execute operation with these data. It is useful for undo/redo stuff or for example, for logging all actions on the server-side. Using that king of logging you can back to previous state in history or moving forward.
+You can serialize any operation into JSON string then unserialize it and then execute operation with these data. It is useful for undo/redo stuff or for example, for logging all actions on the server-side. Using that kind of logging you can back to previous state in history or moving forward.
 
 ##### Virtual DOM
 
