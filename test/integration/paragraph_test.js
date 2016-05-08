@@ -11,20 +11,20 @@ describe('Integration: Paragraph', () => {
   afterEach(function() { document.body.innerHTML = '' });
   beforeEach(function() {
     entities = new Entities();
-    container = document.body;
+    container = (new InsertOperation('RootContainer', {}, document.body)).execute(entities);
     insertOperation = new InsertOperation('Paragraph', { text: 'hello' }, container);
     insertedEntity = insertOperation.execute(entities);
   })
 
   it('insert html', () => {
-    expect(container.innerHTML).to.be.equal('<p>hello</p>');
+    expect(document.body.innerHTML).to.be.equal('<p>hello</p>');
   });
 
   it('update html', () => {
     let operation = new UpdateOperation(insertedEntity, { text: 'p', start: 0, end: 0 });
     operation.execute(entities);
 
-    expect(container.innerHTML).to.be.equal('<p>phello</p>');
+    expect(document.body.innerHTML).to.be.equal('<p>phello</p>');
   });
 
   it('update html, change tag name and attrs', () => {
@@ -33,7 +33,7 @@ describe('Integration: Paragraph', () => {
     });
 
     operation.execute(entities);
-    expect(container.innerHTML).to.be.equal('<blockquote id="xxx" class="yyy">hello</blockquote>');
+    expect(document.body.innerHTML).to.be.equal('<blockquote id="xxx" class="yyy">hello</blockquote>');
   });
 
   it('update html, change text and markup', () => {
@@ -47,7 +47,7 @@ describe('Integration: Paragraph', () => {
     });
 
     operation.execute(entities);
-    expect(container.innerHTML).to.be.equal(
+    expect(document.body.innerHTML).to.be.equal(
       '<p><strong id="xxx" class="yyy"><span>je<em>l</em>ly</span></strong></p>'
     );
   });

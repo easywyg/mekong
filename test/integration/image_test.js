@@ -11,7 +11,7 @@ describe('Integration: Image', () => {
   afterEach(function() { document.body.innerHTML = '' });
   beforeEach(function() {
     entities = new Entities();
-    container = document.body;
+    container = (new InsertOperation('RootContainer', {}, document.body)).execute(entities);
     insertOperation = new InsertOperation('Image', {
       caption : 'Once upon a time',
       attrs   : {
@@ -32,7 +32,7 @@ describe('Integration: Image', () => {
   })
 
   it('insert html', () => {
-    expect(container.innerHTML).to.be.equal(
+    expect(document.body.innerHTML).to.be.equal(
       '<figure class="easywyg-figure"><img src="https://goo.gl/VwjxyL"><figcaption>Once <strong>upon</strong> a time</figcaption></figure>'
     );
   });
@@ -61,7 +61,7 @@ describe('Integration: Image', () => {
     });
 
     operation.execute(entities);
-    expect(container.innerHTML).to.be.equal(
+    expect(document.body.innerHTML).to.be.equal(
       '<figure class="easywyg-figure easywyg-figure-left"><a href="#"><img border="0"></a><figcaption data-id="xxx"><em>Once</em> <strong>upon</strong> a time!</figcaption></figure>'
     );
   });

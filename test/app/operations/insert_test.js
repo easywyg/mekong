@@ -2,23 +2,21 @@ import InsertOperation from '../../../src/app/operations/insert';
 import Entities from '../../../src/app/entities';
 
 describe('InsertOperation', () => {
+  after(function() { document.body.innerHTML = '' });
   let entities;
 
-  after(function() { document.body.innerHTML = '' });
-
   beforeEach(function() {
-    let container = document.body;
-    let operation = new InsertOperation('Paragraph', { text: 'hello' }, container);
     entities = new Entities();
-
+    let container = (new InsertOperation('RootContainer', {}, document.body)).execute(entities);
+    let operation = new InsertOperation('Paragraph', { text: 'hello' }, container);
     operation.execute(entities);
   });
 
-  it('have one entity in entities', () => {
-    expect(entities.entities).to.have.lengthOf(1);
+  it('have two entities', () => {
+    expect(entities.entities).to.have.lengthOf(2); // root_container and paragraph
   });
 
   it('have paragraph in entities', () => {
-    expect(entities.entities[0].type).to.be.equal('paragraph');
+    expect(entities.entities[1].type).to.be.equal('paragraph');
   });
 });

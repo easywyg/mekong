@@ -2,18 +2,17 @@ import UpdateOperation from '../../../../src/app/operations/update';
 import InsertOperation from '../../../../src/app/operations/insert';
 import Entities from '../../../../src/app/entities';
 
+// Надо перед каждым тестом создавать контейнер и entities, а после каждого теста очищать боди
 describe('Image Update Operation', () => {
   after(function() { document.body.innerHTML = '' });
 
   describe('on Image entity', () => {
     describe('updates plain caption text', () => {
-      let entities;
-      let insertedEntity;
+      let insertedEntity, entities;
 
       beforeEach(function() {
-        entities = new Entities();
-
-        let container = document.body;
+        entities  = new Entities();
+        let container = (new InsertOperation('RootContainer', {}, document.body)).execute(entities);
         let insertOperation = new InsertOperation('Image', { caption : 'hello' }, container);
         insertedEntity = insertOperation.execute(entities);
       });
@@ -21,55 +20,53 @@ describe('Image Update Operation', () => {
       it('add new caption to point', () => {
         let operation = new UpdateOperation(insertedEntity, { caption: 'p', start: 0, end: 0 });
         operation.execute(entities);
-        expect(entities.entities[0].opts.caption).to.be.equal('phello');
+
+        expect(entities.entities[1].opts.caption).to.be.equal('phello');
       });
 
       it('updates caption from point to point', () => {
         let operation = new UpdateOperation(insertedEntity, { caption: 'y', start: 0, end: 2 });
         operation.execute(entities);
-
-        expect(entities.entities[0].opts.caption).to.be.equal('yllo');
+        expect(entities.entities[1].opts.caption).to.be.equal('yllo');
       });
 
       it('deletes caption from point to point', () => {
         let operation = new UpdateOperation(insertedEntity, { caption: '', start: 2, end: 4 });
         operation.execute(entities);
-        expect(entities.entities[0].opts.caption).to.be.equal('heo');
+        expect(entities.entities[1].opts.caption).to.be.equal('heo');
       });
 
       it('does nothing with caption if start or end is wrong', () => {
         let operation = new UpdateOperation(insertedEntity, { caption: 'lol', start: 200, end: 400 });
         operation.execute(entities);
-        expect(entities.entities[0].opts.caption).to.be.equal('hello');
+        expect(entities.entities[1].opts.caption).to.be.equal('hello');
       });
 
       it('does nothing with caption if start or end is null', () => {
         let operation = new UpdateOperation(insertedEntity, { caption: 'yay', start: null, end: null });
         operation.execute(entities);
-        expect(entities.entities[0].opts.caption).to.be.equal('hello');
+        expect(entities.entities[1].opts.caption).to.be.equal('hello');
       });
 
       it('replaces whole caption if start or end is not defined', () => {
         let operation = new UpdateOperation(insertedEntity, { caption: 'yay' });
         operation.execute(entities);
-        expect(entities.entities[0].opts.caption).to.be.equal('yay');
+        expect(entities.entities[1].opts.caption).to.be.equal('yay');
       });
 
       it('does nothing at all if opts are empty', () => {
         let operation = new UpdateOperation(insertedEntity, {});
         operation.execute(entities);
-        expect(entities.entities[0].opts.caption).to.be.equal('hello');
+        expect(entities.entities[1].opts.caption).to.be.equal('hello');
       });
     });
 
     describe('html markup', () => {
-      let entities;
-      let insertedEntity;
+      let insertedEntity, entities, container;
 
       beforeEach(function() {
-        entities = new Entities();
-
-        let container = document.body;
+        entities  = new Entities();
+        container = (new InsertOperation('RootContainer', {}, document.body)).execute(entities);
         let insertOperation = new InsertOperation('Image', {
           caption : 'Once upon a time',
           attrs   : {
@@ -115,7 +112,7 @@ describe('Image Update Operation', () => {
         let operation = new UpdateOperation(insertedEntity, opts);
         operation.execute(entities);
 
-        expect(entities.entities[0].opts).to.deep.equal({
+        expect(entities.entities[1].opts).to.deep.equal({
           caption : 'Once upon a time!',
           attrs   : {
             figure: {

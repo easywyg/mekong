@@ -4,11 +4,11 @@ import {create, VNode, VText} from 'virtual-dom';
 
 const doc   = jsdom("<!doctype html><html><head><meta charset='utf-8'></head><body></body></html>", {});
 
-global.window   = doc.defaultView;
-global.document = doc;
-global.Element  = doc.defaultView.Element;
-global.expect   = chai.expect;
-global.create   = create;
+global.window    = doc.defaultView;
+global.document  = doc;
+global.Element   = doc.defaultView.Element;
+global.expect    = chai.expect;
+global.create    = create;
 
 // Helper function
 global.builderHtml = (builder) => {

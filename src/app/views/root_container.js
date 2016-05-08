@@ -4,6 +4,6 @@ import View from '../view.js';
 export default class extends View {
   render(entity) {
     // Nothing to do here
-    return null;
+    return entity.el;
   }
 }

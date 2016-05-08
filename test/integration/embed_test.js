@@ -11,13 +11,13 @@ describe('Integration: Embed', () => {
   afterEach(function() { document.body.innerHTML = '' });
   beforeEach(function() {
     entities = new Entities();
-    container = document.body;
+    container = (new InsertOperation('RootContainer', {}, document.body)).execute(entities);
     insertOperation = new InsertOperation('Embed', {}, container);
     insertedEntity = insertOperation.execute(entities);
   })
 
   it('insert html', () => {
-    expect(container.innerHTML).to.be.equal(
+    expect(document.body.innerHTML).to.be.equal(
       '<div class="easywyg-embed"></div>'
     );
   });
@@ -28,7 +28,7 @@ describe('Integration: Embed', () => {
     });
 
     operation.execute(entities);
-    expect(container.innerHTML).to.be.equal(
+    expect(document.body.innerHTML).to.be.equal(
       '<div class="pretty-embed"></div>'
     );
   });

@@ -4,9 +4,7 @@ import UpdateOperation from './operations/update.js';
 import ReplaceOperation from './operations/replace.js';
 import MoveOperation from './operations/move.js';
 import DeleteOperation from './operations/delete.js';
-import SelectOperation from './operations/select.js';
 import TransferOperation from './operations/transfer.js';
-import UndoOperation from './operations/undo.js';
 
 export default {
   Insert   : InsertOperation,
@@ -14,7 +12,5 @@ export default {
   Replace  : ReplaceOperation,
   Move     : MoveOperation,
   Delete   : DeleteOperation,
-  Select   : SelectOperation,
-  Transfer : TransferOperation,
-  Undo     : UndoOperation
+  Transfer : TransferOperation
 };

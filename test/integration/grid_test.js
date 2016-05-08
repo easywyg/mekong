@@ -13,7 +13,7 @@ describe('Integration: Grid', () => {
   afterEach(function() { document.body.innerHTML = '' });
   beforeEach(function() {
     entities = new Entities();
-    container = document.body;
+    container = (new InsertOperation('RootContainer', {}, document.body)).execute(entities);
     insertGridOperation = new InsertOperation('Grid', {}, container);
     grid = insertGridOperation.execute(entities);
 
@@ -22,7 +22,7 @@ describe('Integration: Grid', () => {
   })
 
   it('insert html', () => {
-    expect(container.innerHTML).to.be.equal(
+    expect(document.body.innerHTML).to.be.equal(
       '<div class="easywyg-grid"><div class="easywyg-grid-column"></div>' +
       '<div class="easywyg-grid-column"></div></div>'
     );
@@ -39,7 +39,7 @@ describe('Integration: Grid', () => {
       attrs: { class: "pretty-grid-column" }
     })).execute(entities);
 
-    expect(container.innerHTML).to.be.equal(
+    expect(document.body.innerHTML).to.be.equal(
       '<div class="pretty-grid"><div class="pretty-grid-column"></div>' +
       '<div class="easywyg-grid-column"></div></div>'
     );

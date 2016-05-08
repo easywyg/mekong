@@ -11,13 +11,13 @@ describe('Integration: Substrate', () => {
   afterEach(function() { document.body.innerHTML = '' });
   beforeEach(function() {
     entities = new Entities();
-    container = document.body;
+    container = (new InsertOperation('RootContainer', {}, document.body)).execute(entities);
     insertOperation = new InsertOperation('Substrate', {}, container);
     insertedEntity = insertOperation.execute(entities);
   })
 
   it('insert html', () => {
-    expect(container.innerHTML).to.be.equal(
+    expect(document.body.innerHTML).to.be.equal(
       '<div class="easywyg-substrate"></div>'
     );
   });
@@ -28,7 +28,7 @@ describe('Integration: Substrate', () => {
     });
 
     operation.execute(entities);
-    expect(container.innerHTML).to.be.equal(
+    expect(document.body.innerHTML).to.be.equal(
       '<div class="pretty-substrate"></div>'
     );
   });

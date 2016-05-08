@@ -17,8 +17,14 @@ export default class extends Operation {
     if (this.entity.type == 'root_container') {
       this.entity.sync(this.container);
     } else {
-      //console.log(this.container, this.entity.view.el)
-      this.entity.sync(this.container.appendChild(this.entity.view.el));
+      // Вставляем в контейнер типа Container
+      if (typeof this.container.type != 'undefined') {
+        this.entity.sync(this.container.append(this.entity.view.el));
+      }
+      // Вставляем в контейнер типа HTMLElement
+      else {
+        this.entity.sync(this.container.appendChild(this.entity.view.el));
+      }
     }
 
     return entities.render();

@@ -14,7 +14,8 @@ export default class extends Entity {
     };
   }
 
-  appendChild(node) {
+  append(node) {
+    //console.log(this.node)
     return this.node.appendChild(node);
   }
 

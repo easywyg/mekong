@@ -13,7 +13,7 @@ describe('Table Update Operation', () => {
       beforeEach(function() {
         entities = new Entities();
 
-        let container = document.body;
+        let container = (new InsertOperation('RootContainer', {}, document.body)).execute(entities);
         let insertOperation = new InsertOperation('Table', { caption : 'hello' }, container);
         insertedEntity = insertOperation.execute(entities);
       });
@@ -21,44 +21,44 @@ describe('Table Update Operation', () => {
       it('add new caption to point', () => {
         let operation = new UpdateOperation(insertedEntity, { caption: 'p', start: 0, end: 0 });
         operation.execute(entities);
-        expect(entities.entities[0].opts.caption).to.be.equal('phello');
+        expect(entities.entities[1].opts.caption).to.be.equal('phello');
       });
 
       it('updates caption from point to point', () => {
         let operation = new UpdateOperation(insertedEntity, { caption: 'y', start: 0, end: 2 });
         operation.execute(entities);
 
-        expect(entities.entities[0].opts.caption).to.be.equal('yllo');
+        expect(entities.entities[1].opts.caption).to.be.equal('yllo');
       });
 
       it('deletes caption from point to point', () => {
         let operation = new UpdateOperation(insertedEntity, { caption: '', start: 2, end: 4 });
         operation.execute(entities);
-        expect(entities.entities[0].opts.caption).to.be.equal('heo');
+        expect(entities.entities[1].opts.caption).to.be.equal('heo');
       });
 
       it('does nothing with caption if start or end is wrong', () => {
         let operation = new UpdateOperation(insertedEntity, { caption: 'lol', start: 200, end: 400 });
         operation.execute(entities);
-        expect(entities.entities[0].opts.caption).to.be.equal('hello');
+        expect(entities.entities[1].opts.caption).to.be.equal('hello');
       });
 
       it('does nothing with caption if start or end is null', () => {
         let operation = new UpdateOperation(insertedEntity, { caption: 'yay', start: null, end: null });
         operation.execute(entities);
-        expect(entities.entities[0].opts.caption).to.be.equal('hello');
+        expect(entities.entities[1].opts.caption).to.be.equal('hello');
       });
 
       it('replaces whole caption if start or end is not defined', () => {
         let operation = new UpdateOperation(insertedEntity, { caption: 'yay' });
         operation.execute(entities);
-        expect(entities.entities[0].opts.caption).to.be.equal('yay');
+        expect(entities.entities[1].opts.caption).to.be.equal('yay');
       });
 
       it('does nothing at all if opts are empty', () => {
         let operation = new UpdateOperation(insertedEntity, {});
         operation.execute(entities);
-        expect(entities.entities[0].opts.caption).to.be.equal('hello');
+        expect(entities.entities[1].opts.caption).to.be.equal('hello');
       });
     });
 
@@ -69,7 +69,7 @@ describe('Table Update Operation', () => {
       beforeEach(function() {
         entities = new Entities();
 
-        let container = document.body;
+        let container = (new InsertOperation('RootContainer', {}, document.body)).execute(entities);
         let insertOperation = new InsertOperation('Table', {
           caption : '',
           attrs   : {
@@ -125,7 +125,7 @@ describe('Table Update Operation', () => {
         let operation = new UpdateOperation(insertedEntity, opts);
         operation.execute(entities);
 
-        expect(entities.entities[0].opts).to.deep.equal({
+        expect(entities.entities[1].opts).to.deep.equal({
           caption : 'Hello world table',
           attrs   : {
             table: {

@@ -11,7 +11,7 @@ describe('Integration: Table', () => {
   afterEach(function() { document.body.innerHTML = '' });
   beforeEach(function() {
     entities = new Entities();
-    container = document.body;
+    container = (new InsertOperation('RootContainer', {}, document.body)).execute(entities);
     insertOperation = new InsertOperation('Table', {
       caption : '',
       attrs   : {
@@ -36,7 +36,7 @@ describe('Integration: Table', () => {
   })
 
   it('insert html', () => {
-    expect(container.innerHTML).to.be.equal(
+    expect(document.body.innerHTML).to.be.equal(
       '<table class="easywyg-table"><tbody><tr><td><strong>Hello</strong> 1</td></tr><tr><td>Hello 3</td></tr></tbody></table>'
     );
   });
@@ -70,7 +70,7 @@ describe('Integration: Table', () => {
     });
 
     operation.execute(entities);
-    expect(container.innerHTML).to.be.equal(
+    expect(document.body.innerHTML).to.be.equal(
       '<table class="easywyg-table easywyg-table-zebra">' +
       '<caption id="xxx"><strong>Hello</strong> world table</caption>' +
       '<tbody><tr><td><strong>Yello</strong> 1</td><td>Hello 2</td></tr>' +

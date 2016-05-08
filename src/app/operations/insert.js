@@ -1,19 +1,21 @@
-import Operation from '../operation.js';
-import TransferOperation from '../operations/transfer.js';
-import DeleteOperation from '../operations/delete.js';
-import EntityMap from '../entity_map.js';
+import Operation from '../operation';
+import TransferOperation from '../operations/transfer';
+import DeleteOperation from '../operations/delete';
+import EntityMap from '../entity_map';
 
 // A Insert Operation
 export default class extends Operation {
   constructor(entityName, opts, container) {
     super();
 
+    /*if (typeof container == 'undefined') {
+      throw new Error('You should pass container option!');
+    }*/
+
     this.entityName = entityName;
     this.opts = opts;
     this.container = container;
-
-    // Созданный entity
-    this.insertedEntity = null;
+    this.insertedEntity = null; // Созданный entity
 
     // При инициализации операции нужно назначать ей ID
   }
@@ -30,7 +32,7 @@ export default class extends Operation {
       entity = new klass;
     } catch (e) {
       if (e.name == 'TypeError') {
-        throw new Error(`Incorrect entity name ${this.entityName}!`)
+        throw new Error(`Cannot find entity with name ${this.entityName}!`)
       }
     }
 

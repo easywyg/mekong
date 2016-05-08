@@ -36,7 +36,6 @@ export default class extends Entity {
 
   set options(opts) {
     this.modified = true;
-    //Object.assign(opts, this.opts);
 
     // Обновляем текст
     this.opts.text = updateText(
