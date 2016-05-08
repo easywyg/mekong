@@ -10,9 +10,18 @@ A Rich text editor Model layer. (not finished yet)
   let entity = api.operate('Insert', 'Paragraph', { text: 'Hello world!' }, container);
 
   // Update paragraph text
-  api.operate('Update', entity, { text: 'Yellow', start: 0, end: 5, attrs: { class: 'headline' } });
+  api.operate('Update', entity, {
+    text: 'Yellow',
+    start: 0,
+    end: 5,
+    attrs: { class: 'headline' }
+    markup: [
+      ['em', 0, 6],
+      ['strong', 0, 6, { class: 'yay' }]
+    ]
+  });
 
-  // It gives: <p class="headline">Yellow world!</p>
+  // It gives: <p class="headline"><strong class="yay"><em>Yellow</em></strong> world!</p>
 
 ```
 
