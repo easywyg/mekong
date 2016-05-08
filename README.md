@@ -30,7 +30,7 @@ A Rich text editor Model layer. (not finished yet)
 It represents a built-in HTML code from a website. For example, videos from YouTube, or Twitter's tweet.
 
 ##### Grid and GridColumn
-Responsive grid, as like a Twitter Bootstrap grid. Cannot contain nested grids.
+Responsive grid, as like Twitter Bootstrap grid. It can't contain nested grids.
 Grid columns can only have such entities inside: `Paragraph`, `List`, `Table`, `Image`, `Substrate`, `Embed`.
 
 ##### Image
@@ -38,7 +38,7 @@ Just an image, always wrapped with `figure` tag. May contain a hyperlink and `fi
 Figcaption can only have inline markup.
 
 ##### List
-Unordered or ordered list with nesting. Its items cannot contain anything other than text with some inline markup.
+Unordered or ordered list with nesting. Its items can't contain anything other than text with some inline markup.
 
 ##### Paragraph
 A semantic paragraph. It can be one of `P`, `BLOCKQUOTE`, `PRE`, `H1`, `H2`, `H3`, `H4`, `H5`, `H6`.
@@ -50,7 +50,7 @@ This is where all the generated html code is inserted.
 A container which combines several `Paragraph`, `List`, `Table`, `Image`, `Embed` entities.
 
 ##### Table
-A regular HTML table. Cannot have anything than text and inline markup within it cells.
+A regular HTML table. It can't have anything other than text and inline markup within it cells.
 
 ### Operations
 All actions on the text and HTML markup are made only via operations. You do not have to work with DOM directly, you just execute operations and things are done.
@@ -67,7 +67,7 @@ All actions on the text and HTML markup are made only via operations. You do not
 
 ##### Serialize operation
 
-You can serialize any operation into JSON string then unserialize it and execute operation with that data. It is useful for undo/redo stuff or for example, logging all actions on the server-side and then you can back to previous state in history or moving forward.
+You can serialize any operation into JSON string then unserialize it and execute operation with these data. It is useful for undo/redo stuff or for example, for logging all actions on the server-side. Using that king of logging you can back to previous state in history or moving forward.
 
 ##### Virtual DOM
 
