@@ -29,6 +29,7 @@ export default class extends Operation {
     // Обновляем индекс у всех entities
     entities.entities.map((entity, index) => {
       entity.index = index;
+      return entity;
     })
 
     this.entity.modified = true;

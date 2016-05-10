@@ -5,7 +5,6 @@ export default class {
     this.container = container;
     this.node      = null;
     this.modified  = false;
-    this.deleted   = false;
     this.index     = null;
     this.mutable   = true;
     this.id        = this.identity();
@@ -105,13 +104,16 @@ export default class {
     return Math.random().toString(36).slice(2);
   }
 
+  delete() {
+    this.view.delete(this);
+  }
+
   // Entity должно уметь рендерить себя
   // Этот метод должен вызывать метод render() у соответствующего View
   // Рендерим только тогда, когда modified == true
   render() {
     if (this.modified == true) {
       let result = this.view.render(this);
-      this.modified = false;
       return result;
     } else {
       return null;

@@ -8,9 +8,7 @@ export default class extends ContainerEntity {
     super(container);
 
     this.opts = {
-      attrs: {
-        class: 'easywyg-grid-column'
-      },
+      attrs: {}
     };
 
     this.view = new View;

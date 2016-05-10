@@ -17,13 +17,11 @@ export default class {
     return new VText(...args);
   }
 
-  render(entity) {
-    if (entity.deleted) {
-      entity.sync(undefined);
-      this.el.parentNode.removeChild(this.el);
-      return null;
-    }
+  delete(entity) {
+    this.el.parentNode.removeChild(this.el);
+  }
 
+  render(entity) {
     // Обновляем вставленную ноду
     if (entity.isSynced()) {
       let newVNode = this.build(entity);

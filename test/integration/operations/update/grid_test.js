@@ -1,6 +1,6 @@
-import UpdateOperation from '../../src/operations/update';
-import InsertOperation from '../../src/operations/insert';
-import Entities from '../../src/entities';
+import UpdateOperation from '../../../../src/operations/update';
+import InsertOperation from '../../../../src/operations/insert';
+import Entities from '../../../../src/entities';
 
 describe('Integration: Grid', () => {
   let entities;
@@ -17,14 +17,13 @@ describe('Integration: Grid', () => {
     insertGridOperation = new InsertOperation('Grid', {}, container);
     grid = insertGridOperation.execute(entities);
 
-    gridColumn1 = (new InsertOperation('GridColumn', {}, grid.view.el)).execute(entities);
-    gridColumn2 = (new InsertOperation('GridColumn', {}, grid.view.el)).execute(entities);
+    gridColumn1 = (new InsertOperation('GridColumn', {}, grid)).execute(entities);
+    gridColumn2 = (new InsertOperation('GridColumn', {}, grid)).execute(entities);
   })
 
   it('insert html', () => {
     expect(document.body.innerHTML).to.be.equal(
-      '<div class="easywyg-grid"><div class="easywyg-grid-column"></div>' +
-      '<div class="easywyg-grid-column"></div></div>'
+      '<div><div></div><div></div></div>'
     );
   });
 
@@ -40,8 +39,7 @@ describe('Integration: Grid', () => {
     })).execute(entities);
 
     expect(document.body.innerHTML).to.be.equal(
-      '<div class="pretty-grid"><div class="pretty-grid-column"></div>' +
-      '<div class="easywyg-grid-column"></div></div>'
+      '<div class="pretty-grid"><div class="pretty-grid-column"></div><div></div></div>'
     );
   });
 });

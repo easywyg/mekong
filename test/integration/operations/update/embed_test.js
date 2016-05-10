@@ -1,6 +1,6 @@
-import UpdateOperation from '../../src/operations/update';
-import InsertOperation from '../../src/operations/insert';
-import Entities from '../../src/entities';
+import UpdateOperation from '../../../../src/operations/update';
+import InsertOperation from '../../../../src/operations/insert';
+import Entities from '../../../../src/entities';
 
 describe('Integration: Embed', () => {
   let entities;

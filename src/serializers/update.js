@@ -6,8 +6,7 @@ export default class extends Serializer {
   serialize() {
     return {
       type: 'Update',
-      id: '',
-      entityId: '',
+      id: this.operation.entity.id,
       opts: this.operation.opts
     }
   }

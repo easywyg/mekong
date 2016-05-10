@@ -6,15 +6,15 @@ export default class extends Serializer {
   serialize() {
     let containerId = null;
 
-    if (this.operation.entityName != "RootContainer") {
+    //if (this.operation.entityName != "RootContainer") {
       containerId = this.operation.container.id;
-    }
+    //}
 
-    console.log(this.operation);
+    //console.log(this.operation);
 
     return {
       type: 'Insert',
-      id: 'zzz',
+      id: this.operation.entity.id,
       entity: this.operation.entityName,
       containerId: containerId,
       opts: this.operation.opts

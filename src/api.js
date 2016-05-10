@@ -4,8 +4,24 @@
 require('./ext.js');
 
 import Entities from './entities.js';
-import OperationMap from './operation_map.js';
 import Serialize from './serialize.js';
+
+// Operations
+import InsertOperation from './operations/insert.js';
+import UpdateOperation from './operations/update.js';
+import ReplaceOperation from './operations/replace.js';
+import MoveOperation from './operations/move.js';
+import DeleteOperation from './operations/delete.js';
+import TransferOperation from './operations/transfer.js';
+
+const OperationMap = {
+  Insert   : InsertOperation,
+  Update   : UpdateOperation,
+  Replace  : ReplaceOperation,
+  Move     : MoveOperation,
+  Delete   : DeleteOperation,
+  Transfer : TransferOperation
+};
 
 export default class {
   constructor() {
@@ -14,18 +30,18 @@ export default class {
 
   operate(operationName, ...args) {
     const operation = new OperationMap[operationName](...args);
-    //const serializer = Serialize(operation);
-    //
-    //console.log(operation)
-
-    // Откат операции
-    const result = operation.execute(this.entities);
+    const serializer = Serialize(operation);
 
     return {
-      result: result,
+      // Result of operation
+      result: operation.execute(this.entities),
+
+      // Rollback operation
       reverse: () => {
         operation.reverse(this.entities)
       },
+
+      // Reference to executed operation
       operation: operation
     };
   }

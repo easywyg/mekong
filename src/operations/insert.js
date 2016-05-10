@@ -1,7 +1,29 @@
 import Operation from '../operation';
 import TransferOperation from '../operations/transfer';
 import DeleteOperation from '../operations/delete';
-import EntityMap from '../entity_map';
+
+// Entities
+import EmbedEntity from '../entities/embed';
+import GridEntity from '../entities/grid';
+import GridColumnEntity from '../entities/grid_column';
+import ImageEntity from '../entities/image';
+import ListEntity from '../entities/list';
+import ParagraphEntity from '../entities/paragraph';
+import RootContainerEntity from '../entities/root_container';
+import SubstrateEntity from '../entities/substrate';
+import TableEntity from '../entities/table';
+
+const EntityMap = {
+  Embed         : EmbedEntity,
+  Grid          : GridEntity,
+  GridColumn    : GridColumnEntity,
+  Image         : ImageEntity,
+  List          : ListEntity,
+  Paragraph     : ParagraphEntity,
+  RootContainer : RootContainerEntity,
+  Substrate     : SubstrateEntity,
+  Table         : TableEntity
+};
 
 // A Insert Operation
 export default class extends Operation {
@@ -15,7 +37,7 @@ export default class extends Operation {
     this.entityName = entityName;
     this.opts = opts;
     this.container = container;
-    this.insertedEntity = null; // Созданный entity
+    this.entity = null; // Созданный entity
 
     // При инициализации операции нужно назначать ей ID
   }
@@ -26,32 +48,32 @@ export default class extends Operation {
 
   execute(entities) {
     const klass = EntityMap[this.entityName];
-    let entity;
+    let newEntity;
 
     try {
-      entity = new klass;
+      newEntity = new klass;
     } catch (e) {
       if (e.name == 'TypeError') {
         throw new Error(`Cannot find entity with name ${this.entityName}!`)
       }
     }
 
-    const length = entities.entities.push(entity);
+    const length = entities.entities.push(newEntity);
 
-    entity.options = this.opts;
-    entity.index = length;
+    newEntity.options = this.opts;
+    newEntity.index = length - 1;
     entities.render();
 
     // Вставка в контейнер
-    const transfer = new TransferOperation(entity, this.container);
+    const transfer = new TransferOperation(newEntity, this.container);
     transfer.execute(entities);
 
     // Записываем данные для отката операции
     if (this.reversible) {
-      this.insertedEntity = entity; // Clone
+      this.entity = newEntity; // Clone
     }
 
-    return entity;
+    return newEntity;
   }
 
   // Чтобы выполнить противоположное действие, команда должна
@@ -65,7 +87,7 @@ export default class extends Operation {
       return false;
     }
 
-    const operation = new DeleteOperation(this.insertedEntity);
+    const operation = new DeleteOperation(this.entity);
 
     // Данные для отката операции нужно запоминать во время вополнения метода execute.
     operation.reversible = false;

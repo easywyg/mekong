@@ -16,23 +16,13 @@ export default class extends Operation {
   // Удалить указанный entity
   execute(entities) {
     if (this.reversible) {
-      this.deletedEntity = Object.assign(entity, {}); // Clone
+      this.deletedEntity = Object.assign(this.entity, {}); // Clone
     }
 
-    entities.entities.splice(this.entity.index, 1);
+    entities.delete(this.entity);
+    this.entity.delete();
 
-    // Обновляем индекс у всех entities
-    entities.entities.map((entity, index) => {
-      entity.index = index;
-    })
-
-    this.entity.modified = true;
-    this.entity.index = null;
-
-    // Помечена как удаленная. entity.render должен удалить такую помеченную сущность
-    this.entity.deleted = true;
-
-    return entities.render();
+    return null;
   }
 
   reverse(entities) {
