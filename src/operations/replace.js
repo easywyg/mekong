@@ -1,4 +1,5 @@
 import Operation from '../operation';
+import DeleteOperation from './delete';
 
 // A Replace Operation
 export default class extends Operation {
@@ -14,15 +15,19 @@ export default class extends Operation {
   }
 
   // Заменить указанный entity на anotherEntity.
-  // В данном случае, anotherEntity не должен быть вставлен в DOM.
   execute(entities) {
-    entities.entities[this.entity.index] = this.anotherEntity;
+    let index = this.entity.index;
+    let entityNode = this.entity.node;
+
+    entities.entities[index] = this.anotherEntity;
     this.anotherEntity.modified = true;
-    this.anotherEntity.index = this.entity.index;
+    this.anotherEntity.index = index;
 
-    //this.el.parentNode.replaceChild(otherEntity.view.el, this.el);
+    const operation = new DeleteOperation(this.entity);
+    operation.execute(entities);
+    entities.render();
 
-    return entities.render();
+    return this.anotherEntity;
   }
 
   reverse(entities) {
