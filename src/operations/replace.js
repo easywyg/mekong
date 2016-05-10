@@ -24,4 +24,8 @@ export default class extends Operation {
 
     return entities.render();
   }
+
+  reverse(entities) {
+    // TODO
+  }
 }

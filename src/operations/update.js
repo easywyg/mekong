@@ -18,4 +18,8 @@ export default class extends Operation {
     this.entity.options = this.opts;
     return entities.render();
   }
+
+  reverse(entities) {
+    // TODO
+  }
 }
