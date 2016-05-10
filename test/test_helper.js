@@ -28,21 +28,3 @@ global.vdomBuilderHtml = (vdomBuilder) => {
 
   return div.innerHTML;
 }
-
-chai.use(function (chai) {
-  chai.Assertion.addMethod('matchSerialized', function(serialized) {
-    if (this._obj.containerId) {
-      let containerId = this._obj.containerId;
-      delete this._obj.containerId;
-      chai.assert.match(containerId, /[a-z0-9]+/i);
-    }
-
-    if (this._obj.id) {
-      let id = this._obj.id;
-      delete this._obj.id;
-      chai.assert.match(id, /[a-z0-9]+/i);
-    }
-
-    chai.assert.deepEqual(this._obj, serialized);
-  });
-});

@@ -65,10 +65,6 @@ All actions on the text and HTML markup are made only via operations. You don't 
 * Transform - transform one entity into another, if it is transformable.
 * Update - update entity text, markup or another data.
 
-##### Serialize operation
-
-You can serialize any operation into JSON string then unserialize it and then execute operation with these data. It is useful for undo/redo stuff or for example, for logging all actions on the server-side. Using that kind of logging you can back to previous state in history or moving forward.
-
 ##### Virtual DOM
 
 Mekong utilizes virtual DOM to partially update HTML markup.

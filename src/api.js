@@ -4,7 +4,6 @@
 require('./ext.js');
 
 import Entities from './entities.js';
-import Serialize from './serialize.js';
 
 // Operations
 import InsertOperation from './operations/insert.js';
@@ -30,16 +29,13 @@ export default class {
 
   operate(operationName, ...args) {
     const operation = new OperationMap[operationName](...args);
-    const serializer = Serialize(operation);
 
     return {
       // Result of operation
       result: operation.execute(this.entities),
 
       // Rollback operation
-      reverse: () => {
-        operation.reverse(this.entities)
-      },
+      reverse: () => { operation.reverse(this.entities) },
 
       // Reference to executed operation
       operation: operation

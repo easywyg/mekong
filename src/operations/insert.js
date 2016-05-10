@@ -48,32 +48,26 @@ export default class extends Operation {
 
   execute(entities) {
     const klass = EntityMap[this.entityName];
-    let newEntity;
 
     try {
-      newEntity = new klass;
+      this.entity = new klass;
     } catch (e) {
       if (e.name == 'TypeError') {
         throw new Error(`Cannot find entity with name ${this.entityName}!`)
       }
     }
 
-    const length = entities.entities.push(newEntity);
+    const length = entities.entities.push(this.entity);
 
-    newEntity.options = this.opts;
-    newEntity.index = length - 1;
+    this.entity.options = this.opts;
+    this.entity.index = length - 1;
     entities.render();
 
     // Вставка в контейнер
-    const transfer = new TransferOperation(newEntity, this.container);
+    const transfer = new TransferOperation(this.entity, this.container);
     transfer.execute(entities);
 
-    // Записываем данные для отката операции
-    if (this.reversible) {
-      this.entity = newEntity; // Clone
-    }
-
-    return newEntity;
+    return this.entity;
   }
 
   // Чтобы выполнить противоположное действие, команда должна
