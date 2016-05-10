@@ -7,9 +7,7 @@ export default class extends Entity {
     super(container);
 
     this.opts = {
-      attrs : {
-        class: 'easywyg-embed'
-      }
+      attrs : {}
     };
 
     this.view = new View();

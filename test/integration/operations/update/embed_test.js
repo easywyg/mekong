@@ -18,7 +18,7 @@ describe('Integration: Embed', () => {
 
   it('insert html', () => {
     expect(document.body.innerHTML).to.be.equal(
-      '<div class="easywyg-embed"></div>'
+      '<div></div>'
     );
   });
 

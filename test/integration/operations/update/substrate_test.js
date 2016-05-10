@@ -18,7 +18,7 @@ describe('Integration: Substrate', () => {
 
   it('insert html', () => {
     expect(document.body.innerHTML).to.be.equal(
-      '<div class="easywyg-substrate"></div>'
+      '<div></div>'
     );
   });
 

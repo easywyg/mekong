@@ -11,10 +11,8 @@ export default class extends Entity {
     this.opts = {
       caption : '',
       attrs   : {
-        table: {
-          class: 'easywyg-table'
-        },
-        caption: {},
+        table : {},
+        caption : {}
       },
       markup: [],
       data: []

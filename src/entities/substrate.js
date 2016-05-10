@@ -10,10 +10,8 @@ export default class extends ContainerEntity {
     this.view = new View;
 
     this.opts = {
-      tag    : 'div',
-      attrs  : {
-        class: 'easywyg-substrate'
-      },
+      tag   : 'div',
+      attrs : {}
     };
   }
 

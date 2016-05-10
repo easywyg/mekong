@@ -10,9 +10,7 @@ export default class extends Entity {
     this.opts = {
       caption : '',
       attrs   : {
-        figure: {
-          class: 'easywyg-figure'
-        },
+        figure: {},
         img: {},
         figcaption: {},
         a: {}
