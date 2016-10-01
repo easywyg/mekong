@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+</head>
+<body>
+
+  <div id="body">
+  hello world
+  <div>yay<img src="http://e1.ru/logo.jpg"></div>
+  </div>
+
+<script>
+  var body = document.getElementById('body');
+  //console.log(body)
+
+  var children = body.childNodes;
+
+  for(child in children){
+      console.log(children[child]);
+  }
+</script>
+
+</body>
+</html>

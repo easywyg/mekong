@@ -68,3 +68,8 @@ All actions on the text and HTML markup are made only via operations. You don't 
 ##### Virtual DOM
 
 Mekong utilizes virtual DOM to partially update HTML markup.
+
+### Running tests
+```
+npm run test
+```
