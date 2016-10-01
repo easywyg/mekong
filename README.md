@@ -41,13 +41,13 @@ Figcaption can only have inline markup.
 Unordered or ordered list with nesting. Its items can't contain anything other than text with some inline markup.
 
 ##### Paragraph
-A semantic paragraph. It can be one of `P`, `BLOCKQUOTE`, `PRE`, `H1`, `H2`, `H3`, `H4`, `H5`, `H6`.
+A semantic paragraph. It can be one of `P`, `PRE`, `H1`, `H2`, `H3`, `H4`, `H5`, `H6`.
 
 ##### RootContainer
 This is where all the generated html code is inserted.
 
 ##### Substrate
-A container which combines several `Paragraph`, `List`, `Table`, `Image`, `Embed` entities.
+A container which combines several `Paragraph`, `List`, `Table`, `Image`, `Embed` entities. `BLOCKQUOTE` is a Substrate by default, because it can contains several `P` paragraphs.
 
 ##### Table
 A regular HTML table. It can't have anything other than text and inline markup within it cells.
