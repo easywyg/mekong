@@ -57,13 +57,13 @@ All actions on the text and HTML markup are made only via operations. You don't 
 
 ##### Types of operations
 
-* [Delete](docs/oparations/delete.md) - remove entity.
-* [Insert](docs/oparations/insert.md) - insert entity.
-* [Move](docs/oparations/move.md) - move antity after another.
-* [Replace](docs/oparations/replace.md) - replace one entity with another.
-* [Transfer](docs/oparations/transfer.md) - put entity into container entity (`Substrate`, `GridColumn` or `RootContainer`).
-* [Transform](docs/oparations/transform.md) - transform one entity into another, if it is transformable.
-* [Update](docs/oparations/update.md) - update entity text, markup or another data.
+* [Delete](docs/operations/delete.md) - remove entity.
+* [Insert](docs/operations/insert.md) - insert entity.
+* [Move](docs/operations/move.md) - move antity after another.
+* [Replace](docs/operations/replace.md) - replace one entity with another.
+* [Transfer](docs/operations/transfer.md) - put entity into container entity (`Substrate`, `GridColumn` or `RootContainer`).
+* [Transform](docs/operations/transform.md) - transform one entity into another, if it is transformable.
+* [Update](docs/operations/update.md) - update entity text, markup or another data.
 
 ##### Virtual DOM
 
