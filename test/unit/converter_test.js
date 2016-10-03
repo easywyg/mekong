@@ -1,7 +1,7 @@
 import Converter from '../../src/converter';
 
 describe('Converter', () => {
-  it.only('converts P tag', () => {
+  it('converts P tag', () => {
     let converter = new Converter;
     //let frag = document.createDocumentFragment();
     //frag.appendChild(document.createTextNode("some text</span>"));
