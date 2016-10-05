@@ -7,11 +7,13 @@ Update Entity
 Update paragraph text, attributes and markup.
 
 ```js
-  let container = api.operate('Insert', 'RootContainer', {}, document.body).result;
-  let entity = api.operate('Insert', 'Paragraph', { text: 'Hello world!' }, container).result;
+  const Mekong = require('mekong');
+  const api = new Mekong.Api;
+  const container = api.operate('Insert', 'RootContainer', {}, document.body).result;
+  const entity = api.operate('Insert', 'Paragraph', { text: 'Hello world!' }, container).result;
 
   // Update paragraph text, attributes and markup
-  let updateOperation = api.operate('Update', entity, {
+  const updateOperation = api.operate('Update', entity, {
     text: 'Yellow',
     start: 0,
     end: 5,

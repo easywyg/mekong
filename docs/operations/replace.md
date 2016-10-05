@@ -6,13 +6,14 @@ Replaces one Entity with another Entity.
 
 ```js
   // Insert new <p> into document.body
-  let api = new Api;
-  let container = api.operate('Insert', 'RootContainer', {}, document.body).result;
-  let insertOperation1 = api.operate('Insert', 'Paragraph', { text: 'Hello world!' }, container);
-  let insertOperation2 = api.operate('Insert', 'Paragraph', { text: 'Yay!' }, container);
+  const Mekong = require('mekong');
+  const api = new Mekong.Api;
+  const container = api.operate('Insert', 'RootContainer', {}, document.body).result;
+  const insertOperation1 = api.operate('Insert', 'Paragraph', { text: 'Hello world!' }, container);
+  const insertOperation2 = api.operate('Insert', 'Paragraph', { text: 'Yay!' }, container);
 
   // Replaces 'Hello world!' with 'Yay!'
-  let replaceOperation = api.operate('Replace', insertOperation1.result, insertOperation2.result);
+  const replaceOperation = api.operate('Replace', insertOperation1.result, insertOperation2.result);
 
   // Rollback replace operation. It will restore initial state.
   replaceOperation.rollback();
