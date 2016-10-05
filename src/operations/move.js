@@ -28,17 +28,13 @@ export default class extends Operation {
       return entity;
     })
 
-    // Нужно ли пеперендеривать?
-    return null;
+    return this.entity;
   }
 
-  reverse(entities) {
-    // Если операция помечена как неоткатываемая, выходим
-    if (!this.reversible) {
-      return false;
-    }
+  rollback(entities) {
+    const operation = new this.constructor(this.beforeEntity, this.entity);
+    operation.execute(entities);
 
-    const operation = new _class(this.beforeEntity.node, this.entity);
-    return operation.execute(entities);
+    return null;
   }
 }

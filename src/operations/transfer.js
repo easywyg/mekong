@@ -14,6 +14,8 @@ export default class extends Operation {
   }
 
   execute(entities) {
+    this.entity.container = this.container;
+
     if (this.entity.type == 'root_container') {
       this.entity.sync(this.container);
     } else {
@@ -30,7 +32,8 @@ export default class extends Operation {
     return entities.render();
   }
 
-  reverse(entities) {
+  rollback(entities) {
     // TODO
+    return null;
   }
 }

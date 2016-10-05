@@ -8,6 +8,6 @@ describe('Api', () => {
     let container = api.operate('Insert', 'RootContainer', { }, document.body).result;
     let result = api.operate('Insert', 'Paragraph', { text: 'hello' }, container);
 
-    expect(result).to.include.keys('operation', 'result', 'reverse');
+    expect(result).to.include.keys('operation', 'result', 'rollback', 'status');
   });
 });

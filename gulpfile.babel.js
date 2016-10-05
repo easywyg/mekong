@@ -7,13 +7,14 @@ import watchify from 'watchify';
 import babel from 'babelify';
 
 function compile(watch) {
-  const bundler = watchify(browserify('./src/app/easywyg.es6', { debug: true })
-    .transform(babel));
+  const bundler = watchify(browserify('./src/api.js')
+    .transform(babel))
+    .require('./src/api.js', { expose: 'mekong'});
 
   function rebundle() {
     bundler.bundle()
       .on('error', function(err) { console.error(err); this.emit('end'); })
-      .pipe(source('easywyg.js'))
+      .pipe(source('mekong.js'))
       .pipe(buffer())
       .pipe(sourcemaps.init({ loadMaps: true }))
       .pipe(sourcemaps.write('./'))

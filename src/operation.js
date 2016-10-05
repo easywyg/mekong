@@ -2,8 +2,6 @@
 // Note: this class cannot be instantiated directly
 export default class {
   constructor() {
-    // Операция может откатываться?
-    this.reversible = true;
   }
 
   // Выполняет команду. Этим меняет массив Entities
@@ -12,7 +10,7 @@ export default class {
   }
 
   // Откат команды. Выполняет действие, противоположное execute.
-  reverse() {
+  rollback() {
     throw new Error('Should be implemented')
   }
 

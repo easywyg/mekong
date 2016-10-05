@@ -7,6 +7,7 @@ export default class extends Operation {
     super();
 
     this.entity = entity;
+    this._rollback = {};
   }
 
   get type() {
@@ -15,26 +16,23 @@ export default class extends Operation {
 
   // Удалить указанный entity
   execute(entities) {
-    if (this.reversible) {
-      this.deletedEntity = Object.assign(this.entity, {}); // Clone
-    }
+    this._rollback.entity = Object.assign(this.entity, {}); // Clone
 
     entities.delete(this.entity);
     this.entity.delete();
 
-    return null;
+    return this._rollback.entity;
   }
 
-  reverse(entities) {
-    // Если операция помечена как неоткатываемая, выходим
-    if (!this.reversible) {
-      return false;
-    }
-
+  rollback(entities) {
     const operation = new InsertOperation(
-      entityName, this.deletedEntity.opts, this.deletedEntity.container
+      this._rollback.entity.name,
+      this._rollback.entity.opts,
+      this._rollback.entity.container
     );
 
-    return operation.execute(entities);
+    operation.execute(entities);
+
+    return null;
   }
 }

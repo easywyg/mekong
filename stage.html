@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Mekong Stage</title>
+</head>
+<body>
+
+  <div id="body">
+  </div>
+
+<script src="build/mekong.js"></script>
+<script>
+  var Mekong = require('mekong');
+  var api = new Mekong.Api;
+/*
+  let container = api.operate('Insert', 'RootContainer', {}, document.body).result;
+  let entity1 = api.operate('Insert', 'Paragraph', {
+    text: 'Hello world!'
+  }, container).result;
+
+  let entity2 = api.operate('Insert', 'Paragraph', {
+    text: 'Yellow world!'
+  }, container).result;
+
+  api.operate('Replace', entity1, entity2);
+  */
+  let container = api.operate('Insert', 'RootContainer', {}, document.getElementById('body')).result;
+  let entity = api.operate('Insert', 'Paragraph', {
+    text: 'Hello world!'
+  }, container).result;
+
+  let entity2 = api.operate('Insert', 'Paragraph', {
+    text: 'Hello nigga!'
+  }, container).result;
+
+
+  let moveOperation = api.operate('Move', entity2, entity);
+
+  console.log(moveOperation.rollback());
+
+</script>
+
+</body>
+</html>

@@ -38,6 +38,7 @@ export default class extends Operation {
     this.opts = opts;
     this.container = container;
     this.entity = null; // Созданный entity
+    this._rollback = {};
 
     // При инициализации операции нужно назначать ей ID
   }
@@ -67,24 +68,20 @@ export default class extends Operation {
     const transfer = new TransferOperation(this.entity, this.container);
     transfer.execute(entities);
 
+    this._rollback.entity = this.entity;
+
     return this.entity;
   }
 
   // Чтобы выполнить противоположное действие, команда должна
   // знать, что было сделано.
-  // Здесь есть фишка. Выполняемая команда в методе reverse не должна
+  // Здесь есть фишка. Выполняемая команда в методе rollback не должна
   // записывать данные внутри себя для отката команды, иначе будет бесконечный цикл.
   // Нужен какой-то флаг, который пометит вновь созданную операцию как неоткатываемую.
-  reverse(entities) {
-    // Если операция помечена как неоткатываемая, выходим
-    if (!this.reversible) {
-      return false;
-    }
+  rollback(entities) {
+    const operation = new DeleteOperation(this._rollback.entity);
+    operation.execute(entities);
 
-    const operation = new DeleteOperation(this.entity);
-
-    // Данные для отката операции нужно запоминать во время вополнения метода execute.
-    operation.reversible = false;
-    return operation.execute(entities);
+    return null;
   }
 }

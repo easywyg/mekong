@@ -1,5 +1,6 @@
 import Operation from '../operation';
 import DeleteOperation from './delete';
+import InsertOperation from './insert';
 
 // A Replace Operation
 export default class extends Operation {
@@ -30,7 +31,20 @@ export default class extends Operation {
     return this.anotherEntity;
   }
 
-  reverse(entities) {
-    // TODO
+  rollback(entities) {
+    const insertOperation = new InsertOperation(
+      this.entity.name,
+      this.entity.opts,
+      this.entity.container
+    );
+
+    const insertedEntity = insertOperation.execute(entities);
+    const replaceOperation = new this.constructor(
+      this.anotherEntity, this.entity
+    );
+
+    replaceOperation.execute(entities);
+
+    return null;
   }
 }

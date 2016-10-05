@@ -22,23 +22,27 @@ const OperationMap = {
   Transfer : TransferOperation
 };
 
-export default class {
+export class Api {
   constructor() {
     this.entities = new Entities();
   }
 
   operate(operationName, ...args) {
     const operation = new OperationMap[operationName](...args);
+    const result = operation.execute(this.entities);
 
     return {
       // Result of operation
-      result: operation.execute(this.entities),
+      result: result,
 
       // Rollback operation
-      reverse: () => { operation.reverse(this.entities) },
+      rollback: () => { operation.rollback(this.entities) },
 
       // Reference to executed operation
-      operation: operation
+      operation: operation,
+
+      // TODO: Add operation status (true if successful, otherwise false)
+      status: null // operation.status()
     };
   }
 }

@@ -13,11 +13,11 @@ Delete paragraph:
   let entity = api.operate('Insert', 'Paragraph', { text: 'Hello world!' }, container).result;
 
   // Delete paragraph entity
-  let deleteOparation = api.operate('Delete', entity);
+  let deleteOperation = api.operate('Delete', entity);
 
   // Result of delete operation
-  console.log(deleteOparation.result); // Will return 'null'
+  console.log(deleteOperation.result); // Will return 'null'
 
-  // Rollback (reverse) deletion. It will restore deleted paragraph.
-  deleteOparation.reverse();
+  // Rollback deletion. It will restore deleted paragraph.
+  deleteOperation.rollback();
 ```

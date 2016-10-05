@@ -69,6 +69,11 @@ All actions on the text and HTML markup are made only via operations. You don't 
 
 Mekong utilizes virtual DOM to partially update HTML markup.
 
+### Build from sources
+```
+gulp build
+```
+
 ### Running tests
 ```
 npm run test

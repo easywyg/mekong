@@ -22,7 +22,19 @@ export default class extends Entity {
   // Обновить разметку
   updateMarkup(markup = []) {
     if (markup.length == 0) return;
-    this.opts.markup = this.opts.markup.concat(markup);
+
+    markup = this.opts.markup.concat(markup);
+
+    // Toggle markup
+    // When we have two equal markup entries, delete both.
+    markup = markup.filter((entry) => {
+      return markup.filter((entry2) => {
+        // entries equality condition
+        return entry2[0] == entry[0] && entry2[1] == entry[1] && entry2[2] == entry[2]
+      }).length == 1;
+    });
+
+    this.opts.markup = markup;
   }
 
   // Обновить тег или атрибуты тега

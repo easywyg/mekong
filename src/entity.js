@@ -2,6 +2,7 @@
 // Note: this class cannot be instantiated directly
 export default class {
   constructor(container = null) {
+    console.log('Entity', container)
     this.container = container;
     this.node      = null;
     this.modified  = false;
@@ -93,6 +94,12 @@ export default class {
   // Тип сущности
   get type() {
     return null
+  }
+
+  get name() {
+    return this.type.replace (/(?:^|[-_])(\w)/g, function (_, c) {
+      return c ? c.toUpperCase () : '';
+    })
   }
 
   set options(opts) {

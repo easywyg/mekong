@@ -3,7 +3,7 @@ import MoveOperation from '../../../src/operations/move';
 import Entities from '../../../src/entities';
 
 describe('Integration:', () => {
-  after(function() { document.body.innerHTML = '' });
+  afterEach(function() { document.body.innerHTML = '' });
   let entities, entity1, entity2;
 
   beforeEach(function() {
@@ -21,5 +21,22 @@ describe('Integration:', () => {
     moveOperation.execute(entities);
 
     expect(document.body.innerHTML).to.be.equal('<p>yellow</p><p>hello</p>');
+  });
+
+  describe('rollback', () => {
+    let result;
+    beforeEach(function() {
+      let moveOperation = new MoveOperation(entity2, entity1);
+      moveOperation.execute(entities);
+      result = moveOperation.rollback(entities);
+    });
+
+    it('works', () => {
+      expect(document.body.innerHTML).to.be.equal('<p>hello</p><p>yellow</p>');
+    });
+
+    it('result is null', () => {
+      expect(result).to.be.equal(null);
+    });
   });
 });
