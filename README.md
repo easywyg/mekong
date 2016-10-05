@@ -27,31 +27,19 @@ A Rich text editor Model layer. (not finished yet)
 ```
 
 ### Entities
-##### Embed
-It represents a built-in HTML code from a website. For example, videos from YouTube, or Twitter's tweet.
 
-##### Grid and GridColumn
-Responsive grid, as like Twitter Bootstrap grid. It can't contain nested grids.
-Grid columns can only have such entities inside: `Paragraph`, `List`, `Table`, `Image`, `Substrate`, `Embed`.
+Entity is a building block, such as paragraph, image, table and others.
 
-##### Image
-Just an image, always wrapped with `figure` tag. May contain a hyperlink and `figcaption`.
-Figcaption can only have inline markup.
+##### Types of built-in entities
 
-##### List
-Unordered or ordered list with nesting. Its items can't contain anything other than text with some inline markup.
-
-##### Paragraph
-A semantic paragraph. It can be one of `P`, `PRE`, `H1`, `H2`, `H3`, `H4`, `H5`, `H6`.
-
-##### RootContainer
-This is where all the generated html code is inserted.
-
-##### Substrate
-A container which combines several `Paragraph`, `List`, `Table`, `Image`, `Embed` entities. `BLOCKQUOTE` is a Substrate by default, because it can contains several `P` paragraphs.
-
-##### Table
-A regular HTML table. It can't have anything other than text and inline markup within it cells.
+* [Embed](docs/entities/embed.md)
+* [Grid](docs/entities/grid.md)
+* [Image](docs/entities/image.md)
+* [List](docs/entities/list.md)
+* [Paragraph](docs/entities/paragraph.md)
+* [RootContainer](docs/entities/root_container.md)
+* [Substrate](docs/entities/substrate.md)
+* [Table](docs/entities/table.md)
 
 ### Operations
 All actions on the text and HTML markup are made only via operations. You don't have to work with DOM directly, you just execute operations and things are done.
