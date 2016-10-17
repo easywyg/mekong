@@ -10,8 +10,8 @@ export default class extends View {
     return tagger.process()
   }
 
-  build() {
-    let children = this.buildMarkup(this.entity.options.text, this.entity.options.markup);
-    return this.vnode(this.entity.options.tag, { attributes: this.entity.options.attrs }, children);
+  build(entity) {
+    let children = this.buildMarkup(entity.text, entity.markup);
+    return this.vnode(entity.tag, { attributes: entity.attrs }, children);
   }
 }

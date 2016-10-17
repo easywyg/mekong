@@ -1,8 +1,11 @@
 import View from '../view';
 
-// A List View
+// List view
 export default class extends View {
-  render() {
-    // ...
+  build() {
+    const r = this.entity._representation;
+
+    // TODO: Надо рекурсивно построить виртуальный дом на основе представления
+    return this.vnode(r.tag, { attributes: r.attrs }, []);
   }
 }

@@ -6,8 +6,8 @@ import {updateText} from './lib/utils';
 // Note: Что делает этот класс? По-идее, он просто хранит в себе переданные
 // в него данные, и имеет надор методов для модификации этих данных.
 export default class extends Entity {
-  constructor(container = null) {
-    super(container);
+  /*constructor(opts) {
+    super(opts);
 
     this.opts = {
       tag    : 'p',
@@ -15,8 +15,12 @@ export default class extends Entity {
       attrs  : {},
       markup : []
     };
-
+    this.opts = opts;
     this.view = new View();
+  }*/
+
+  view() {
+    return new View;
   }
 
   // Обновить разметку

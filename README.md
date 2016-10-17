@@ -36,10 +36,14 @@ Entity is a building block, such as paragraph, image, table and others.
 * [Grid](docs/entities/grid.md)
 * [Image](docs/entities/image.md)
 * [List](docs/entities/list.md)
+* [ListItem](docs/entities/list_item.md)
 * [Paragraph](docs/entities/paragraph.md)
 * [RootContainer](docs/entities/root_container.md)
 * [Substrate](docs/entities/substrate.md)
 * [Table](docs/entities/table.md)
+* [TableCell](docs/entities/table_cell.md)
+* [DefinitionList](docs/entities/table_cell.md)
+* [DefinitionListEntry](docs/entities/table_cell.md)
 
 ### Operations
 All actions on the text and HTML markup are made only via operations. You don't have to work with DOM directly, you just execute operations and things are done.
@@ -51,7 +55,6 @@ All actions on the text and HTML markup are made only via operations. You don't 
 * [Move](docs/operations/move.md) - move antity after another.
 * [Replace](docs/operations/replace.md) - replace one entity with another.
 * [Transfer](docs/operations/transfer.md) - put entity into container entity (`Substrate`, `GridColumn` or `RootContainer`).
-* [Transform](docs/operations/transform.md) - transform one entity into another, if it is transformable.
 * [Update](docs/operations/update.md) - update entity text, markup or another data.
 
 ##### Virtual DOM

@@ -1,14 +1,12 @@
 import Operation from '../operation';
-import InsertOperation from '../operations/insert';
-import ReplaceOperation from '../operations/replace';
 
 export default class extends Operation {
   // Принимает инстанс сущности и опции
-  constructor(entity, opts) {
+  constructor(entity, options) {
     super();
 
     this.entity = entity;
-    this.opts = opts;
+    this.options = options;
     this._rollback = {};
   }
 
@@ -17,32 +15,18 @@ export default class extends Operation {
   }
 
   // Обновить указанный entity
-  execute(entities) {
+  execute() {
     // Keep entity opts for rollback()
-    this._rollback = {
-      opts: Object.assign({}, this.entity.opts),
-      entity: this.entity
-    };
-
-    this.entity.options = this.opts;
-    entities.render();
+    this._rollback.options = this.entity.cloneOptions();
+    this.entity.options = this.options;
+    this.entity.render();
 
     return this.entity;
   }
 
-  rollback(entities) {
-    const insertOperation = new InsertOperation(
-      this._rollback.entity.name,
-      this._rollback.opts,
-      this.entity.container
-    );
-
-    const insertedEntity = insertOperation.execute(entities);
-    const replaceOperation = new ReplaceOperation(
-      this.entity, insertedEntity
-    );
-
-    replaceOperation.execute(entities);
+  rollback() {
+    this.entity.options = this._rollback.options;
+    this.entity.render();
 
     return null;
   }

@@ -1,5 +1,4 @@
 import Operation from '../operation';
-import InsertOperation from '../operations/insert';
 
 // A Delete Operation
 export default class extends Operation {
@@ -15,23 +14,24 @@ export default class extends Operation {
   }
 
   // Удалить указанный entity
-  execute(entities) {
-    this._rollback.entity = Object.assign(this.entity, {}); // Clone
+  execute() {
+    this._rollback = {
+      entity: this.entity.clone()
+    }
 
-    entities.delete(this.entity);
-    this.entity.delete();
+    this.entity.node.parentNode.removeChild(this.entity.node);
+    this.entity.container.removeEntity(this.entity);
 
     return this._rollback.entity;
   }
 
-  rollback(entities) {
-    const operation = new InsertOperation(
-      this._rollback.entity.name,
-      this._rollback.entity.opts,
-      this._rollback.entity.container
-    );
+  rollback() {
+    this._rollback.entity.container.appendEntity(this._rollback.entity);
 
-    operation.execute(entities);
+    const prevEntity = this._rollback.entity.prev()
+    if (prevEntity) {
+      this._rollback.entity.moveBefore(prevEntity);
+    }
 
     return null;
   }

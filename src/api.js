@@ -3,46 +3,72 @@
 // Core extensions
 require('./ext.js');
 
-import Entities from './entities.js';
+// Core classes
+import Entity from './entity.js';
+import Container from './container.js';
+import View from './view.js';
+import Policy from './policy.js';
+import Particle from './particle.js';
 
-// Operations
-import InsertOperation from './operations/insert.js';
-import UpdateOperation from './operations/update.js';
-import ReplaceOperation from './operations/replace.js';
-import MoveOperation from './operations/move.js';
-import DeleteOperation from './operations/delete.js';
-import TransferOperation from './operations/transfer.js';
+// Default entities
+import ListEntity from './entities/list/export.js';
+import ContainerEntity from './entities/container/export.js';
 
-const OperationMap = {
-  Insert   : InsertOperation,
-  Update   : UpdateOperation,
-  Replace  : ReplaceOperation,
-  Move     : MoveOperation,
-  Delete   : DeleteOperation,
-  Transfer : TransferOperation
+const core = {
+  Entity    : Entity,
+  Container : Container,
+  View      : View,
+  Policy    : Policy,
+  Particle  : Particle
 };
 
-export class Api {
-  constructor() {
-    this.entities = new Entities();
-  }
+export default function() {
+  return {
+    coreEntities: {
+      List: ListEntity
+    },
 
-  operate(operationName, ...args) {
-    const operation = new OperationMap[operationName](...args);
-    const result = operation.execute(this.entities);
+    usedEntitities: {
+      Container: ContainerEntity
+    },
 
-    return {
-      // Result of operation
-      result: result,
+    useEntity: function(entry) {
+      if (typeof entry === 'string' || entry instanceof String) {
+        this.usedEntitities[entry] = this.coreEntities[entry];
+      } else {
+        for (let key in entry) {
+          this.usedEntitities[key] = function(core) {
+            return entry[key];
+          }
+        }
+      }
 
-      // Rollback operation
-      rollback: () => { operation.rollback(this.entities) },
+      return null;
+    },
 
-      // Reference to executed operation
-      operation: operation,
-
-      // TODO: Add operation status (true if successful, otherwise false)
-      status: null // operation.status()
-    };
-  }
+    entity: function(name, options) {
+      const klass = this.usedEntitities[name](core);
+      return new klass(options);
+    }
+  };
 }
+
+// Entities
+/*import RootEntity from './entities/root.js';
+import ParagraphEntity from './entities/paragraph.js';
+import ListEntity from './entities/list.js';
+import ListItemEntity from './entities/list_item.js';
+import TableEntity from './entities/table.js';
+//import TableCellEntity from './entities/table_cell.js';
+
+export default {
+  Entity: {
+    Root: RootEntity,
+    Paragraph: ParagraphEntity,
+    List: ListEntity,
+    ListItem: ListItemEntity,
+    Table: TableEntity//,
+    //TableCell: TableCellEntity
+  }
+};
+*/

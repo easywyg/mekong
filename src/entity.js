@@ -1,129 +1,135 @@
-// Entity abstract class
-// Note: this class cannot be instantiated directly
+import DeleteOperation   from './operations/delete.js';
+import MoveOperation     from './operations/move.js';
+import ReplaceOperation  from './operations/replace.js';
+import TransferOperation from './operations/transfer.js';
+import UpdateOperation   from './operations/update.js';
+
+const OperationMap = {
+  Delete   : DeleteOperation,
+  Move     : MoveOperation,
+  Replace  : ReplaceOperation,
+  Transfer : TransferOperation,
+  Update   : UpdateOperation
+};
+
 export default class {
-  constructor(container = null) {
-    console.log('Entity', container)
-    this.container = container;
-    this.node      = null;
-    this.modified  = false;
-    this.index     = null;
-    this.mutable   = true;
-    this.id        = this.identity();
-
-    // Значение для создания новой строки
-    // Возможные значения:
-    // \r - возврат каретки. Создать аналогичный entity, или разбить его на 2.
-    // \n - перевод строки. Просто вставить перевод строки (для PRE)
-    this.newlineEntry = "\r";
-
-    // Наследовать ли тип entity при создании нового entity при
-    // некоторых действиях в текущем.
-    // NOTE: Тип entity "BLOCKQUOTE" должен иметь inherit=true,
-    // для всех сотальных созданный entity будет "P".
-    this.inherit = false;
-
-    // При нажатии enter в конце entity создаем новый, или переходим на следующий.
-    // Для типа PRE нужно нажать enter 3 раза.
-    // TODO: Возможно, лучше всего это сделать методом с регэкспом внутри.
-    this.leaveExpr = "\r";
-
-    this.opts = {
-      attrs: {}
-    };
-  }
-
-  // Нужно ли переходить на следующий entity при попытке создания нового?
-  // (например, если следующий пустой).
-  shouldMoveToNext() {
-    return false;
-  }
-
-  // Нужно ли переходить на предыдущий entity? при попытке создания нового?
-  // (например, если предыдущий пустой)
-  shouldMoveToPrev() {
-    return false;
-  }
-
-  // Может ли сущность быть разбита на 2 сущности?
-  canSplit() {
-    return false;
-  }
-
-  // Может ли сущность склеиться с другой сущностью?
-  canConcat(anotherEntity) {
-    return false;
-  }
-
-  canBreak() {} // br
-
-  // Можно ли удалить сущность при помощи нажатия на крестик в UI :)
-  isRemovable() {
-
-  }
-
-  // Можно ли перемещать сущность.
-  isMovable() {
-
-  }
-
-  isSelectable() {}
-  isEditable() {}
-  isEmpty() {}
-
-  // Указываем ссылку на элемент, вставленный в DOM
-  sync(node) {
-    if (node) {
-      this.node = node;
-      this.node.easywygEntity = this;
-    } else {
-      delete this.node.easywygEntity;
-      delete this.node;
+  constructor(options) {
+    this.modified = false;
+    this._id = this.generateId();
+    this._container = null;
+    this._options = {};
+    this._representation = {};
+    this._siblings = {
+      prev: null,
+      next: null
     }
 
-    this.modified = false;
+    this.options = options;
   }
 
-  isSynced() {
-    return this.node != null
+  defaultOptions() {
+    return {};
   }
 
-  get attrs() {
-    return this.opts.attrs
+  prev() {
+    return this._container.prev(this);
   }
 
-  // Тип сущности
+  next() {
+    return this._container.next(this);
+  }
+
   get type() {
-    return null
+    return null;
   }
 
-  get name() {
-    return this.type.replace (/(?:^|[-_])(\w)/g, function (_, c) {
-      return c ? c.toUpperCase () : '';
-    })
+  get view() {
+    return null;
+  }
+
+  get policy() {
+    return null;
+  }
+
+  get container() {
+    return this._container;
+  }
+
+  get options() {
+    return this._options;
+  }
+
+  set container(container) {
+    this._container = container;
   }
 
   set options(opts) {
     this.modified = true;
-    Object.assign(this.opts, opts);
+    this._options = Object.assign(this.defaultOptions, opts);
   }
 
-  identity() {
+  generateId() {
     return Math.random().toString(36).slice(2);
   }
 
-  delete() {
-    this.view.delete(this);
+  clone() {
+    return Object.assign(Object.create(this), this);
   }
 
-  // Entity должно уметь рендерить себя
-  // Этот метод должен вызывать метод render() у соответствующего View
-  // Рендерим только тогда, когда modified == true
+  cloneOptions() {
+    return Object.assign({}, this.options);
+  }
+
+  appendEntity(entity) {
+    if (this.policy.canAppend()) {
+      entity.render();
+      return this.operate('Transfer', entity, this);
+    }
+
+    return null;
+  }
+
+  replaceWith(entity) {
+    return this.operate('Replace', this, entity);
+  }
+
+  delete() {
+    return this.operate('Delete', this);
+  }
+
+  update(opts) {
+    return this.operate('Update', this, opts);
+  }
+
+  moveBefore(entity) {
+    return this.operate('Move', this, entity);
+  }
+
+  operate(operationName, ...args) {
+    const operation = new OperationMap[operationName](...args);
+    const result = operation.execute();
+
+    return {
+      // Result of operation
+      result: result,
+
+      // Rollback operation
+      rollback: () => { operation.rollback() },
+
+      // Reference to executed operation
+      operation: operation,
+
+      // TODO: Add operation status (true if successful, otherwise false)
+      status: null // operation.status()
+    };
+  }
+
   render() {
     if (this.modified == true) {
-      let result = this.view.render(this);
-      return result;
-    } else {
-      return null;
+      this.node = this.view.render();
+      this.modified = false;
     }
+
+    return null;
   }
 }

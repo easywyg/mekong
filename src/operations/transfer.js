@@ -1,39 +1,38 @@
 import Operation from '../operation';
 
 // A Transfer Operation
+// Put entity to container
 export default class extends Operation {
   constructor(entity, container) {
     super();
 
     this.entity = entity;
     this.container = container;
+    this._rollback = {};
   }
 
   get type() {
     return 'transfer'
   }
 
-  execute(entities) {
-    this.entity.container = this.container;
-
-    if (this.entity.type == 'root_container') {
-      this.entity.sync(this.container);
-    } else {
-      // Вставляем в контейнер типа Container
-      if (typeof this.container.type != 'undefined') {
-        this.entity.sync(this.container.append(this.entity.view.el));
-      }
-      // Вставляем в контейнер типа HTMLElement
-      else {
-        this.entity.sync(this.container.appendChild(this.entity.view.el));
-      }
+  execute() {
+    if (!this.container.node || !this.entity.node) {
+      return null;
     }
 
-    return entities.render();
+    this._rollback.prevContainer = this.entity.container;
+    this.container.node.appendChild(this.entity.node);
+    this.entity.container = this.container;
+    this.entity.node._entity = this.entity;
+
+    return null;
   }
 
-  rollback(entities) {
-    // TODO
+  rollback() {
+    if (this._rollback.prevContainer) {
+      this._rollback.prevContainer.appendEntity(this.entity);
+    }
+
     return null;
   }
 }

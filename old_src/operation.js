@@ -4,7 +4,7 @@ export default class {
   constructor() {
   }
 
-  // Выполняет команду.
+  // Выполняет команду. Этим меняет массив Entities
   execute() {
     throw new Error('Should be implemented')
   }

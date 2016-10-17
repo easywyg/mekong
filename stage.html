@@ -4,42 +4,203 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <title>Mekong Stage</title>
+  <style>
+    table {
+      border: 1px dotted #ddd;
+    }
+
+    td {
+      border: 1px solid #ddd;
+    }
+
+    #body {
+      padding: 5px;
+      margin: 20px;
+      border: 1px solid #aaa;
+    }
+  </style>
 </head>
 <body>
 
-  <div id="body">
+  <div id="body" contenteditable="true">
   </div>
 
 <script src="build/mekong.js"></script>
 <script>
-  var Mekong = require('mekong');
+  var Mekong = require('mekong').default();
+  Mekong.useEntity('List');
+  Mekong.useEntity({ Image: function(core) {} });
+
+  //console.log(Mekong);
+  var list = Mekong.entity('List', { tag: 'ol' });
+  var item1 = list.addItem('item 1');
+  var item1_1 = item1.addItem('item 1.1');
+  var item2 = list.addItem('item 2');
+  var item1_2 = item1.addItem('item 1.2');
+
+  console.log(list);
+
+  /*var root = new Mekong.Entity.Root({ as: document.getElementById('body') });
+  var list = new Mekong.Entity.List({ tag: 'ol' });
+  root.appendEntity(list);
+
+  list.setRepresentation({
+    tag: 'ul',
+    attrs: {},
+    items: [
+      { text: 'item 1', id: '1', markup: [], attrs: {} },
+      {
+        text: 'item 2',
+        id: '2'
+        items: [
+          { text: 'item 2.1', id: '2.1' },
+          { text: 'item 2.2', id: '2.2' },
+          { text: 'item 2.3', id: '2.3' },
+        ]
+      },
+      { text: 'item 3', id: '3' }
+    ];
+  });
+
+  var item1 = list.addItem('item 1');
+  var item1_1 = item1.addItem('item 1.1');
+  var item2 = list.addItem('item 2');
+  var item1_2 = item1.addItem('item 1.2');*/
+  /*
+  var paragraph1 = new Mekong.Entity.Paragraph({ text: 'fuckoff' });
+  var paragraph = new Mekong.Entity.Paragraph({ text: 'hello' });
+
+  // TODO
+  paragraph.setText('text')
+  paragraph.setMarkup('strong', 0, 5)
+
+  // Вот в этот момент и будет происходить рендеринг
+  root.appendEntity(paragraph1);
+  root.appendEntity(paragraph);
+
+  // List
+  var list1 = new Mekong.Entity.List({ tag: 'ol' });
+  var item1 = new Mekong.Entity.ListItem({ text: 'hello world', markup: [] });
+  var item2 = new Mekong.Entity.ListItem({ text: 'substance' });
+
+  var list2 = new Mekong.Entity.List({ tag: 'ol' });
+  var item3 = new Mekong.Entity.ListItem({ text: 'what a day', markup: [
+    ['strong', 0, 4]
+  ] });
+
+  root.appendEntity(list1);
+  list1.appendEntity(item1);
+  list1.appendEntity(item2);
+  item1.appendEntity(list2);
+  list2.appendEntity(item3);
+
+  //console.log(paragraph)
+  paragraph.update({ text: 'yay!', markup: [['strong', 0, 4]] }).rollback();
+  var deleteOp = paragraph1.replaceWith(paragraph)//.rollback();
+  //paragraph.moveBefore(paragraph1).rollback()
+
+  // Table
+  // Внутри таблицы есть представление в виде JSON всех её
+  // ячеек и т.д. И так в каждой сущности.
+  var table = new Mekong.Entity.Table({ caption: 'fuck' });
+  var row = table.addRow();
+  var cell = row.addCell({})
+  cell.update({});
+  table.updateCell('cellId', {})
+  table.updateRow('rowId', {})
+  //var cell1 = Mekong.Entity.TableCell({ text: 'cell1' });
+  //var cell2 = Mekong.Entity.TableCell({ text: 'cell1' });
+  //var cell3 = Mekong.Entity.TableCell({ text: 'cell1' });
+
+  root.appendEntity(table);
+
+  //table.appendEntity(cell1);
+  //table.appendEntity(cell2);
+  //table.appendEntity(cell3);
+*/
+  /*
   var api = new Mekong.Api;
-/*
-  let container = api.operate('Insert', 'RootContainer', {}, document.body).result;
-  let entity1 = api.operate('Insert', 'Paragraph', {
-    text: 'Hello world!'
-  }, container).result;
 
-  let entity2 = api.operate('Insert', 'Paragraph', {
-    text: 'Yellow world!'
-  }, container).result;
 
-  api.operate('Replace', entity1, entity2);
-  */
   let container = api.operate('Insert', 'RootContainer', {}, document.getElementById('body')).result;
-  let entity = api.operate('Insert', 'Paragraph', {
-    text: 'Hello world!'
-  }, container).result;
 
-  let entity2 = api.operate('Insert', 'Paragraph', {
-    text: 'Hello nigga!'
-  }, container).result;
+  // List
+  let listEntity = api.operate('Insert', 'List', { tag: 'ol' }, container).result;
+  let listItemEntity = api.operate('Insert', 'ListItem', { text: 'hello world', markup: [] }, listEntity).result;
+  let listItemEntity1 = api.operate('Insert', 'ListItem', { text: 'what a day', markup: [] }, listEntity).result;
+  let listItemEntity2 = api.operate('Insert', 'ListItem', { text: 'substance', markup: [] }, listItemEntity).result;
+
+  // Table
+  let tableEntity = api.operate('Insert', 'Table', {}, container).result;
+  let tableRow = api.operate('Insert', 'TableRow', {}, tableEntity).result;
+
+  let tableCell1 = api.operate('Insert', 'TableCell', { text: 'cell 1', tag: 'th', markup: [] }, tableRow).result;
+  let tableCell2 = api.operate('Insert', 'TableCell', { text: 'cell 2', tag: 'th', markup: [] }, tableRow).result;
+  let tableCell3 = api.operate('Insert', 'TableCell', { text: 'cell 3', tag: 'th', markup: [] }, tableRow).result;
+
+  // Definition list
+  let dlEntity = api.operate('Insert', 'DefinitionList', {}, container).result;
+  let dlEntry = api.operate('Insert', 'DefinitionListEntry', {
+    term: {
+      text: 'Monday',
+      markup: []
+    },
+    description: {
+      text: 'First day of a week',
+      markup: []
+    }
+  }, tableEntity).result;
+
+  api.operate('Update', dlEntry, {
+    term: { text: 'Monday - hard day' }
+  });
+
+  // Grid
+  let gridEntity = api.operate('Insert', 'Grid', {}, container).result;
+  let gridColumn1 = api.operate('Insert', 'GridColumn', {}, gridEntity).result;
+  let gridColumn2 = api.operate('Insert', 'GridColumn', {}, gridEntity).result;
+  let gridColumn3 = api.operate('Insert', 'GridColumn', {}, gridEntity).result;
+
+  let p1 = api.operate('Insert', 'Paragraph', { text: 'p 1', markup: [] }, gridColumn1).result;
+  let p2 = api.operate('Insert', 'Paragraph', { text: 'p 2', markup: [] }, gridColumn2).result;
+  let p3 = api.operate('Insert', 'Paragraph', { text: 'p 3', markup: [] }, gridColumn3).result;
 
 
-  let moveOperation = api.operate('Move', entity2, entity);
+  При том, что есть сейчас, мы не можем контролировать, сколько например колонок может принимать
+  грид - мы можем вставить сколько угодно, что есть плохо. Это потому, что API возможно
+  не очень подходит. Может делать так:
 
-  console.log(moveOperation.rollback());
+  let rootContainer = new RootContainer(document.getElementById('body'));
 
+  grid.appendEntity(
+    new GridColumn({})
+  )
+
+  if (rootContainer.canAppendEntity(grid) {
+    rootContainer.appendEntity(grid)
+  }
+
+  // List
+  let list = new List({ tag: 'ol' });
+  let listItem1 = listEntity.appendEntity(new ListItem({ text: 'hello world1', markup: [] }));
+  listItem1.appendEntity(new ListItem({ text: 'what a day', markup: [] }));
+
+  let listItem3 = listEntity.appendEntity(new ListItem({ text: 'substance', markup: [] }));
+  container.appendEntity(list);
+
+  // ---
+  entity.append(anotherEntity); // Insert if anotherEntity is new or transfer
+  entity.replaceWith(anotherEntity); // Replace
+  entity.delete(); // Delete
+  entity.update({ markup: [] }); // Update
+  let moveOperation = entity.moveAfter(anotherEntity); // Move
+
+  moveOperation.rollback();
+
+  Каждая такая команда должна возвращать Oparation, у которой есть метод rollback()
+  и мы можем откатить операцию.
+
+   */
 </script>
 
 </body>

@@ -14,27 +14,23 @@ export default class extends Operation {
   }
 
   // Переместить entity после beforeEntity.
-  // Если beforeEntity не указан (null), то entity будет перемещен
-  // в самое начало списка entities.
-  execute(entities) {
-    entities.entities.splice(this.beforeEntity.index, 0, this.entity);
+  execute() {
+    // Если перемещаем ноду из одного контейнера в другой
+    if (this.entity._container._id != this.beforeEntity._container._id) {
+      this.beforeEntity._container.appendEntity(this.entity);
+    }
 
     // Переносим ноду
-    this.entity.node.parentNode.insertBefore(this.entity.node, this.beforeEntity.node);
+    this.entity.node.parentNode.insertBefore(
+      this.entity.node, this.beforeEntity.node
+    );
 
-    // Обновляем индекс у всех entities
-    entities.entities.map((entity, index) => {
-      entity.index = index;
-      return entity;
-    })
-
+    this.entity._container.swap(this.entity, this.beforeEntity);
     return this.entity;
   }
 
-  rollback(entities) {
-    const operation = new this.constructor(this.beforeEntity, this.entity);
-    operation.execute(entities);
-
+  rollback() {
+    this.beforeEntity.moveBefore(this.entity);
     return null;
   }
 }
