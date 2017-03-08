@@ -1,34 +1,30 @@
-import DeleteOperation   from './operations/delete.js';
+import RemoveOperation   from './operations/remove.js';
 import MoveOperation     from './operations/move.js';
 import ReplaceOperation  from './operations/replace.js';
-import TransferOperation from './operations/transfer.js';
 import UpdateOperation   from './operations/update.js';
 
 const OperationMap = {
-  Delete   : DeleteOperation,
+  Remove   : RemoveOperation,
   Move     : MoveOperation,
   Replace  : ReplaceOperation,
-  Transfer : TransferOperation,
   Update   : UpdateOperation
 };
 
 export default class {
-  constructor(options) {
-    this.modified = false;
+  constructor(root, options) {
+    this.root = root;
     this._id = this.generateId();
     this._container = null;
-    this._options = {};
-    this._representation = {};
+    this.state = {};
+
     this._siblings = {
       prev: null,
       next: null
     }
-
-    this.options = options;
   }
 
-  defaultOptions() {
-    return {};
+  get type() {
+    throw new Error('Should be implemented')
   }
 
   prev() {
@@ -39,33 +35,12 @@ export default class {
     return this._container.next(this);
   }
 
-  get type() {
-    return null;
-  }
-
-  get view() {
-    return null;
-  }
-
-  get policy() {
-    return null;
-  }
-
   get container() {
     return this._container;
   }
 
-  get options() {
-    return this._options;
-  }
-
   set container(container) {
     this._container = container;
-  }
-
-  set options(opts) {
-    this.modified = true;
-    this._options = Object.assign(this.defaultOptions, opts);
   }
 
   generateId() {
@@ -76,39 +51,32 @@ export default class {
     return Object.assign(Object.create(this), this);
   }
 
-  cloneOptions() {
-    return Object.assign({}, this.options);
+  // Replace Entity with another `entity`
+  replace(entity) {
+    return this.operate('Replace', entity);
   }
 
-  appendEntity(entity) {
-    if (this.policy.canAppend()) {
-      entity.render();
-      return this.operate('Transfer', entity, this);
-    }
-
-    return null;
+  // Update Entity state with newState
+  update(newState) {
+    return this.operate('Update', newState)
   }
 
-  replaceWith(entity) {
-    return this.operate('Replace', this, entity);
+  // Move Entity before another `entity`
+  move(entity) {
+    return this.operate('Move', entity);
   }
 
-  delete() {
-    return this.operate('Delete', this);
+  // Remove Entity from DOM
+  // This is common method for all Entities.
+  remove() {
+    //return this.operate('Remove', {})
   }
 
-  update(opts) {
-    return this.operate('Update', this, opts);
-  }
-
-  moveBefore(entity) {
-    return this.operate('Move', this, entity);
-  }
-
-  operate(operationName, ...args) {
-    const operation = new OperationMap[operationName](...args);
+  operate(operationName, newState) {
+    const operation = new OperationMap[operationName](this, newState);
     const result = operation.execute();
 
+    // OperationResult object
     return {
       // Result of operation
       result: result,
@@ -120,16 +88,13 @@ export default class {
       operation: operation,
 
       // TODO: Add operation status (true if successful, otherwise false)
-      status: null // operation.status()
+      success: operation.status // operation.status()
     };
   }
 
+  // Render Entity
   render() {
-    if (this.modified == true) {
-      this.node = this.view.render();
-      this.modified = false;
-    }
-
+    this.view.render();
     return null;
   }
 }

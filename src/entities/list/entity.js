@@ -2,62 +2,77 @@ import View   from './view.js';
 import Policy from './policies/entity.js';
 import Item from './particles/item.js';
 
-export default function(core) {
-  //console.log('List Entity', core.Entity);
+/*
+  Example:
 
+  var Mekong = require('mekong').default;
+  var mekong = new Mekong(document.getElementById('body'));
+
+  mekong.useEntity('Root');
+  mekong.useEntity('List');
+  mekong.useEntity({ Image: function(core) {} });
+
+  // A List
+  var list = mekong.entity('List', { tag: 'ol' });
+  var item1 = list.addItem('item 1');
+
+  var item1_1 = item1.addItem('item 1.1');
+  var item2 = list.addItem('item 2');
+  var item1_2 = item1.addItem('item 1.2');
+  var item1_3 = item1.addItem('item 1.3');
+
+  console.log('x',item1)
+  item1.update('lol');
+  item1_3.remove();
+*/
+
+
+export default function(core) {
   // A List Entity
   return class extends core.Entity {
-    constructor(x) {
-      super(x);
+    constructor(root, options) {
+      super(root, options);
+      let self = this;
 
-      console.log('VIEW', this.view)
+      this.state = new Proxy(Object.assign({
+        tag   : 'ul',
+        attrs : {},
+        items : []
+      }, options || {}), {
+        set(target, key, value) {
+          console.log(`XSetting value ${key} as ${value}`)
+          target[key] = value;
 
-      // Inner representation of entity
-      this._representation = {
-        tag: 'ul',
-        attrs: {},
-        items: []
-      };
+          self.render()
+
+          return true
+        },
+        deleteProperty(target, key) {
+          console.log(`Deleting ${key}`)
+          delete target[key];
+          self.render()
+        }
+      });
+
+      // Entity's view object
+      this.view = new (View(core))(this);
+
+      // Entity's policy object
+      this.policy = new (Policy(core))(this);
     }
 
-    // Этот метод устанавливает данные представления и рендерит сущность целиком
-    setRepresentation(representation) {
-      // В процессе вызова разных методов мы меняем эти данные. Их потом отдаем в View
-      // и рендерим.
-      this._representation = representation;
-      this.modified = true;
-      this.render();
-    }
-
-    // Эти методы меняют данные в представлении
-    addItem(text, attrs = {}, markup = []) {
+    // Add list item
+    addItem(state) {
       const klass = Item(core);
-      const item = new klass(this._representation.items);
-      const newItem = item.addItem(text, attrs, markup);
+      const item = new klass(this.state.items, this);
 
-      //console.log( this._representation);
-      // re-render
-      this.modified = true;
-      this.render();
-
-      return new klass(newItem.items);
+      return item.addItem(state);
     }
 
-    get defaultOptions() {
-      return {
-        tag    : 'ul',
-        attrs  : {}
-      }
-    }
-
-    get view() {
-      const klass = View(core);
-      return new klass(this);
-    }
-
-    get policy() {
-      const klass = Policy(core);
-      return new klass(this);
+    // Remove list
+    remove() {
+      this.state.items = [];
+      this.view.remove();
     }
 
     get type() {

@@ -1,11 +1,36 @@
 export default function(core) {
   // List view
   return class extends core.View {
-    build() {
-      const r = this.entity._representation;
+    build(state) {
+      const buildList = (tag, attrs, items) => {
+        let children = [];
 
-      // TODO: Надо рекурсивно построить виртуальный дом на основе представления
-      return this.vnode(r.tag, { attributes: r.attrs }, []);
+        items.forEach((item) => {
+          let vitem;
+
+          if (item.items.length > 0) {
+            let a = [
+              this.vtext(item.text),
+              buildList(tag, item.attrs, item.items)
+            ]
+            vitem = this.vnode('li', item.attrs, a);
+          } else {
+            // Build item without children
+            // TODO: Add markup here
+            vitem = this.vnode('li', item.attrs, [ this.vtext(item.text) ]);
+          }
+
+          children.push(vitem);
+        })
+
+        return this.vnode(tag, attrs, children);
+      }
+
+      if (state.items.length > 0) {
+        return buildList(state.tag, state.attrs, state.items)
+      } else {
+        return null
+      }
     }
   }
 }

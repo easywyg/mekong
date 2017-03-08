@@ -1,9 +1,6 @@
 // Operation abstract class
 // Note: this class cannot be instantiated directly
 export default class {
-  constructor() {
-  }
-
   // Выполняет команду.
   execute() {
     throw new Error('Should be implemented')

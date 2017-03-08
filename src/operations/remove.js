@@ -1,6 +1,6 @@
 import Operation from '../operation';
 
-// A Delete Operation
+// A Remove Operation
 export default class extends Operation {
   constructor(entity) {
     super();
@@ -10,7 +10,7 @@ export default class extends Operation {
   }
 
   get type() {
-    return 'delete'
+    return 'remove'
   }
 
   // Удалить указанный entity

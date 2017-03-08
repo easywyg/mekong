@@ -10,22 +10,63 @@ export default class extends Operation {
     this.entity = entity;
     this.opts = opts;
     this._rollback = {};
+    this.status = false;
   }
 
   get type() {
     return 'update'
   }
 
-  // Обновить указанный entity
-  execute(entities) {
-    // Keep entity opts for rollback()
-    this._rollback = {
-      opts: Object.assign({}, this.entity.opts),
-      entity: this.entity
-    };
+  // Обновить текст в соответствии с переданными параметрами
+  _updateText(original, update, start, end) {
+    if (typeof update == 'undefined') return original;
 
-    this.entity.options = this.opts;
-    entities.render();
+    // Обновляем текст целиком
+    if (typeof start == 'undefined' && typeof end == 'undefined') {
+      return update;
+
+    // Обновляем текст на указанных позициях
+    } else {
+      const len = original.length;
+
+      if (start > len || end > len) return original;
+      if (start == null || end == null) return original;
+
+      const startBefore = 0;
+      const endBefore   = start;
+      const startAfter  = end;
+      const endAfter    = len;
+
+      return [
+        original.substr(startBefore, endBefore),
+        update,
+        original.substr(startAfter, endAfter)
+      ].join('')
+    }
+  }
+
+  // Обновить указанный entity. Обновляет внутреннее представление сущности.
+  execute() {
+    console.log('operate')
+    //let opts = Object.assign({}, this.entity.opts);
+    console.log('YYY', this.opts)
+
+    if (this.entity._representation.text) {
+      // _representation должен обновляться внутри операции update
+      this.entity._representation.text = this._updateText(
+        this.entity._representation.text, this.opts.text, this.opts.start, this.opts.end
+      )
+    }
+
+    // Keep entity opts for rollback()
+    /*this._rollback = {
+      opts: Object.assign({}, this.entity.opts);,
+      entity: this.entity
+    };*/
+
+    //this.entity.options = this.opts;
+    //entities.render();
+    this.entity.render()
 
     return this.entity;
   }
