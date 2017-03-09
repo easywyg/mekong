@@ -1,4 +1,4 @@
 {
-  "presets": ["es2015"],
-  "plugins": ["syntax-flow"]
+  "presets": ["latest"],
+  "plugins": ["syntax-flow", "transform-es2015-parameters", "transform-class-properties"]
 }

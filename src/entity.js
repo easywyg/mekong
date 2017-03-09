@@ -1,35 +1,43 @@
 // Entity base class
 export default class {
-  constructor(root, options) {
-    this.root = root;
-    this._id = this.generateId();
-    this._container = null;
-    this.state = {};
+  constructor(options) {
+    const self = this
 
-    this._siblings = {
+    this.type = this.constructor.type
+
+    this.state = new Proxy(Object.assign(this.constructor.defaultState, options || {}), {
+      set(target, key, value) {
+        target[key] = value
+        self.onSetProp(target, key, value)
+        return true
+      }
+    })
+
+    // Callbacks
+    this.onStateChange = (command) => {}
+    this.onSetProp = (target, propName, propValue) => {}
+
+    // Reference to DOM node
+    this.node = null
+
+    // Entity's Virtual DOM tree
+    this.vtree = null
+
+    this.id = this.generateId();
+    this.container = null;
+
+    this.siblings = {
       prev: null,
       next: null
     }
   }
 
-  get type() {
-    throw new Error('Should be implemented')
-  }
-
   prev() {
-    return this._container.prev(this);
+    return this.container.prev(this);
   }
 
   next() {
-    return this._container.next(this);
-  }
-
-  get container() {
-    return this._container;
-  }
-
-  set container(container) {
-    this._container = container;
+    return this.container.next(this);
   }
 
   generateId() {

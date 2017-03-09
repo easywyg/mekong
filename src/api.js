@@ -9,14 +9,12 @@ import Container from './container.js';
 import View from './view.js';
 import Policy from './policy.js';
 import Particle from './particle.js';
-import Entities from './entities.js';
+import Document from './document.js';
 
 // Default entities
 import ListEntity from './entities/list/export.js';
 import TableEntity from './entities/table/export.js';
 import ParagraphEntity from './entities/paragraph/export.js';
-//import RootEntity from './entities/root/export.js';
-//import ContainerEntity from './entities/container/export.js';
 
 const core = {
   Entity      : Entity,
@@ -28,17 +26,15 @@ const core = {
 
 export default class Mekong {
   constructor(root) {
-    this.root = root;
+    this.document = new Document(root)
 
     this.coreEntities = {
       List      : ListEntity,
       Table     : TableEntity,
       Paragraph : ParagraphEntity
-      //Root: RootEntity
     }
 
     this.usedEntitities = {}
-    this.entities = new Entities(this.root)
   }
 
   useEntity(entry) {
@@ -57,28 +53,28 @@ export default class Mekong {
 
   entity(name, options) {
     const klass = this.usedEntitities[name](core);
-    const entity = new klass(this.root, options);
+    const entity = new klass(options);
 
-    return this.entities.add(entity)
+    return this.document.insert(entity)
   }
 
   canUndo() {
-    return this.entities.undoManager.canUndo()
+    return this.document.undoManager.canUndo()
   }
 
   canRedo() {
-    return this.entities.undoManager.canRedo()
+    return this.document.undoManager.canRedo()
   }
 
   undo() {
     if (this.canUndo()) {
-      this.entities.undoManager.undo()
+      this.document.undoManager.undo()
     }
   }
 
   redo() {
     if (this.canRedo()) {
-      this.entities.undoManager.redo()
+      this.document.undoManager.redo()
     }
   }
 /*

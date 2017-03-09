@@ -1,7 +1,13 @@
 import UndoManager from './undo_manager.js';
-import {diff, patch, create} from 'virtual-dom';
+import {diff, patch} from 'virtual-dom';
 
-// Entities collection
+import InsertCommand from './commands/insert.js';
+import RemoveCommand from './commands/remove.js';
+import MoveCommand from './commands/move.js';
+
+// A Document
+// TODO: Возможно надо переименовать этот класс в Document, если массив
+// entities нам не пригодится!
 export default class {
   constructor(root) {
     // Список сущностей не содержит вложенностей. Какая-сущность внутри какой находится,
@@ -12,14 +18,16 @@ export default class {
   }
 
   // TODO: Именно тут нужно добавлять entity в DOM
-  add(entity) {
+  insert(entity) {
     this.entities.push(entity)
 
     // При при изменении состояния сущности
     // записываем обновленное состояние в undoManager
     // А так же обновляем сущность в DOM
     entity.onStateChange = (command, execCommandItself) => {
-      l('onStateChange', command)
+      //l('onStateChange', command)
+
+      // TODO: Во всех командах параграфа реализовать метод redo()
       if (execCommandItself) {
         command.execute()
       } else {
@@ -28,17 +36,13 @@ export default class {
 
       // Update DOM node
       if (entity.node) {
-        //l('upd', entity.state)
         entity.vtree = diff(entity.vtree, entity.view.render(entity.state))
-        //l(entity.vtree)
         entity.node = patch(entity.node, entity.vtree);
       }
       // Create DOM node
       else {
-        //l('create')
-        entity.vtree = entity.view.render(entity.state)
-        entity.node = this.root.appendChild(
-          create(entity.vtree, { document: this.root.ownerDocument })
+        this.undoManager.execute(
+          new InsertCommand(this.root, entity)
         )
       }
     }
@@ -46,11 +50,17 @@ export default class {
     return entity
   }
 
+  // Remove specified entity
   remove(entity) {
-
+    this.undoManager.execute(
+      new RemoveCommand(this.root, entity)
+    )
   }
 
-  move(entity) {
-
+  // Move entity before anotherEntity
+  move(entity, anotherEntity) {
+    this.undoManager.execute(
+      new MoveCommand(this.root, entity, anotherEntity)
+    )
   }
 }

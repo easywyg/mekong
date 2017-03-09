@@ -11,41 +11,22 @@ import RemoveMarkupCommand from './commands/remove_markup.js';
 export default function(core) {
   // A Paragraph Entity
   return class extends core.Entity {
-    constructor(root, options) {
-      super(root, options);
+    static type = 'paragraph'
+    static defaultState = {
+      tag    : 'p',
+      text   : '',
+      start  : null,
+      end    : null,
+      attrs  : {},
+      markup : []
+    }
 
-      const self = this;
+    get view() {
+      return new (View(core))
+    }
 
-      // Reference to DOM node
-      this.node = null
-
-      // Entity's Virtual DOM tree
-      this.vtree = null
-
-      this.state = new Proxy(Object.assign({
-        tag    : 'p',
-        text   : '',
-        start  : null,
-        end    : null,
-        attrs  : {},
-        markup : []
-      }, options || {}), {
-        set(target, key, value) {
-          target[key] = value
-          self.onSetProp(target, key, value)
-          return true
-        }
-      })
-
-      // Entity's view object
-      this.view = new (View(core))
-
-      // Entity's policy object
-      this.policy = new (Policy(core))(this)
-
-      // Callbacks
-      this.onStateChange = (command) => {}
-      this.onSetProp = (target, propName, propValue) => {}
+    get policy() {
+      return new (Policy(core))(this)
     }
 
     getText() {
@@ -103,11 +84,6 @@ export default function(core) {
 
     removeAttr(name) {
       this.onStateChange(new RemoveAttrCommand(this, name))
-    }
-
-    // Get type of Entity
-    get type() {
-      return 'paragraph';
     }
   }
 }
