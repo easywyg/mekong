@@ -10,6 +10,7 @@ import View from './view.js';
 import Policy from './policy.js';
 import Particle from './particle.js';
 import History from './history.js';
+import UndoManager from './undo_manager.js';
 
 // Default entities
 import ListEntity from './entities/list/export.js';
@@ -19,11 +20,12 @@ import ParagraphEntity from './entities/paragraph/export.js';
 //import ContainerEntity from './entities/container/export.js';
 
 const core = {
-  Entity    : Entity,
-  Container : Container,
-  View      : View,
-  Policy    : Policy,
-  Particle  : Particle
+  Entity      : Entity,
+  Container   : Container,
+  View        : View,
+  Policy      : Policy,
+  Particle    : Particle,
+  UndoManager : UndoManager
 };
 
 export default class Mekong {
@@ -31,16 +33,13 @@ export default class Mekong {
     this.root = root;
 
     this.coreEntities = {
-      List: ListEntity,
-      Table: TableEntity,
-      Paragraph: ParagraphEntity
+      List      : ListEntity,
+      Table     : TableEntity,
+      Paragraph : ParagraphEntity
       //Root: RootEntity
     }
 
-    this.usedEntitities = {
-      //Container: ContainerEntity
-    }
-
+    this.usedEntitities = {}
     this.history = new History
   }
 

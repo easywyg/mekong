@@ -60,19 +60,63 @@
   column3.remove();*/
 
   // A paragraph
-  var paragraph = mekong.entity('Paragraph', { tag: 'blockquote', attrs: {} });
+  var paragraph = mekong.entity('Paragraph', { tag: 'p', attrs: {} });
 
-  paragraph.update({ text: 'Hello world!' })
-  paragraph.update({ attrs: { id: 'saintp', class: ['parag', 'parag1'] } })
+// undos: undefined, first (after first, second)
+/*paragraph.undoManager.update("first", { force: true });
+paragraph.undoManager.update("second", { force: true });
+console.log(paragraph.undoManager.undos); // "second"
+paragraph.undoManager.undo(function(state) { console.log('state', state) });
+console.log(paragraph.undoManager.undos); // "second"
+console.log(paragraph.undoManager.state); // "first"
+paragraph.undoManager.redo();
+console.log(paragraph.undoManager.state); // "second"
+*/
+
+  paragraph.setText('Hello world!')
+  //paragraph.setText('Yello world!')
+  paragraph.setMarkup('strong', 0, 5)
+  paragraph.setMarkup('em', 0, 5)
+  paragraph.undo()
+  paragraph.undo()
+  //paragraph.redo()
+
+  //paragraph.setMarkup('strong', 0, 5)
+  //paragraph.removeMarkup('strong', 0, 5)
+  //paragraph.setMarkup('em', 0, 5)
+  //paragraph.setMarkup('u', 0, 5)
+  //paragraph.undo();
+  //paragraph.redo();
+
+  //paragraph.update({ text: 'Hell yeah!' })
+  //paragraph.redo();
+  //console.log(paragraph.undoManager.state);
+/*
+  paragraph.undoManager.update("first", { force: true });
+  paragraph.undoManager.update("second", { force: true });
+  console.log(paragraph.undoManager.state); // "second"
+  paragraph.undoManager.undo();
+  console.log(paragraph.undoManager.state); // "first"
+  paragraph.undoManager.redo();
+  console.log(paragraph.undoManager.state); // "second"
+*/
+
+  /*paragraph.update({ attrs: { id: 'saintp', class: ['parag', 'parag1'] } })
   paragraph.update({ text: 'Y', start: 0, end: 1 })
-  paragraph.update({ tag: 'pre' })
-  paragraph.update({ markup: [ ['strong', 0, 5] ] })
-  paragraph.update({ markup: [ ['em', 3, 9] ] })
+  paragraph.update({ tag: 'pre' })*/
+  //paragraph.update({ markup: [ ['strong', 0, 5] ] })
+  /*paragraph.update({ markup: [ ['em', 3, 9] ] })
   paragraph.update({ attrs: { class: 'paragz' } }) // атрибуты надо мерджить тож
-  paragraph.update({ tag: 'blockquote' })
+  paragraph.update({ tag: 'blockquote' })*/
 
-  console.log(paragraph.history)
-  paragraph.undo();
+  //console.log(paragraph.history)
+  //console.log(paragraph.undoManager.state);
+  //paragraph.undo();
+  //console.log(paragraph.undoManager.state);
+
+  //paragraph.update({ text: 'Y', start: 0, end: 1 })
+  //paragraph.redo();
+  //paragraph.undo();
   //paragraph.remove()
   ////////////////////////////////////////////////////////
   /*

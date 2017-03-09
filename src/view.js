@@ -34,6 +34,7 @@ export default class {
   // В сложных случаях, когда пересекается разметка, он работает неправильно.
   // Видимо, нужно будет написать свою реализацию виртуального дома. А пока обойдемся без него.
   render() {
+    //console.log('view', this.entity.state)
     const newVNode = this.build(this.entity.state);
 
     if (newVNode === null) {
@@ -42,6 +43,7 @@ export default class {
 
     // Обновляем вставленную ноду (patch)
     if (this.el) {
+      //console.log(diff(this.vel, newVNode))
       this.vel = diff(this.vel, newVNode);
       this.el = patch(this.el, this.vel);
       this.entity.node = this.el;
@@ -52,6 +54,21 @@ export default class {
       this.el = create(this.vel, { document: this.entity.root.ownerDocument });
       this.entity.root.appendChild(this.el);
     }
+
+    return null
+  }
+
+  replace(state) {
+    const newVNode = this.build(state);
+    //console.log(this.entity.state)
+    if (newVNode === null) {
+      return null;
+    }
+
+    this.entity.node.parentNode.replaceChild(
+      create(newVNode, { document: this.entity.root.ownerDocument }),
+      this.el
+    );
 
     return null
   }
