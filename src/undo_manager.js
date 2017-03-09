@@ -1,118 +1,57 @@
-// A UndoManager
+// UndoManager
 export default class {
-  constructor(options) {
-    this.bindings = {};
-    this.options = {
-      buffer: 1000,
-      synchronizeOnUpdate: false,
-      comparator: function(a, b) {
-        return a === b;
-      }
-    };
-
-    this.reset(this.options.state);
+  constructor() {
+    this.commands = [];
+    this.stackPosition = -1;
+    this.savePosition = -1;
   }
 
-  reset(state, options) {
-    if (options == null) {
-      options = {};
-    }
+  execute(command) {
+    this._clearRedo();
 
-    this.clearTimeout();
+    command.execute();
 
-    delete this.undos;
-    delete this.redos;
-    delete this.bufferTimeout;
-
-    this.undos = [];
-    this.redos = [];
-    this.bufferReady = true;
-
-    return this.state = state;
+    this.commands.push(command);
+    this.stackPosition++;
+    this.changed();
   }
 
-  undo(cb) {
-    if (!this.canUndo()) {
-      return false;
-    }
-
-    this.redos.push(this.state);
-    this.state = this.undos.pop();
-
-    if (cb) {
-      cb(this.state);
-    }
-
-    this.synchronize();
-    return this.undos.length;
-  }
-
-  redo(cb) {
-    if (!this.canRedo()) {
-      return false;
-    }
-
-    this.undos.push(this.state);
-    this.state = this.redos.pop();
-
-    if (cb) {
-      cb(this.state);
-    }
-
-    this.synchronize();
-    return this.redos.length;
+  undo() {
+    this.commands[this.stackPosition].undo();
+    this.stackPosition--;
+    this.changed();
   }
 
   canUndo() {
-    return this.undos.length > 0;
+    return this.stackPosition >= 0;
+  }
+
+  redo() {
+    this.stackPosition++;
+    this.commands[this.stackPosition].redo();
+    this.changed();
   }
 
   canRedo() {
-    return this.redos.length > 0;
+    return this.stackPosition < this.commands.length - 1;
   }
 
-  update(state, options) {
-    //l(state)
-    if (options == null) {
-      options = {};
-    }
-
-    if (this.options.comparator(this.state, state) && !options.force) {
-      return false;
-    }
-
-    this.redos = [];
-    if (options.force || this.bufferReady) {
-      //l('writeHistory', this.state)
-      this.undos.push(this.state);
-
-      //if (cb) {
-      //  cb(this.state);
-      //}
-
-      this.bufferReady = false;
-    }
-
-    this.clearTimeout();
-    this.bufferTimeout = setTimeout(() => {
-      return () => {
-        return this.bufferReady = true;
-      };
-    }, this.options.buffer);
-
-    this.state = state;
-    return this.synchronize(this.options.synchronizeOnUpdate != null);
+  save() {
+    this.savePosition = this.stackPosition;
+    this.changed();
   }
 
-  clearTimeout() {
-    if (this.bufferTimeout != null) {
-      return clearTimeout(this.bufferTimeout);
-    }
+  dirty() {
+    return this.stackPosition != this.savePosition;
   }
 
-  synchronize(options) {
-    if ((this.options.synchronize != null)) {
-      return this.options.synchronize(this.state);
-    }
+  _clearRedo() {
+    // TODO there's probably a more efficient way for this
+    this.commands = this.commands.slice(0, this.stackPosition + 1);
+  }
+
+  changed() {
+    // do nothing, override
   }
 }
+

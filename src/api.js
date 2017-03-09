@@ -9,8 +9,7 @@ import Container from './container.js';
 import View from './view.js';
 import Policy from './policy.js';
 import Particle from './particle.js';
-import History from './history.js';
-import UndoManager from './undo_manager.js';
+import Entities from './entities.js';
 
 // Default entities
 import ListEntity from './entities/list/export.js';
@@ -24,8 +23,7 @@ const core = {
   Container   : Container,
   View        : View,
   Policy      : Policy,
-  Particle    : Particle,
-  UndoManager : UndoManager
+  Particle    : Particle
 };
 
 export default class Mekong {
@@ -40,7 +38,7 @@ export default class Mekong {
     }
 
     this.usedEntitities = {}
-    this.history = new History
+    this.entities = new Entities
   }
 
   useEntity(entry) {
@@ -59,9 +57,18 @@ export default class Mekong {
 
   entity(name, options) {
     const klass = this.usedEntitities[name](core);
-    return new klass(this.root, options);
+    const entity = new klass(this.root, options);
+
+    return this.entities.add(entity)
   }
 
+  undo() {
+    this.entities.undoManager.undo()
+  }
+
+  redo() {
+    this.entities.undoManager.redo()
+  }
 /*
 
   return {

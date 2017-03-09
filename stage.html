@@ -60,29 +60,24 @@
   column3.remove();*/
 
   // A paragraph
-  var paragraph = mekong.entity('Paragraph', { tag: 'p', attrs: {} });
+  var p1 = mekong.entity('Paragraph', { tag: 'p', attrs: {} });
+  p1.setText('Hello world!')
+  p1.setText('Yay!')
+  p1.setText('Lol!')
+  p1.setTag('blockquote')
+  p1.setMarkup('strong', 0, 2)
+  mekong.undo()
+  //mekong.entities.undoManager.undo()
 
-// undos: undefined, first (after first, second)
-/*paragraph.undoManager.update("first", { force: true });
-paragraph.undoManager.update("second", { force: true });
-console.log(paragraph.undoManager.undos); // "second"
-paragraph.undoManager.undo(function(state) { console.log('state', state) });
-console.log(paragraph.undoManager.undos); // "second"
-console.log(paragraph.undoManager.state); // "first"
-paragraph.undoManager.redo();
-console.log(paragraph.undoManager.state); // "second"
-*/
+  //mekong.entities.undoManager.redo()
+  //p1.setMarkup('strong', 0, 5)
+  //p1.setMarkup('em', 0, 5)
 
-  paragraph.setText('Hello world!')
-  //paragraph.setText('Yello world!')
-  paragraph.setMarkup('strong', 0, 5)
-  paragraph.setMarkup('em', 0, 5)
-  paragraph.undo()
-  paragraph.undo()
-  //paragraph.redo()
+  /*var p2 = mekong.entity('Paragraph');
+  p2.setText('Another paragraph')
+  p2.setMarkup('em', 1, 4)*/
 
-  //paragraph.setMarkup('strong', 0, 5)
-  //paragraph.removeMarkup('strong', 0, 5)
+  //mekong.entities.undo()
   //paragraph.setMarkup('em', 0, 5)
   //paragraph.setMarkup('u', 0, 5)
   //paragraph.undo();
@@ -90,16 +85,7 @@ console.log(paragraph.undoManager.state); // "second"
 
   //paragraph.update({ text: 'Hell yeah!' })
   //paragraph.redo();
-  //console.log(paragraph.undoManager.state);
-/*
-  paragraph.undoManager.update("first", { force: true });
-  paragraph.undoManager.update("second", { force: true });
-  console.log(paragraph.undoManager.state); // "second"
-  paragraph.undoManager.undo();
-  console.log(paragraph.undoManager.state); // "first"
-  paragraph.undoManager.redo();
-  console.log(paragraph.undoManager.state); // "second"
-*/
+
 
   /*paragraph.update({ attrs: { id: 'saintp', class: ['parag', 'parag1'] } })
   paragraph.update({ text: 'Y', start: 0, end: 1 })
