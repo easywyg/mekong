@@ -13,12 +13,9 @@ export default class extends Command {
     if (this.entity.state.attrs[this.name]) {
       delete this.entity.state.attrs[this.name]
     }
-
-    this.entity.view.render()
   }
 
   undo() {
     this.entity.state.attrs[this.name] = this.oldValue
-    this.entity.view.render()
   }
 }

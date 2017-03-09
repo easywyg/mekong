@@ -20,8 +20,6 @@ export default class extends Command {
     } else {
       this.entity.state.attrs[name] = this.newValue
     }
-
-    this.entity.view.render()
   }
 
   undo() {
@@ -30,7 +28,5 @@ export default class extends Command {
     } else {
       this.entity.state.attrs[name] = this.oldValue;
     }
-
-    this.entity.view.render()
   }
 }

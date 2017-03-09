@@ -38,7 +38,7 @@ export default class Mekong {
     }
 
     this.usedEntitities = {}
-    this.entities = new Entities
+    this.entities = new Entities(this.root)
   }
 
   useEntity(entry) {
@@ -62,12 +62,24 @@ export default class Mekong {
     return this.entities.add(entity)
   }
 
+  canUndo() {
+    return this.entities.undoManager.canUndo()
+  }
+
+  canRedo() {
+    return this.entities.undoManager.canRedo()
+  }
+
   undo() {
-    this.entities.undoManager.undo()
+    if (this.canUndo()) {
+      this.entities.undoManager.undo()
+    }
   }
 
   redo() {
-    this.entities.undoManager.redo()
+    if (this.canRedo()) {
+      this.entities.undoManager.redo()
+    }
   }
 /*
 

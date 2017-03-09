@@ -1,7 +1,6 @@
 import Command from '../../../undo_manager/command.js';
 import {updateText} from '../../../entity_utils.js';
 
-// TODO: Нужна доработка undo()
 export default class extends Command {
   constructor(entity, newText, start, end) {
     super()
@@ -23,15 +22,18 @@ export default class extends Command {
     this.entity.state.text = updateText(
       this.oldText, this.newText, this.start, this.end
     )
-
-    this.entity.view.render()
   }
 
   undo() {
-    this.entity.state.text = updateText(
-      this.newText, this.oldText, this.oldBounds.start, this.oldBounds.end
+    const command = new this.constructor(
+      this.entity, this.oldText, this.oldBounds.start, this.oldBounds.end
     )
 
-    this.entity.view.render()
+    this.entity.onStateChange(command, true)
+  }
+
+  redo() {
+    this.execute()
+    this.entity.onStateChange(this)
   }
 }

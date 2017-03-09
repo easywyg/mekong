@@ -16,6 +16,12 @@ export default function(core) {
 
       const self = this;
 
+      // Reference to DOM node
+      this.node = null
+
+      // Entity's Virtual DOM tree
+      this.vtree = null
+
       this.state = new Proxy(Object.assign({
         tag    : 'p',
         text   : '',
@@ -32,7 +38,7 @@ export default function(core) {
       })
 
       // Entity's view object
-      this.view = new (View(core))(this)
+      this.view = new (View(core))
 
       // Entity's policy object
       this.policy = new (Policy(core))(this)

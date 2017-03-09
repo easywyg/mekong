@@ -16,8 +16,6 @@ export default class extends Command {
     if (!this.entity.hasMarkup(this.tag, this.start, this.end)) {
       this.entity.state.markup.push([this.tag, this.start, this.end, this.attrs])
     }
-
-    this.entity.view.render()
   }
 
   undo() {
@@ -28,7 +26,5 @@ export default class extends Command {
     if (index != -1) {
       this.entity.state.markup.splice(index, 1)
     }
-
-    this.entity.view.render()
   }
 }

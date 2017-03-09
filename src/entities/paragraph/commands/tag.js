@@ -16,11 +16,9 @@ export default class extends Command {
     }
 
     this.entity.state.tag = this.newTag
-    this.entity.view.render()
   }
 
   undo() {
     this.entity.state.tag = this.oldTag
-    this.entity.view.render()
   }
 }
