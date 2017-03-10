@@ -3,6 +3,10 @@
 // Core extensions
 require('./ext.js');
 
+// Lib
+import mix from './lib/mix.js';
+import EntityUtils from './lib/entity_utils.js';
+
 // Core classes
 import Entity from './entity.js';
 import Container from './container.js';
@@ -16,12 +20,28 @@ import ListEntity from './entities/list/export.js';
 import TableEntity from './entities/table/export.js';
 import ParagraphEntity from './entities/paragraph/export.js';
 
+// Mixins
+import TextMethods from './mixins/text_methods.js';
+import MarkupMethods from './mixins/markup_methods.js';
+import AttrMethods from './mixins/attr_methods.js';
+import TagMethods from './mixins/tag_methods.js';
+
 const core = {
   Entity      : Entity,
   Container   : Container,
   View        : View,
   Policy      : Policy,
-  Particle    : Particle
+  Particle    : Particle,
+  Lib : {
+    Mix : mix,
+    EntityUtils : EntityUtils
+  },
+  Mixin : {
+    TextMethods   : TextMethods,
+    MarkupMethods : MarkupMethods,
+    AttrMethods   : AttrMethods,
+    TagMethods    : TagMethods
+  }
 };
 
 export default class Mekong {

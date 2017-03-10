@@ -1,4 +1,4 @@
-import TextCommand from '../entities/paragraph/commands/text.js';
+import TextCommand from '../commands/common/text.js';
 
 const TextMethods = (superclass) => class extends superclass {
   getText() {

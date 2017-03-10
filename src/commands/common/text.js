@@ -1,5 +1,5 @@
-import Command from '../../../undo_manager/command.js';
-import {updateText} from '../../../entity_utils.js';
+import Command from '../../undo_manager/command.js';
+import EntityUtils from '../../lib/entity_utils.js';
 
 export default class extends Command {
   // entity = Entity | Particle
@@ -21,7 +21,7 @@ export default class extends Command {
       return
     }
 
-    this.stateReference.text = updateText(
+    this.stateReference.text = EntityUtils.updateText(
       this.oldText, this.newText, this.start, this.end
     )
   }

@@ -33,7 +33,6 @@ export default class {
 
       // Update DOM node
       if (entity.node) {
-        l(entity.state)
         entity.vtree = diff(entity.vtree, entity.view.render(entity.state))
         entity.node = patch(entity.node, entity.vtree);
       }

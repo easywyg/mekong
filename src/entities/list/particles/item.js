@@ -1,15 +1,10 @@
-import mix from '../../../lib/mix.js';
-
 // Commands
 import InsertItemCommand from '../commands/insert_item.js';
 
-// Mixins
-import TextMethods from '../../../mixins/text_methods.js'
-import MarkupMethods from '../../../mixins/markup_methods.js'
-import AttrMethods from '../../../mixins/attr_methods.js'
-
 export default function(core) {
-  return class Item extends mix(core.Particle).with(TextMethods, MarkupMethods, AttrMethods) {
+  return class extends core.Lib.Mix(core.Particle).with(
+    core.Mixin.TextMethods, core.Mixin.MarkupMethods, core.Mixin.AttrMethods) {
+
     static defaultState = {
       items: [],
       text: '',

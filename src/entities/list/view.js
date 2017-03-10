@@ -6,7 +6,6 @@ export default function(core) {
         let children = [];
 
         items.forEach((item) => {
-          l('item', item)
           let vitem;
 
           if (item.items.length > 0) {
