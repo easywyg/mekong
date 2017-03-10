@@ -37,17 +37,24 @@
   mekong.useEntity({ Image: function(core) {} });
 
   // A List
-  /*var list = mekong.entity('List', { tag: 'ol' });
-  var item1 = list.addItem({ text: 'item 1' });
+  var list = mekong.entity('List', { tag: 'ol' });
+  var item1 = list.createItem();
+  item1.setText('item 1');
 
-  var item1_1 = item1.addItem({ text: 'item 1.1' });
-  var item2 = list.addItem({ text: 'item 2' });
-  var item1_2 = item1.addItem({ text: 'item 1.2' });
-  var item1_3 = item1.addItem({ text: 'item 1.3' });
+  var item1_1 = item1.createItem();
+  item1_1.setText('item 1.1');
 
-  item1.update({ text: 'lol' });
-  item1_3.remove();
-  console.log(list.state)*/
+  var item2 = list.createItem();
+  item2.setText('item 2');
+
+  var item1_2 = item1.createItem();
+  item1_2.setText('item 1.2');
+
+  var item1_3 = item1.createItem();
+  item1_3.setText('item 1.3');
+
+  mekong.document.remove(list)
+  mekong.document.undo()
   // A Table
   /*var table = mekong.entity('Table');
   var row1 = table.addRow();
@@ -62,58 +69,11 @@
   // A paragraph
   var p1 = mekong.entity('Paragraph', { tag: 'p', attrs: {} });
   p1.setText('Hello world!')
-  p1.setText('Yay!')
+  //p1.setText('Yay!')
+  p1.setMarkup('strong', 0, 5)
+  //mekong.document.undo()
 
-  //mekong.entities.remove(p1)
-  //p1.setText('Lol!')
-  //p1.setTag('blockquote')
-  //p1.setMarkup('strong', 0, 2)
-  //mekong.undo()
-  mekong.undo()
-  //mekong.redo()
-
-  //mekong.redo()
-  //mekong.entities.undoManager.undo()
-
-  //mekong.entities.undoManager.redo()
-  //p1.setMarkup('strong', 0, 5)
-  //p1.setMarkup('em', 0, 5)
-
-  /*var p2 = mekong.entity('Paragraph');
-  p2.setText('Another paragraph')
-  p2.setMarkup('em', 1, 4)*/
-
-  //mekong.entities.undo()
-  //paragraph.setMarkup('em', 0, 5)
-  //paragraph.setMarkup('u', 0, 5)
-  //paragraph.undo();
-  //paragraph.redo();
-
-  //paragraph.update({ text: 'Hell yeah!' })
-  //paragraph.redo();
-
-
-  /*paragraph.update({ attrs: { id: 'saintp', class: ['parag', 'parag1'] } })
-  paragraph.update({ text: 'Y', start: 0, end: 1 })
-  paragraph.update({ tag: 'pre' })*/
-  //paragraph.update({ markup: [ ['strong', 0, 5] ] })
-  /*paragraph.update({ markup: [ ['em', 3, 9] ] })
-  paragraph.update({ attrs: { class: 'paragz' } }) // атрибуты надо мерджить тож
-  paragraph.update({ tag: 'blockquote' })*/
-
-  //console.log(paragraph.history)
-  //console.log(paragraph.undoManager.state);
-  //paragraph.undo();
-  //console.log(paragraph.undoManager.state);
-
-  //paragraph.update({ text: 'Y', start: 0, end: 1 })
-  //paragraph.redo();
-  //paragraph.undo();
-  //paragraph.remove()
-  ////////////////////////////////////////////////////////
-  /*
-
-
+/*
   // Grid
   let gridEntity = api.operate('Insert', 'Grid', {}, container).result;
   let gridColumn1 = api.operate('Insert', 'GridColumn', {}, gridEntity).result;

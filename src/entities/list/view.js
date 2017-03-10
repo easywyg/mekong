@@ -6,6 +6,7 @@ export default function(core) {
         let children = [];
 
         items.forEach((item) => {
+          l('item', item)
           let vitem;
 
           if (item.items.length > 0) {
@@ -26,11 +27,7 @@ export default function(core) {
         return this.vnode(tag, attrs, children);
       }
 
-      if (state.items.length > 0) {
-        return buildList(state.tag, state.attrs, state.items)
-      } else {
-        return null
-      }
+      return buildList(state.tag, state.attrs, state.items)
     }
   }
 }

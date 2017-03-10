@@ -21,4 +21,9 @@ export default class extends Command {
   undo() {
     this.entity.state.tag = this.oldTag
   }
+
+  redo() {
+    this.execute()
+    this.entity.onStateChange(this)
+  }
 }

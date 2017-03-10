@@ -6,8 +6,6 @@ import RemoveCommand from './commands/remove.js';
 import MoveCommand from './commands/move.js';
 
 // A Document
-// TODO: Возможно надо переименовать этот класс в Document, если массив
-// entities нам не пригодится!
 export default class {
   constructor(root) {
     // Список сущностей не содержит вложенностей. Какая-сущность внутри какой находится,
@@ -17,7 +15,7 @@ export default class {
     this.root = root
   }
 
-  // TODO: Именно тут нужно добавлять entity в DOM
+  // Insert Entity into Document
   insert(entity) {
     this.entities.push(entity)
 
@@ -27,7 +25,6 @@ export default class {
     entity.onStateChange = (command, execCommandItself) => {
       //l('onStateChange', command)
 
-      // TODO: Во всех командах параграфа реализовать метод redo()
       if (execCommandItself) {
         command.execute()
       } else {
@@ -36,6 +33,7 @@ export default class {
 
       // Update DOM node
       if (entity.node) {
+        l(entity.state)
         entity.vtree = diff(entity.vtree, entity.view.render(entity.state))
         entity.node = patch(entity.node, entity.vtree);
       }
@@ -60,7 +58,28 @@ export default class {
   // Move entity before anotherEntity
   move(entity, anotherEntity) {
     this.undoManager.execute(
+      // TODO: Need to complete
       new MoveCommand(this.root, entity, anotherEntity)
     )
+  }
+
+  canUndo() {
+    return this.undoManager.canUndo()
+  }
+
+  canRedo() {
+    return this.undoManager.canRedo()
+  }
+
+  undo() {
+    if (this.canUndo()) {
+      this.undoManager.undo()
+    }
+  }
+
+  redo() {
+    if (this.canRedo()) {
+      this.undoManager.redo()
+    }
   }
 }

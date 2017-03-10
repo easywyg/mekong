@@ -5,7 +5,6 @@
   "main": "build/easywyg.js",
   "preferGlobal": "true",
   "devDependencies": {
-    "array-xor": "^0.1.1",
     "babel-cli": "^6.6.5",
     "babel-core": "^6.7.4",
     "babel-plugin-syntax-flow": "^6.5.0",

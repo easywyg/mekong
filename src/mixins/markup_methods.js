@@ -1,0 +1,23 @@
+import MarkupCommand from '../entities/paragraph/commands/markup.js';
+
+const MarkupMethods = (superclass) => class extends superclass {
+  getMarkup() {
+    return this.state.markup
+  }
+
+  hasMarkup(tag, start, end) {
+    return this.state.markup.findIndex((b) => {
+      return tag == b[0] && start == b[1] && end == b[2]
+    }) != -1
+  }
+
+  setMarkup(tag, start, end, attrs) {
+    this.onStateChange(new MarkupCommand(this, this.state, tag, start, end, attrs))
+  }
+
+  removeMarkup(tag, start, end) {
+    this.onStateChange(new RemoveMarkupCommand(this, this.state, tag, start, end))
+  }
+}
+
+export default MarkupMethods;

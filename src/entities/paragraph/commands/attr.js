@@ -1,12 +1,14 @@
 import Command from '../../../undo_manager/command.js';
 
 export default class extends Command {
-  constructor(entity, name, newValue) {
+  // entity = Entity | Particle
+  constructor(entity, stateReference, name, newValue) {
     super()
 
     this.entity = entity
+    this.stateReference = stateReference
     this.name = name
-    this.oldValue = this.entity.getAttr(this.name)
+    this.oldValue = this.stateReference.attrs[this.name]
     this.newValue = newValue
 
     if (Array.isArray(this.newValue)) {
@@ -15,18 +17,23 @@ export default class extends Command {
   }
 
   execute() {
-    if (this.newValue === null && this.entity.state.attrs[name]) {
-      delete this.entity.state.attrs[name];
+    if (this.newValue === null && this.stateReference.attrs[name]) {
+      delete this.stateReference.attrs[name];
     } else {
-      this.entity.state.attrs[name] = this.newValue
+      this.stateReference.attrs[name] = this.newValue
     }
   }
 
   undo() {
-    if (this.oldValue === null && this.entity.state.attrs[name]) {
-      delete this.entity.state.attrs[name];
+    if (this.oldValue === null && this.stateReference.attrs[name]) {
+      delete this.stateReference.attrs[name];
     } else {
-      this.entity.state.attrs[name] = this.oldValue;
+      this.stateReference.attrs[name] = this.oldValue;
     }
+  }
+
+  redo() {
+    this.execute()
+    this.entity.onStateChange(this)
   }
 }

@@ -2,12 +2,14 @@ import Command from '../../../undo_manager/command.js';
 import {updateText} from '../../../entity_utils.js';
 
 export default class extends Command {
-  constructor(entity, newText, start, end) {
+  // entity = Entity | Particle
+  constructor(entity, stateReference, newText, start, end) {
     super()
 
     this.entity = entity
-    this.oldBounds = this.entity.getTextBounds()
-    this.oldText = this.entity.getText()
+    this.stateReference = stateReference
+    this.oldBounds = { start: this.stateReference.start, end: this.stateReference.end }
+    this.oldText = this.stateReference.text
     this.newText = newText
     this.start = start
     this.end = end
@@ -19,7 +21,7 @@ export default class extends Command {
       return
     }
 
-    this.entity.state.text = updateText(
+    this.stateReference.text = updateText(
       this.oldText, this.newText, this.start, this.end
     )
   }

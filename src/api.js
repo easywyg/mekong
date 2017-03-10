@@ -58,25 +58,6 @@ export default class Mekong {
     return this.document.insert(entity)
   }
 
-  canUndo() {
-    return this.document.undoManager.canUndo()
-  }
-
-  canRedo() {
-    return this.document.undoManager.canRedo()
-  }
-
-  undo() {
-    if (this.canUndo()) {
-      this.document.undoManager.undo()
-    }
-  }
-
-  redo() {
-    if (this.canRedo()) {
-      this.document.undoManager.redo()
-    }
-  }
 /*
 
   return {

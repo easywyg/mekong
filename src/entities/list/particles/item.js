@@ -1,43 +1,38 @@
-//import Particle from '../particle';
+import mix from '../../../lib/mix.js';
 
-// TODO
-// дефолтный representation для сущности
-// можно хранить в отдельном файле. Сама сущность хранится в отдельной дире
-// со всеми зависимости. Есть файл export.js, в котором экспортируется сущность и все ее
-// зависимости.
+// Commands
+import InsertItemCommand from '../commands/insert_item.js';
+
+// Mixins
+import TextMethods from '../../../mixins/text_methods.js'
+import MarkupMethods from '../../../mixins/markup_methods.js'
+import AttrMethods from '../../../mixins/attr_methods.js'
 
 export default function(core) {
-  return class Item extends core.Particle {
-    constructor(items, list) {
+  return class Item extends mix(core.Particle).with(TextMethods, MarkupMethods, AttrMethods) {
+    static defaultState = {
+      items: [],
+      text: '',
+      start: null,
+      end: null,
+      markup: [],
+      attrs: {}
+    }
+
+    // TODO: тут надо сделать наподобие как в Entity
+    constructor(items, entity) {
       super();
 
       this.items = items;
-      this.list  = list;
-      this.state = {};
+      this.entity = entity;
+      this.onStateChange = this.entity.onStateChange
     }
 
-    // TODO: Добавление нужно делать при помощи операции
-    addItem(state) {
-      state.items = []
+    createItem() {
+      const command = new InsertItemCommand(this)
+      this.entity.onStateChange(command)
 
-      this.items.push(state);
-
-      let item = new Item(state.items, this.list);
-      item.state = state;
-
-      // Touch state.items to rerender
-      this.list.state.items = this.list.state.items
-
-      return item;
-    }
-
-    // TODO: Merge attrs & markup
-    // TODO: Обновление нужно делать при помощи операции
-    update(newState) { // text, attrs = {}, markup = []
-      this.state.text = newState.text;
-      this.list.render();
-
-      return null; // TODO
+      return command.item
     }
 
     // TODO: Удаление нужно делать при помощи операции
