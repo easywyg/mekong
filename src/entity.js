@@ -14,7 +14,7 @@ export default class {
     })
 
     // Callbacks
-    this.onStateChange = (command) => {}
+    this.onStateChange = () => {}
     this.onSetProp = (target, propName, propValue) => {}
 
     // Reference to DOM node
@@ -24,21 +24,29 @@ export default class {
     this.vtree = null
 
     this.id = this.generateId();
-    this.container = null;
+    //this.container = null;
 
-    this.siblings = {
+    /*this.siblings = {
       prev: null,
       next: null
-    }
+    }*/
   }
 
-  prev() {
+  runCommand(command, execCommandItself) {
+    this.onCommand(command, execCommandItself)
+  }
+
+  changeState() {
+    this.onStateChange()
+  }
+
+  /*prev() {
     return this.container.prev(this);
   }
 
   next() {
     return this.container.next(this);
-  }
+  }*/
 
   generateId() {
     return Math.random().toString(36).slice(2);

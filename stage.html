@@ -18,6 +18,19 @@
       margin: 20px;
       border: 1px solid #aaa;
     }
+
+    .grid {
+      border: 1px solid red;
+      overflow: hidden;
+    }
+
+    .grid > div {
+      width: 50%;
+      float: left;
+      border: 1px solid orange;
+      min-height: 1em;
+      box-sizing: border-box;
+    }
   </style>
 </head>
 <body>
@@ -30,14 +43,15 @@
   var Mekong = require('mekong').default;
   var mekong = new Mekong(document.getElementById('body'));
 
-  mekong.useEntity('Root');
+  //mekong.useEntity('Root');
   mekong.useEntity('Table');
   mekong.useEntity('Paragraph');
   mekong.useEntity('List');
+  mekong.useEntity('Grid');
   mekong.useEntity({ Image: function(core) {} });
 
   // A List
-  var list = mekong.entity('List', { tag: 'ol' });
+  /*var list = mekong.entity('List', { tag: 'ol' });
   var item1 = list.createItem();
   item1.setText('item 1');
 
@@ -54,7 +68,7 @@
   item1_3.setText('item 1.3');
 
   mekong.document.remove(list)
-  mekong.document.undo()
+  mekong.document.undo()*/
   // A Table
   /*var table = mekong.entity('Table');
   var row1 = table.addRow();
@@ -69,57 +83,24 @@
   // A paragraph
   var p1 = mekong.entity('Paragraph', { tag: 'p', attrs: {} });
   p1.setText('Hello world!')
-  //p1.setText('Yay!')
-  p1.setMarkup('strong', 0, 5)
-  //mekong.document.undo()
+  p1.setText('Yay!')
+  //p1.setMarkup('strong', 0, 5)
+  mekong.document.undo()
+  //mekong.document.redo()
 
-/*
-  // Grid
-  let gridEntity = api.operate('Insert', 'Grid', {}, container).result;
-  let gridColumn1 = api.operate('Insert', 'GridColumn', {}, gridEntity).result;
-  let gridColumn2 = api.operate('Insert', 'GridColumn', {}, gridEntity).result;
-  let gridColumn3 = api.operate('Insert', 'GridColumn', {}, gridEntity).result;
+  // A Grid
+  var grid = mekong.entity('Grid');
+  grid.setAttr('id', 'grid');
+  var column1 = grid.createColumn({ class: 'col-xs-1' });
+  var column2 = grid.createColumn();
+  mekong.document.undo()
+  column1.remove()
+  mekong.document.undo()
+  console.log('a', grid)
+  //grid.setAttr('id', 'lol');
 
-  let p1 = api.operate('Insert', 'Paragraph', { text: 'p 1', markup: [] }, gridColumn1).result;
-  let p2 = api.operate('Insert', 'Paragraph', { text: 'p 2', markup: [] }, gridColumn2).result;
-  let p3 = api.operate('Insert', 'Paragraph', { text: 'p 3', markup: [] }, gridColumn3).result;
-
-
-  При том, что есть сейчас, мы не можем контролировать, сколько например колонок может принимать
-  грид - мы можем вставить сколько угодно, что есть плохо. Это потому, что API возможно
-  не очень подходит. Может делать так:
-
-  let rootContainer = new RootContainer(document.getElementById('body'));
-
-  grid.appendEntity(
-    new GridColumn({})
-  )
-
-  if (rootContainer.canAppendEntity(grid) {
-    rootContainer.appendEntity(grid)
-  }
-
-  // List
-  let list = new List({ tag: 'ol' });
-  let listItem1 = listEntity.appendEntity(new ListItem({ text: 'hello world1', markup: [] }));
-  listItem1.appendEntity(new ListItem({ text: 'what a day', markup: [] }));
-
-  let listItem3 = listEntity.appendEntity(new ListItem({ text: 'substance', markup: [] }));
-  container.appendEntity(list);
-
-  // ---
-  entity.append(anotherEntity); // Insert if anotherEntity is new or transfer
-  entity.replaceWith(anotherEntity); // Replace
-  entity.delete(); // Delete
-  entity.update({ markup: [] }); // Update
-  let moveOperation = entity.moveAfter(anotherEntity); // Move
-
-  moveOperation.rollback();
-
-  Каждая такая команда должна возвращать Oparation, у которой есть метод rollback()
-  и мы можем откатить операцию.
-
-   */
+  // Transfer
+  //mekong.document.transfer(p1, column1);
 </script>
 
 </body>

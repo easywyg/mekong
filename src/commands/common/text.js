@@ -24,18 +24,15 @@ export default class extends Command {
     this.stateReference.text = EntityUtils.updateText(
       this.oldText, this.newText, this.start, this.end
     )
+
+    this.entity.changeState()
   }
 
   undo() {
     const command = new this.constructor(
-      this.entity, this.oldText, this.oldBounds.start, this.oldBounds.end
+      this.entity, this.stateReference, this.oldText, this.oldBounds.start, this.oldBounds.end
     )
 
-    this.entity.onStateChange(command, true)
-  }
-
-  redo() {
-    this.execute()
-    this.entity.onStateChange(this)
+    this.entity.runCommand(command, true)
   }
 }

@@ -16,14 +16,11 @@ export default class extends Command {
     }
 
     this.entity.state.tag = this.newTag
+    this.entity.changeState()
   }
 
   undo() {
     this.entity.state.tag = this.oldTag
-  }
-
-  redo() {
-    this.execute()
-    this.entity.onStateChange(this)
+    this.entity.changeState()
   }
 }

@@ -23,6 +23,7 @@ export default class extends Command {
   execute() {
     if (!this.hasMarkup(this.tag, this.start, this.end)) {
       this.stateReference.markup.push([this.tag, this.start, this.end, this.attrs])
+      this.entity.changeState()
     }
   }
 
@@ -33,11 +34,7 @@ export default class extends Command {
 
     if (index != -1) {
       this.stateReference.markup.splice(index, 1)
+      this.entity.changeState()
     }
-  }
-
-  redo() {
-    this.execute()
-    this.entity.onStateChange(this)
   }
 }

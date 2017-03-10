@@ -17,23 +17,22 @@ export default class extends Command {
   }
 
   execute() {
-    if (this.newValue === null && this.stateReference.attrs[name]) {
-      delete this.stateReference.attrs[name];
+    if (this.newValue === null && this.stateReference.attrs[this.name]) {
+      delete this.stateReference.attrs[this.name];
     } else {
-      this.stateReference.attrs[name] = this.newValue
+      this.stateReference.attrs[this.name] = this.newValue
     }
+
+    this.entity.changeState()
   }
 
   undo() {
-    if (this.oldValue === null && this.stateReference.attrs[name]) {
-      delete this.stateReference.attrs[name];
+    if (this.oldValue === null && this.stateReference.attrs[this.name]) {
+      delete this.stateReference.attrs[this.name];
     } else {
-      this.stateReference.attrs[name] = this.oldValue;
+      this.stateReference.attrs[this.name] = this.oldValue;
     }
-  }
 
-  redo() {
-    this.execute()
-    this.entity.onStateChange(this)
+    this.entity.changeState()
   }
 }

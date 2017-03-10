@@ -12,11 +12,11 @@ const AttrMethods = (superclass) => class extends superclass {
   }
 
   setAttr(name, value) {
-    this.onStateChange(new AttrCommand(this, this.state, name, value))
+    this.runCommand(new AttrCommand(this, this.state, name, value))
   }
 
   removeAttr(name) {
-    this.onStateChange(new RemoveAttrCommand(this, this.state, name))
+    this.runCommand(new RemoveAttrCommand(this, this.state, name))
   }
 };
 

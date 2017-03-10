@@ -1,5 +1,3 @@
-import {VNode, VText} from 'virtual-dom';
-
 // Порядок следования тегов в том случае, если у двух тегов
 // одинаковые позиции начала и конца. Чем меньше индекс в массиве, тем тег первее.
 const TAGS = [
@@ -10,9 +8,12 @@ const TAGS = [
 
 // Создает иерархию виртуальных нод в группе сегментов
 export default class {
-  constructor(segments) {
+  constructor(segments, vnode, vtext) {
     this.segments = segments;
     this.segments.sort(this.sortSegments);
+
+    this.vnode = vnode
+    this.vtext = vtext
   }
 
   // Сортируем отрезки.
@@ -33,14 +34,6 @@ export default class {
     return 0;
   }
 
-  vnode(...args) {
-    return new VNode(...args);
-  }
-
-  vtext(...args) {
-    return new VText(...args);
-  }
-
   // Создаём иерархию для группы отрезков.
   // Возвращает VNode.
   generate() {
@@ -52,7 +45,7 @@ export default class {
       let type = segment[3].type;
 
       if (type == 1) {
-        let newCur = this.vnode(segment[0], { attributes: segment[3].attrs }, []);
+        let newCur = new this.vnode(segment[0], { attributes: segment[3].attrs }, []);
 
         if (cur) {
           parents[JSON.stringify(segment)] = cur;
@@ -64,7 +57,7 @@ export default class {
       }
       else if (type == 3) {
         if (cur) {
-          cur.children.push(this.vtext(segment[0]));
+          cur.children.push(new this.vtext(segment[0]));
 
           // При выходе из тега, нужно находить родительский vnode
           var prev = this.segments[i - 1];
@@ -72,7 +65,7 @@ export default class {
             cur = parents[JSON.stringify(prev)]
           }
         } else {
-          result = this.vtext(segment[0]);
+          result = new this.vtext(segment[0]);
         }
       }
     });

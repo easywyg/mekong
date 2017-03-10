@@ -14,15 +14,12 @@ export default class extends Command {
   execute() {
     if (this.stateReference.attrs[this.name]) {
       delete this.stateReference.attrs[this.name]
+      this.entity.changeState()
     }
   }
 
   undo() {
     this.stateReference.attrs[this.name] = this.oldValue
-  }
-
-  redo() {
-    this.execute()
-    this.entity.onStateChange(this)
+    this.entity.changeState()
   }
 }

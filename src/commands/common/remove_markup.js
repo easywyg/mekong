@@ -24,15 +24,12 @@ export default class extends Command {
 
     if (index != -1) {
       this.stateReference.markup.splice(index, 1)
+      this.entity.changeState()
     }
   }
 
   undo() {
     this.stateReference.markup.push([this.tag, this.start, this.end, this.attrs])
-  }
-
-  redo() {
-    this.execute()
-    this.entity.onStateChange(this)
+    this.entity.changeState()
   }
 }

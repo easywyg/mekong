@@ -12,11 +12,11 @@ const MarkupMethods = (superclass) => class extends superclass {
   }
 
   setMarkup(tag, start, end, attrs) {
-    this.onStateChange(new MarkupCommand(this, this.state, tag, start, end, attrs))
+    this.runCommand(new MarkupCommand(this, this.state, tag, start, end, attrs))
   }
 
   removeMarkup(tag, start, end) {
-    this.onStateChange(new RemoveMarkupCommand(this, this.state, tag, start, end))
+    this.runCommand(new RemoveMarkupCommand(this, this.state, tag, start, end))
   }
 }
 

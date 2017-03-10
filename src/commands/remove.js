@@ -3,9 +3,10 @@ import InsertCommand from './insert.js';
 
 // RemoveCommand
 export default class extends Command {
-  constructor(root, entity) {
+  constructor(core, root, entity) {
     super()
 
+    this.core = core
     this.root = root
     this.entity = entity
   }
@@ -14,9 +15,10 @@ export default class extends Command {
     this.entity.node.parentNode.removeChild(this.entity.node)
     this.entity.node = null
     this.entity.vtree = null
+    this.entity.changeState()
   }
 
   undo() {
-    (new InsertCommand(this.root, this.entity)).execute()
+    (new InsertCommand(this.core, this.root, this.entity)).execute()
   }
 }

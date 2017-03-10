@@ -2,9 +2,11 @@ import Builder from './builder';
 import Normalizer from './normalizer';
 
 export default class {
-  constructor(text, markup) {
+  constructor(text, markup, vnode, vtext) {
     let calc = new Normalizer(text, markup);
     this.segments = calc.calculate();
+    this.vnode = vnode;
+    this.vtext = vtext;
 
     this.sort();
   }
@@ -55,10 +57,10 @@ export default class {
     return result;
   }
 
-  // Создать список объектов virtual-dom
+  // Создать список объектов vdom
   process() {
     return this.group().map((segments) => {
-      return (new Builder(segments)).generate();
+      return (new Builder(segments, this.vnode, this.vtext)).generate();
     });
   }
 }

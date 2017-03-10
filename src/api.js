@@ -1,5 +1,7 @@
 'use strict';
 
+import {create, diff, patch, VNode, VText} from './vdom/index.js';
+
 // Core extensions
 require('./ext.js');
 
@@ -19,6 +21,7 @@ import Document from './document.js';
 import ListEntity from './entities/list/export.js';
 import TableEntity from './entities/table/export.js';
 import ParagraphEntity from './entities/paragraph/export.js';
+import GridEntity from './entities/grid/export.js';
 
 // Mixins
 import TextMethods from './mixins/text_methods.js';
@@ -27,31 +30,33 @@ import AttrMethods from './mixins/attr_methods.js';
 import TagMethods from './mixins/tag_methods.js';
 
 const core = {
-  Entity      : Entity,
-  Container   : Container,
-  View        : View,
-  Policy      : Policy,
-  Particle    : Particle,
+  Entity,
+  Container,
+  View,
+  Policy,
+  Particle,
   Lib : {
     Mix : mix,
-    EntityUtils : EntityUtils
+    EntityUtils
   },
   Mixin : {
-    TextMethods   : TextMethods,
-    MarkupMethods : MarkupMethods,
-    AttrMethods   : AttrMethods,
-    TagMethods    : TagMethods
+    TextMethods, MarkupMethods,
+    AttrMethods, TagMethods
+  },
+  VDOM : {
+    create, diff, patch, VNode, VText
   }
 };
 
 export default class Mekong {
   constructor(root) {
-    this.document = new Document(root)
+    this.document = new Document(core, root)
 
     this.coreEntities = {
       List      : ListEntity,
       Table     : TableEntity,
-      Paragraph : ParagraphEntity
+      Paragraph : ParagraphEntity,
+      Grid      : GridEntity
     }
 
     this.usedEntitities = {}
