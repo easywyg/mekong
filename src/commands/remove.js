@@ -2,23 +2,25 @@ import Command from '../undo_manager/command.js';
 import InsertCommand from './insert.js';
 
 // RemoveCommand
+// Remove entity from DOM
 export default class extends Command {
-  constructor(core, root, entity) {
+  constructor(removeEntity) {
     super()
 
-    this.core = core
-    this.root = root
-    this.entity = entity
+    this.removeEntity = removeEntity
+    //this.core = core
+    //this.root = root
+    //this.entity = entity
   }
 
   execute() {
-    this.entity.node.parentNode.removeChild(this.entity.node)
-    this.entity.node = null
-    this.entity.vtree = null
-    this.entity.changeState()
+    this.removeEntity.node.parentNode.removeChild(this.removeEntity.node)
+    this.removeEntity.node = null
+    this.removeEntity.vtree = null
+    this.removeEntity.changeState()
   }
 
   undo() {
-    (new InsertCommand(this.core, this.root, this.entity)).execute()
+    (new InsertCommand(this.removeEntity.node.parentNode.entity, this.removeEntity)).execute()
   }
 }

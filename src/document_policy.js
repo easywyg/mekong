@@ -1,20 +1,20 @@
 export default function(core) {
   return class extends core.Policy {
     canAppend() {
-      return false;
+      return true;
     }
 
     // Can entity be replaced with another entity
     canBeReplaced(entity) {
-      return true;
+      return false;
     }
 
     canBeRemoved() {
-      return true;
+      return false;
     }
 
     canBeMoved() {
-      return true;
+      return false;
     }
   }
 }

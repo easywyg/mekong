@@ -21,7 +21,7 @@ export default function(core) {
     }
 
     get policy() {
-      return new (Policy(core))(this)
+      return new (Policy(core))
     }
   }
 }

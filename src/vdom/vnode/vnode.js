@@ -7,7 +7,6 @@ var noProperties = {}
 var noChildren = []
 
 function VirtualNode(entry, properties, children, key, namespace) {
-    console.log(entry)
     if (typeof entry === 'string') {
         this.tagName = entry
     } else {

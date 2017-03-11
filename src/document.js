@@ -1,7 +1,14 @@
+import Entity from './entity.js';
 import UndoManager from './undo_manager.js';
+import Policy from './document_policy.js';
+
+// Commands
+// TODO: Эти команды должны использоваться внутри сущностей.
+// У документа тоже должна быть полиси
 import InsertCommand from './commands/insert.js';
 import RemoveCommand from './commands/remove.js';
 import MoveCommand from './commands/move.js';
+import ReplaceCommand from './commands/replace.js';
 
 // A Document
 // TODO: По идее даже документ может быть чем-то вроде сущности и возможно что у него
@@ -12,19 +19,33 @@ import MoveCommand from './commands/move.js';
 //
 // При попытке перемещения одной сущности в другую при помощи метода Document#transfer,
 // та сущность, в которую перемещаем, должна проверять, может ли она принять передаваемую сущность.
-export default class {
-  constructor(core, root) {
+export default class extends Entity {
+  static type = 'document'
+  static defaultState = {
     // Список сущностей не содержит вложенностей. Какая-сущность внутри какой находится,
     // определяется свойством container у сущности.
-    this.entities = []
+    entities: []
+  }
+
+  constructor(core, root) {
+    super()
+
     this.undoManager = new UndoManager
     this.core = core
-    this.root = root
+    this.node = root
+  }
+
+  get policy() {
+    return new (Policy(this.core))
   }
 
   // Insert Entity into Document
   insert(entity) {
-    this.entities.push(entity)
+    if (!this.policy.canAppend(entity)) {
+      return false
+    }
+
+    this.state.entities.push(entity)
 
     // Run command
     entity.onCommand = (command, execCommandItself) => {
@@ -43,40 +64,57 @@ export default class {
       // Update DOM node
       if (entity.node) {
         entity.vtree = this.core.VDOM.diff(entity.vtree, entity.view.render(entity))
-        entity.node = this.core.VDOM.patch(entity.node, entity.vtree);
+        this.core.VDOM.patch(entity.node, entity.vtree);
       }
     }
 
-    // Insert entity into DOM
+    // Insert entity into DOM first time
+    entity.vtree = entity.view.render(entity)
+    entity.node = this.core.VDOM.create(entity.vtree, { document: this.node.ownerDocument })
+    //entity.node = this.root.appendChild(
+    //  this.core.VDOM.create(this.entity.vtree, { document: this.root.ownerDocument })
+    //)
+
     this.undoManager.execute(
-      new InsertCommand(this.core, this.root, entity)
+      new InsertCommand(this, entity)
+      //new InsertCommand(this.core, this.node, entity)
     )
 
     return entity
   }
-
+/*
   // Remove specified entity
+  // У Particle должен быть свой метод для удаления, а чистые Entity
+  // удаляем при помощи этого метода. Тут надо подумать короч.
   remove(entity) {
-    this.undoManager.execute(
-      new RemoveCommand(this.root, entity)
-    )
+    if (entity.policy.canBeRemoved()) {
+      this.undoManager.execute(
+        new RemoveCommand(this.core, this.root, entity)
+      )
+    }
   }
 
-  // Move entity before anotherEntity
-  move(entity, anotherEntity) {
-    this.undoManager.execute(
-      // TODO: Need to complete
-      new MoveCommand(this.root, entity, anotherEntity)
-    )
+  // TODO: Need to complete
+  // Move entity into containerEntity before beforeEntity
+  move(entity, containerEntity, beforeEntity) {
+    // && anotherEntity.container.policy.canAppend(entity)
+    if (entity.policy.canBeMoved(containerEntity, beforeEntity)) {
+      this.undoManager.execute(
+        new MoveCommand(this.root, entity, containerEntity, beforeEntity)
+      )
+    }
   }
 
-  // Transfer entity into anotherEntity
-  transfer(entity, anotherEntity) {
-    l(entity, anotherEntity)
-    anotherEntity.node.appendChild(entity.node)
-    // ...
+  // TODO: Need to complete
+  // Replace one entity with anotherEntity
+  replace(entity, anotherEntity) {
+    if (entity.policy.canBeReplaced(anotherEntity)) {
+      this.undoManager.execute(
+        new ReplaceCommand(entity, anotherEntity)
+      )
+    }
   }
-
+*/
   canUndo() {
     return this.undoManager.canUndo()
   }

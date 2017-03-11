@@ -1,4 +1,4 @@
-import MarkupCommand from '../commands/common/markup.js';
+import MarkupCommand from '../commands/markup.js';
 
 const MarkupMethods = (superclass) => class extends superclass {
   getMarkup() {

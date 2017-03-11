@@ -83,9 +83,9 @@
   // A paragraph
   var p1 = mekong.entity('Paragraph', { tag: 'p', attrs: {} });
   p1.setText('Hello world!')
-  p1.setText('Yay!')
-  //p1.setMarkup('strong', 0, 5)
-  mekong.document.undo()
+  //p1.setText('Yay!')
+  ////p1.setMarkup('strong', 0, 5)
+  //mekong.document.undo()
   //mekong.document.redo()
 
   // A Grid
@@ -93,14 +93,16 @@
   grid.setAttr('id', 'grid');
   var column1 = grid.createColumn({ class: 'col-xs-1' });
   var column2 = grid.createColumn();
-  mekong.document.undo()
-  column1.remove()
-  mekong.document.undo()
-  console.log('a', grid)
+  //mekong.document.undo()
+  //column1.remove()
+  //mekong.document.undo()
+  //console.log('a', grid)
   //grid.setAttr('id', 'lol');
 
   // Transfer
   //mekong.document.transfer(p1, column1);
+  //
+  console.log(mekong.document)
 </script>
 
 </body>

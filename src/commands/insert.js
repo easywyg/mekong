@@ -2,23 +2,18 @@ import Command from '../undo_manager/command.js';
 import RemoveCommand from './remove.js';
 
 // InsertCommand
+// Insert one entity into another entity
 export default class extends Command {
-  constructor(core, root, entity) {
+  constructor(targetEntity, insertEntity) {
     super()
 
-    this.core = core
-    this.root = root
-    this.entity = entity
+    this.targetEntity = targetEntity
+    this.insertEntity = insertEntity
   }
 
   execute() {
-    this.entity.vtree = this.entity.view.render(this.entity)
-
-    this.entity.node = this.root.appendChild(
-      this.core.VDOM.create(this.entity.vtree, { document: this.root.ownerDocument })
-    )
-
-    this.entity.changeState()
+    this.insertEntity.node = this.targetEntity.node.appendChild(this.insertEntity.node)
+    this.insertEntity.changeState()
   }
 
   undo() {

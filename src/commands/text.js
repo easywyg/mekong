@@ -1,5 +1,5 @@
-import Command from '../../undo_manager/command.js';
-import EntityUtils from '../../lib/entity_utils.js';
+import Command from '../undo_manager/command.js';
+import EntityUtils from '../lib/entity_utils.js';
 
 export default class extends Command {
   // entity = Entity | Particle

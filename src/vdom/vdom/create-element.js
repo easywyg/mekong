@@ -32,7 +32,12 @@ function createElement(vnode, opts) {
     for (var i = 0; i < children.length; i++) {
         var childNode = createElement(children[i], opts)
         if (childNode) {
-            node.appendChild(childNode)
+            var newNode = node.appendChild(childNode)
+
+            if (children[i].entity) {
+                newNode.entity = children[i].entity
+                newNode.entity.node = newNode
+            }
         }
     }
 

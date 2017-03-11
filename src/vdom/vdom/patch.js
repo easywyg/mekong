@@ -36,6 +36,11 @@ function patchRecursive(rootNode, patches, renderOptions) {
             index[nodeIndex],
             patches[nodeIndex],
             renderOptions)
+
+        if (patches[nodeIndex].patch.entity) {
+            rootNode.entity = patches[nodeIndex].patch.entity
+            rootNode.entity.node = rootNode
+        }
     }
 
     return rootNode

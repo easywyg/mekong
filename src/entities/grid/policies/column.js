@@ -1,12 +1,12 @@
 export default function(core) {
   return class extends core.Policy {
-    canAppend() {
-      return false;
+    canAppend(entity) {
+      return entity.type == 'paragraph';
     }
 
     // Can entity be replaced with another entity
     canBeReplaced(entity) {
-      return true;
+      return false;
     }
 
     canBeRemoved() {
@@ -14,7 +14,7 @@ export default function(core) {
     }
 
     canBeMoved() {
-      return true;
+      return false;
     }
   }
 }
