@@ -4,26 +4,19 @@ A Rich text editor Model layer. (not finished yet)
 ### Quick example
 
 ```js
-  // Insert new <p> into document.body
-  const Mekong = require('mekong');
-  const api = new Mekong.Api;
-  const container = api.operate('Insert', 'RootContainer', {}, document.body).result;
-  const entity = api.operate('Insert', 'Paragraph', { text: 'Hello world!' }, container).result;
+  import Mekong from 'mekong';
 
-  // Update paragraph text
-  api.operate('Update', entity, {
-    text: 'Yellow',
-    start: 0,
-    end: 5,
-    attrs: { class: 'headline' },
-    markup: [
-      ['em', 0, 6],
-      ['strong', 0, 6, { class: 'yay' }]
-    ]
-  });
+  const mekong = new Mekong(document.getElementById('body'));
+  mekong.useEntity('Paragraph');
 
-  // It gives: <p class="headline"><strong class="yay"><em>Yellow</em></strong> world!</p>
+  // Create paragraph with markup
+  const p1 = mekong.entity('Paragraph', { tag: 'p', attrs: {} });
+  p1.setText('Hello world!')
+  p1.setMarkup('strong', 0, 5)
+  p1.setMarkup('em', 6, 11)
+  p1.setMarkup('u', 4, 7)
 
+  // It gives: <p><strong>Hell<u>o</u></strong> <em class="x1 x2"><u>w</u>orld</em>!</p>
 ```
 
 ### Entities
@@ -32,30 +25,15 @@ Entity is a building block, such as paragraph, image, table and others.
 
 ##### Types of built-in entities
 
+* [Document](docs/entities/document.md)
 * [Embed](docs/entities/embed.md)
 * [Grid](docs/entities/grid.md)
 * [Image](docs/entities/image.md)
 * [List](docs/entities/list.md)
-* [ListItem](docs/entities/list_item.md)
 * [Paragraph](docs/entities/paragraph.md)
-* [RootContainer](docs/entities/root_container.md)
 * [Substrate](docs/entities/substrate.md)
 * [Table](docs/entities/table.md)
-* [TableCell](docs/entities/table_cell.md)
 * [DefinitionList](docs/entities/table_cell.md)
-* [DefinitionListEntry](docs/entities/table_cell.md)
-
-### Operations
-All actions on the text and HTML markup are made only via operations. You don't have to work with DOM directly, you just execute operations and things are done.
-
-##### Types of operations
-
-* [Delete](docs/operations/delete.md) - remove entity.
-* [Insert](docs/operations/insert.md) - insert entity.
-* [Move](docs/operations/move.md) - move antity after another.
-* [Replace](docs/operations/replace.md) - replace one entity with another.
-* [Transfer](docs/operations/transfer.md) - put entity into container entity (`Substrate`, `GridColumn` or `RootContainer`).
-* [Update](docs/operations/update.md) - update entity text, markup or another data.
 
 ##### Virtual DOM
 
