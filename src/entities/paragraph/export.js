@@ -1,4 +1,4 @@
-import entity from './entity.js';
+import entity from './paragraph.js';
 
 export default function(core) {
   return entity(core);

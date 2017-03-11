@@ -14,14 +14,26 @@ import Entity from './entity.js';
 import Container from './container.js';
 import View from './view.js';
 import Policy from './policy.js';
-import Particle from './particle.js';
 import Document from './document.js';
+import Command from './undo_manager/command.js';
 
 // Default entities
 import ListEntity from './entities/list/export.js';
 import TableEntity from './entities/table/export.js';
 import ParagraphEntity from './entities/paragraph/export.js';
 import GridEntity from './entities/grid/export.js';
+
+// Commands
+import InsertCommand from './commands/insert.js';
+import RemoveCommand from './commands/remove.js';
+import MoveCommand from './commands/move.js';
+import ReplaceCommand from './commands/replace.js';
+import AttrCommand from './commands/attr.js';
+import RemoveAttrCommand from './commands/remove_attr.js';
+import MarkupCommand from './commands/markup.js';
+import RemoveMarkupCommand from './commands/remove_markup.js';
+import TagCommand from './commands/tag.js';
+import TextCommand from './commands/text.js';
 
 // Mixins
 import TextMethods from './mixins/text_methods.js';
@@ -34,10 +46,23 @@ const core = {
   Container,
   View,
   Policy,
-  Particle,
+  Command,
+  Document,
   Lib : {
     Mix : mix,
     EntityUtils
+  },
+  Command: {
+    Insert: InsertCommand,
+    Remove: RemoveCommand,
+    Move: MoveCommand,
+    Replace: ReplaceCommand,
+    Attr: AttrCommand,
+    RemoveAttr: RemoveAttrCommand,
+    Markup: MarkupCommand,
+    RemoveMarkup: RemoveMarkupCommand,
+    Tag: TagCommand,
+    Text: TextCommand
   },
   Mixin : {
     TextMethods, MarkupMethods,
@@ -45,7 +70,7 @@ const core = {
   },
   VDOM : {
     create, diff, patch, VNode, VText
-  }
+  },
 };
 
 export default class Mekong {

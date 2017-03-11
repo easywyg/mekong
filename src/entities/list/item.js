@@ -1,5 +1,6 @@
 // Commands
-import InsertItemCommand from '../commands/insert_item.js';
+import InsertItemCommand from './commands/item/insert.js';
+import Policy from './policies/item.js';
 
 export default function(core) {
   return class extends core.Lib.Mix(core.Particle).with(

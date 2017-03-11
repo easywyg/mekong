@@ -1,7 +1,6 @@
 import Command from '../undo_manager/command.js';
 
 export default class extends Command {
-  // entity = Entity | Particle
   constructor(entity, stateReference, name, newValue) {
     super()
 

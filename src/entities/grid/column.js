@@ -1,11 +1,11 @@
 // Commands
-import InsertColumnCommand from '../commands/insert_column.js';
-import RemoveColumnCommand from '../commands/remove_column.js';
+import InsertColumnCommand from './commands/column/insert.js';
+import RemoveColumnCommand from './commands/column/remove.js';
 
-import Policy from '../policies/column.js';
+import Policy from './policies/column.js';
 
 export default function(core) {
-  return class extends core.Lib.Mix(core.Particle).with(core.Mixin.AttrMethods) {
+  return class extends core.Lib.Mix(core.Entity).with(core.Mixin.AttrMethods) {
     static type = 'grid_column'
     static defaultState = {
       tag: 'div',

@@ -1,6 +1,6 @@
 import View   from './view.js';
-import Policy from './policies/entity.js';
-import Item from './particles/item.js';
+import Policy from './policies/list.js';
+import Item   from './item.js';
 
 export default function(core) {
   // A List Entity

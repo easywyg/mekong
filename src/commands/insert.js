@@ -13,6 +13,7 @@ export default class extends Command {
 
   execute() {
     this.insertEntity.node = this.targetEntity.node.appendChild(this.insertEntity.node)
+    this.insertEntity.parentEntity = this.targetEntity
     this.insertEntity.changeState()
   }
 

@@ -8,15 +8,13 @@ export default class extends Command {
     super()
 
     this.removeEntity = removeEntity
-    //this.core = core
-    //this.root = root
-    //this.entity = entity
   }
 
   execute() {
     this.removeEntity.node.parentNode.removeChild(this.removeEntity.node)
     this.removeEntity.node = null
     this.removeEntity.vtree = null
+    this.removeEntity.parentEntity = null
     this.removeEntity.changeState()
   }
 

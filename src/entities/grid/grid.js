@@ -1,16 +1,16 @@
 import View   from './view.js';
-import Policy from './policies/entity.js';
-import Column from './particles/column.js';
+import Policy from './policies/grid.js';
+import Column from './column.js';
 
 export default function(core) {
   // A Grid Entity
   return class extends core.Lib.Mix(core.Entity).with(core.Mixin.AttrMethods) {
     static type = 'grid'
     static defaultState = {
-      tag     : 'div',
-      attrs   : { class: 'grid' },
+      tag   : 'div',
+      attrs : { class: 'grid' },
 
-      // Column particles collection
+      // Columns collection
       columns : []
     }
 

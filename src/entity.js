@@ -4,8 +4,9 @@ export default class {
     const self = this
 
     this.type = this.constructor.type
+    options = Object.assign(this.constructor.defaultState, options || {})
 
-    this.state = new Proxy(Object.assign(this.constructor.defaultState, options || {}), {
+    this.state = new Proxy(options, {
       set(target, key, value) {
         target[key] = value
         self.onSetProp(target, key, value)
@@ -23,8 +24,8 @@ export default class {
     // Entity's Virtual DOM tree
     this.vtree = null
 
-    this.id = this.generateId();
-    //this.container = null;
+    // Parent entity
+    this.parentEntity = null;
 
     /*this.siblings = {
       prev: null,
@@ -48,11 +49,6 @@ export default class {
     return this.container.next(this);
   }*/
 
-  generateId() {
-    return Math.random().toString(36).slice(2);
-  }
-
-
   // Insert entity
   insert(entity) {
     if (!this.policy.canAppend(entity)) {
@@ -63,8 +59,6 @@ export default class {
   }
 
   // Remove entity
-  // У Particle должен быть свой метод для удаления, а чистые Entity
-  // удаляем при помощи этого метода. Тут надо подумать короч.
   remove() {
     if (this.policy.canBeRemoved()) {
       this.runCommand(

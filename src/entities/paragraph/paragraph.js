@@ -1,5 +1,5 @@
 import View   from './view.js';
-import Policy from './policies/entity.js';
+import Policy from './policies/paragraph.js';
 
 export default function(core) {
   // A Paragraph Entity
