@@ -83,7 +83,9 @@
   // A paragraph
   var p1 = mekong.entity('Paragraph', { tag: 'p', attrs: {} });
   p1.setText('Hello world!')
-  //p1.setText('Yay!')
+  p1.setMarkup('strong', 0, 5)
+  p1.setMarkup('em', 6, 11)
+  p1.setMarkup('u', 4, 7)
   ////p1.setMarkup('strong', 0, 5)
   //mekong.document.undo()
   //mekong.document.redo()
