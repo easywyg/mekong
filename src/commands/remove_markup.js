@@ -26,7 +26,6 @@ export default class extends Command {
 
   execute() {
     const index = this.getMarkupIndex()
-    console.log('index', index)
 
     if (index != -1) {
       this.stateReference.markup.splice(index, 1)

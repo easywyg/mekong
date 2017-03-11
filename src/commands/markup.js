@@ -12,11 +12,20 @@ export default class extends Command {
     this.end = end
     this.attrs = attrs || {}
     this.oldAttrs = {}
+    this.allowedTags = [
+      'a', 'em', 'strong', 'small', 's', 'cite', 'quote', 'dfn', 'abbr', 'time', 'code',
+      'var', 'samp', 'kbd', 'sub', 'sup', 'u', 'mark', 'ruby', 'rt', 'rp', 'bdi', 'bdo',
+      'wbr', 'ins', 'del', 'i', 'b', 'strike', 'q', 'acronym', 'big', 'dir', 'tt'
+    ]
 
     this.index = this.getMarkupIndex(this.tag, this.start, this.end)
     if (this.index != -1) {
       this.oldAttrs = Object.assign({}, this.stateReference.markup[this.index][3])
     }
+  }
+
+  isAllowed(tag) {
+    return this.allowedTags.includes(tag)
   }
 
   getMarkupIndex(tag, start, end, attrs) {
@@ -26,8 +35,17 @@ export default class extends Command {
   }
 
   execute() {
+    if (!this.isAllowed(this.tag)) {
+      return false
+    }
+
     // Markup exists - update its attributes
     if (this.index != -1) {
+      // if new attrs are not empty
+      if (Object.keys(this.attrs).length == 0) {
+        return false
+      }
+
       this.stateReference.markup[this.index][3] = this.attrs
     }
     // Markup not exists - so insert markup

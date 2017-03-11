@@ -36,26 +36,32 @@ describe('Integration', () => {
     it('can be removed', () => {
       p.removeMarkup('strong', 0, 5)
       expect(content()).to.be.equal('<p>Hell<u>o</u> <em class="x1 x2"><u>w</u>orld</em>!</p>')
+      mekong.document.undo()
     })
 
     it('ignore incorrect bounds when remove', () => {
       p.removeMarkup('u', 1000, 3000)
-      expect(content()).to.be.equal('<p>Hell<u>o</u> <em class="x1 x2"><u>w</u>orld</em>!</p>')
+      expect(content()).to.be.equal('<p><strong>Hell<u>o</u></strong> <em class="x1 x2"><u>w</u>orld</em>!</p>')
     })
 
     it('ignore incorrect tag when remove', () => {
       p.removeMarkup('span', 4, 7)
-      expect(content()).to.be.equal('<p>Hell<u>o</u> <em class="x1 x2"><u>w</u>orld</em>!</p>')
+      expect(content()).to.be.equal('<p><strong>Hell<u>o</u></strong> <em class="x1 x2"><u>w</u>orld</em>!</p>')
+    })
+
+    it('cannot set restricted tags', () => {
+      p.setMarkup('pre', 0, 5)
+      expect(content()).to.be.equal('<p><strong>Hell<u>o</u></strong> <em class="x1 x2"><u>w</u>orld</em>!</p>')
     })
 
     it('can undo', () => {
       mekong.document.undo()
-      expect(content()).to.be.equal('<p><strong>Hell<u>o</u></strong> <em class="x1 x2"><u>w</u>orld</em>!</p>')
+      expect(content()).to.be.equal('<p><strong>Hello</strong> <em class="x1 x2">world</em>!</p>')
     })
 
     it('can redo', () => {
       mekong.document.redo()
-      expect(content()).to.be.equal('<p>Hell<u>o</u> <em class="x1 x2"><u>w</u>orld</em>!</p>')
+      expect(content()).to.be.equal('<p><strong>Hell<u>o</u></strong> <em class="x1 x2"><u>w</u>orld</em>!</p>')
     })
   })
 })
