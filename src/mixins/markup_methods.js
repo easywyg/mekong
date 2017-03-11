@@ -1,4 +1,5 @@
 import MarkupCommand from '../commands/markup.js';
+import RemoveMarkupCommand from '../commands/remove_markup.js';
 
 const MarkupMethods = (superclass) => class extends superclass {
   getMarkup() {

@@ -1,11 +1,11 @@
 // Command abstract class
 export default class {
   execute() {
-    throw new Error("override me!")
+    return false
   }
 
   undo() {
-    throw new Error("override me!")
+    return false
   }
 
   redo() {

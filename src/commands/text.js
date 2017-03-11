@@ -17,7 +17,7 @@ export default class extends Command {
 
   execute() {
     if (!this.isTextChanged) {
-      return
+      return false
     }
 
     this.stateReference.text = EntityUtils.updateText(
@@ -25,6 +25,7 @@ export default class extends Command {
     )
 
     this.entity.changeState()
+    return true
   }
 
   undo() {
@@ -32,6 +33,6 @@ export default class extends Command {
       this.entity, this.stateReference, this.oldText, this.oldBounds.start, this.oldBounds.end
     )
 
-    this.entity.runCommand(command, true)
+    return this.entity.runCommand(command, true)
   }
 }

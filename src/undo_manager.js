@@ -9,17 +9,20 @@ export default class {
   execute(command) {
     this._clearRedo();
 
-    command.execute();
+    const success  = command.execute();
 
-    this.commands.push(command);
-    this.stackPosition++;
-    this.changed();
+    if (success) {
+      this.commands.push(command);
+      this.stackPosition++;
+      this.changed();
+    }
   }
 
   undo() {
-    this.commands[this.stackPosition].undo();
-    this.stackPosition--;
-    this.changed();
+    if (this.commands[this.stackPosition].undo()) {
+      this.stackPosition--;
+      this.changed();
+    }
   }
 
   canUndo() {

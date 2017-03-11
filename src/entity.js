@@ -34,7 +34,7 @@ export default class {
   }
 
   runCommand(command, execCommandItself) {
-    this.onCommand(command, execCommandItself)
+    return this.onCommand(command, execCommandItself)
   }
 
   changeState() {

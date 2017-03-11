@@ -9,7 +9,13 @@ export default class extends Command {
     this.tag = tag
     this.start = start
     this.end = end
-    this.attrs = this.stateReference.markup[this.getMarkupIndex()][3]
+    this.attrs = {}
+
+    const index = this.getMarkupIndex();
+
+    if (index != -1) {
+      this.attrs = this.stateReference.markup[this.getMarkupIndex()][3]
+    }
   }
 
   getMarkupIndex() {
@@ -20,15 +26,21 @@ export default class extends Command {
 
   execute() {
     const index = this.getMarkupIndex()
+    console.log('index', index)
 
     if (index != -1) {
       this.stateReference.markup.splice(index, 1)
       this.entity.changeState()
+      return true
     }
+
+    return false
   }
 
   undo() {
     this.stateReference.markup.push([this.tag, this.start, this.end, this.attrs])
     this.entity.changeState()
+
+    return true
   }
 }

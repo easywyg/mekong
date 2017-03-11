@@ -16,9 +16,11 @@ export default class extends Command {
     this.removeEntity.vtree = null
     this.removeEntity.parentEntity = null
     this.removeEntity.changeState()
+
+    return true
   }
 
   undo() {
-    (new InsertCommand(this.removeEntity.node.parentNode.entity, this.removeEntity)).execute()
+    return (new InsertCommand(this.removeEntity.node.parentNode.entity, this.removeEntity)).execute()
   }
 }

@@ -12,15 +12,17 @@ export default class extends Command {
 
   execute() {
     if (!this.isTagChanged) {
-      return
+      return false
     }
 
     this.entity.state.tag = this.newTag
     this.entity.changeState()
+    return true
   }
 
   undo() {
     this.entity.state.tag = this.oldTag
     this.entity.changeState()
+    return true
   }
 }

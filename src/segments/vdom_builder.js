@@ -4,6 +4,7 @@ import Normalizer from './normalizer';
 export default class {
   constructor(text, markup, vnode, vtext) {
     let calc = new Normalizer(text, markup);
+
     this.segments = calc.calculate();
     this.vnode = vnode;
     this.vtext = vtext;

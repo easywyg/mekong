@@ -19,9 +19,10 @@ export default class extends Command {
     // Add column to Grid state
     this.grid.state.columns.push(this.column)
     this.grid.changeState()
+    return true
   }
 
   undo() {
-    (new RemoveColumnCommand(this.column)).execute()
+    return (new RemoveColumnCommand(this.column)).execute()
   }
 }

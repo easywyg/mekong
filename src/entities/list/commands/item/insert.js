@@ -18,9 +18,10 @@ export default class extends Command {
 
     // Синхронизация состояния
     this.item.state = newState;
+    return true
   }
 
   undo() {
-
+    return false
   }
 }

@@ -17,11 +17,16 @@ export default class extends Command {
       return column === this.column
     })
 
-    this.grid.state.columns.splice(index, 1)
-    this.grid.changeState()
+    if (index > 0) {
+      this.grid.state.columns.splice(index, 1)
+      this.grid.changeState()
+      return true
+    }
+
+    return false
   }
 
   undo() {
-    (new InsertColumnCommand(this.column, this.attrs)).execute()
+    return (new InsertColumnCommand(this.column, this.attrs)).execute()
   }
 }

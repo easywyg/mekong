@@ -15,9 +15,10 @@ export default class extends Command {
     this.insertEntity.node = this.targetEntity.node.appendChild(this.insertEntity.node)
     this.insertEntity.parentEntity = this.targetEntity
     this.insertEntity.changeState()
+    return true
   }
 
   undo() {
-    (new RemoveCommand(this.core, this.root, this.entity)).execute()
+    return (new RemoveCommand(this.core, this.root, this.entity)).execute()
   }
 }

@@ -42,10 +42,16 @@ export default class {
     let parents = {};
 
     this.segments.forEach((segment, i) => {
-      let type = segment[3].type;
+      const type = segment[3].type;
 
       if (type == 1) {
-        let newCur = new this.vnode(segment[0], { attributes: segment[3].attrs }, []);
+        const attrs = segment[3].attrs
+
+        if (attrs['class'] && Array.isArray(attrs['class'])) {
+          attrs['class'] = attrs['class'].join(' ')
+        }
+
+        const newCur = new this.vnode(segment[0], { attributes: attrs }, []);
 
         if (cur) {
           parents[JSON.stringify(segment)] = cur;

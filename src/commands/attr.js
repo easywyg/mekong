@@ -23,6 +23,7 @@ export default class extends Command {
     }
 
     this.entity.changeState()
+    return true
   }
 
   undo() {
@@ -33,5 +34,6 @@ export default class extends Command {
     }
 
     this.entity.changeState()
+    return true
   }
 }

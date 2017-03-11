@@ -6,8 +6,10 @@ export default class extends Command {
   }
 
   execute() {
+    return false
   }
 
   undo() {
+    return false
   }
 }

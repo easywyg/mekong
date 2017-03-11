@@ -35,11 +35,11 @@ export default class extends Entity {
     entity.onCommand = (command, execCommandItself) => {
       // Run command without putting it in undoManager history
       if (execCommandItself) {
-        command.execute()
+        return command.execute()
       }
       // Run command and put it into history to make undo/redo in the future
       else {
-        this.undoManager.execute(command)
+        return this.undoManager.execute(command)
       }
     }
 
