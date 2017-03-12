@@ -1,6 +1,8 @@
 // Entity base class
 export default class {
   constructor(options) {
+    this.core = null
+
     const self = this
 
     this.type = this.constructor.type
@@ -78,12 +80,11 @@ export default class {
     }
   }
 
-  // TODO: Need to complete
-  // Replace one entity with anotherEntity
-  replace(anotherEntity) {
-    if (this.policy.canBeReplaced(anotherEntity)) {
+  // Replace entity with current entity
+  replace(withEntity) {
+    if (withEntity.policy.canBeReplaced(this)) {
       this.runCommand(
-        //new ReplaceCommand(this, anotherEntity)
+        new this.core.Command.Replace(withEntity, this)
       )
     }
   }

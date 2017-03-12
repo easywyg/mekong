@@ -53,6 +53,7 @@ export default class extends Entity {
     }
 
     // Insert entity into DOM first time
+    entity.core = this.core
     entity.vtree = entity.view.render(entity)
     entity.node = this.core.VDOM.create(entity.vtree, {
       document: this.node.ownerDocument
