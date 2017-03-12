@@ -12,8 +12,8 @@ export default function(core) {
       attrs: {}
     }
 
-    constructor(entity) {
-      super();
+    constructor(state, entity) {
+      super(state);
       this.entity = entity;
     }
 

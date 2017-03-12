@@ -1,14 +1,14 @@
 // Entity base class
 export default class {
-  constructor(options) {
+  constructor(state) {
     this.core = null
 
     const self = this
 
     this.type = this.constructor.type
-    options = Object.assign(this.constructor.defaultState, options || {})
+    state = Object.assign(this.constructor.defaultState, state || {})
 
-    this.state = new Proxy(options, {
+    this.state = new Proxy(state, {
       set(target, key, value) {
         target[key] = value
         self.onSetProp(target, key, value)

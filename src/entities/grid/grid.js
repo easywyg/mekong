@@ -25,7 +25,7 @@ export default function(core) {
     // Add column
     createColumn(attrs) {
       const klass = Column(core);
-      const item = new klass(this);
+      const item = new klass({}, this);
       return item.createColumn(attrs);
     }
   }

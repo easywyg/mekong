@@ -7,8 +7,8 @@ import Caption from './particles/caption.js';
 export default function(core) {
   // A Table Entity
   return class extends core.Entity {
-    constructor(root, options) {
-      super(root, options);
+    constructor(state) {
+      super(state);
 
       // Entity's default state
       this.state = {
