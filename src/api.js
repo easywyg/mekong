@@ -101,7 +101,7 @@ export default class Mekong {
     return null;
   }
 
-  entity(name, options) {
+  create(name, options) {
     const klass = this.usedEntitities[name](core);
     const entity = new klass(options);
 

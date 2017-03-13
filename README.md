@@ -10,7 +10,7 @@ A Rich text editor Model layer. (not finished yet)
   mekong.useEntity('Paragraph');
 
   // Create paragraph with markup
-  const p1 = mekong.entity('Paragraph', { tag: 'p', attrs: {} });
+  const p1 = mekong.create('Paragraph', { tag: 'p', attrs: {} });
   p1.setText('Hello world!')
   p1.setMarkup('strong', 0, 5)
   p1.setMarkup('em', 6, 11)
