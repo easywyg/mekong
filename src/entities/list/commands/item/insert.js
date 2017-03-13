@@ -5,31 +5,40 @@ export default class extends Command {
     super()
 
     this.item = item
+    this.list = this.item.list
+    this.doc  = this.list.document
     this.newItem = null
-    this.removedItem = null
+    this.removedItemId = null
   }
 
+  // Вставка нового элемента списка
   execute() {
     if (!this.item.reference) {
-      this.item.reference = this.item.list.state.items
+      this.item.reference = this.list.state.items
     }
 
     this.newItem = new this.item.constructor(
-      this.item.cloneDefaultState(), this.item.list
+      this.item.cloneDefaultState(), this.list
     )
 
     // Добавляем новый item entity в текущий уровень
     this.item.reference.push(this.newItem)
     this.newItem.reference = this.newItem.state.items
 
+    // Ссылка на документ
+    this.newItem.document = this.doc
+
+    // Обновляем список сущностей
+    this.doc.add(this.newItem)
+
     // Синхронизация состояния
-    this.newItem.list.changeState()
+    this.list.changeState()
 
     return true
   }
 
+  // Отмена вставки нового элемента списка (т.е. удаление)
   undo() {
-    //return true
     const removeEntry = (items) => {
       items.forEach((item, i) => {
         let found = [
@@ -39,7 +48,7 @@ export default class extends Command {
         ].every((value) => { return value == true })
 
         if (found) {
-          this.removedItem = items[i]
+          this.removedItemId = items[i].id
           delete items[i]
         } else if (item.state.items.length > 0) {
           removeEntry(item.state.items)
@@ -48,25 +57,34 @@ export default class extends Command {
     }
 
     removeEntry(this.newItem.list.state.items)
+    this.doc.remove(this.removedItemId)
     this.newItem.list.changeState()
 
     return true
   }
 
+  // Восстановление элемента списка после удаления
   redo() {
-    //this.item = this.removedItem
-    //return this.execute()
-    //return true
-    //l('restore item')
-    const newItem = this.newItem.constructor(
-      this.newItem.state, this.newItem.list
+    const item = this.newItem.constructor(
+      this.newItem.state, this.list
     )
 
-    newItem.reference = this.item.reference
-    this.removedItem = newItem
-    this.item = this.removedItem
+    item.reference = this.item.reference
 
-    return this.execute()
-    //return (new this.constructor(newItem)).execute()
+    // Ссылка на документ
+    item.document = this.doc
+    item.id = this.removedItemId
+
+    // Добавляем новый item entity в текущий уровень
+    item.reference.push(this.newItem)
+    this.newItem.reference = this.newItem.state.items
+
+    // Обновляем список сущностей
+    this.doc.state.entities.push(item)
+
+    // Синхронизация состояния
+    this.list.changeState()
+
+    return true
   }
 }

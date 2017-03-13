@@ -20,6 +20,9 @@ export default class {
     // Parent entity
     this.parentEntity = null;
 
+    // Link to document
+    this.document = null
+
     this.id = this.generateId()
     /*this.siblings = {
       prev: null,

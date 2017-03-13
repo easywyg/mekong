@@ -4,31 +4,31 @@ import InsertCommand from './insert.js';
 // RemoveCommand
 // Remove entity from DOM
 export default class extends Command {
-  constructor(removeEntity) {
+  constructor(entity) {
     super()
 
-    this.removeEntity = removeEntity
-    this.parent = this.removeEntity.node.parentNode
-    this.parentEntity = this.removeEntity.parentEntity
+    this.entity = entity
+    this.parent = this.entity.node.parentNode
+    this.parentEntity = this.entity.parentEntity
   }
 
   execute() {
-    this.parent.removeChild(this.removeEntity.node)
-    this.removeEntity.node = null
-    this.removeEntity.vtree = null
-    this.removeEntity.parentEntity = null
-    this.removeEntity.changeState()
+    this.parent.removeChild(this.entity.node)
+    this.entity.node = null
+    this.entity.vtree = null
+    this.entity.parentEntity = null
+    this.entity.changeState()
 
     return true
   }
 
   undo() {
-    this.removeEntity.vtree = this.removeEntity.view.render(this.removeEntity)
-    this.removeEntity.node = this.removeEntity.core.VDOM.create(this.removeEntity.vtree, {
+    this.entity.vtree = this.entity.view.render(this.entity)
+    this.entity.node = this.entity.core.VDOM.create(this.entity.vtree, {
       document: this.parent.ownerDocument
     })
 
-    this.removeEntity.node = this.parent.appendChild(this.removeEntity.node)
-    return (new InsertCommand(this.parentEntity, this.removeEntity)).execute()
+    this.entity.node = this.parent.appendChild(this.entity.node)
+    return (new InsertCommand(this.parentEntity, this.entity)).execute()
   }
 }

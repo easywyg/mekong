@@ -1,33 +1,39 @@
+import merge from 'deepmerge';
 import Command from '../undo_manager/command.js';
 
 export default class extends Command {
-  constructor(entity, newTag) {
+  constructor(doc, entityId, newState) {
     super()
 
-    this.entity = entity
-    this.oldTag = this.entity.getTag()
-    this.newTag = newTag.toLowerCase()
-    this.isTagChanged = this.oldTag != this.newTag && this.newTag.length > 0
+    this.doc      = doc
+    this.entityId = entityId
+    this.entity   = this.doc.find(this.entityId)
+    this.oldState = merge({}, this.entity.state)
+    this.newState = newState
     this.allowedTags = ['p', 'pre', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
   }
 
   isAllowed(tag) {
-    return this.allowedTags.includes(tag)
+    return this.allowedTags.includes(tag.toLowerCase())
+  }
+
+  isTagChanged(tag) {
+    return this.oldState.tag != this.newState.tag
   }
 
   execute() {
-    if (!this.isTagChanged || !this.isAllowed(this.newTag)) {
-      return false
-    }
+    const newState = merge(this.entity.state, this.newState)
 
-    this.entity.state.tag = this.newTag
+    if (!this.isTagChanged || !this.isAllowed(newState.tag)) return false
+
+    this.entity.state.tag = newState.tag
     this.entity.changeState()
     return true
   }
 
   undo() {
-    this.entity.state.tag = this.oldTag
-    this.entity.changeState()
-    return true
+    return new this.constructor(
+      this.doc, this.entityId, { tag: this.oldState.tag }
+    ).execute()
   }
 }

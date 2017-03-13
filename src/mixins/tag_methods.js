@@ -5,8 +5,8 @@ const TagMethods = (superclass) => class extends superclass {
     return this.state.tag
   }
 
-  setTag(newTag) {
-    this.runCommand(new TagCommand(this, newTag))
+  setTag(tag) {
+    this.runCommand(new TagCommand(this.document, this.id, { tag }))
   }
 }
 

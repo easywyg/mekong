@@ -29,7 +29,7 @@ export default class extends Entity {
       return false
     }
 
-    this.state.entities.push(entity)
+    this.add(entity)
 
     // Run command
     entity.onCommand = (command, execCommandItself) => {
@@ -54,6 +54,7 @@ export default class extends Entity {
 
     // Insert entity into DOM first time
     entity.core = this.core
+    entity.document = this
     entity.vtree = entity.view.render(entity)
     entity.node = this.core.VDOM.create(entity.vtree, {
       document: this.node.ownerDocument
@@ -62,6 +63,32 @@ export default class extends Entity {
     this.undoManager.execute(new this.core.Command.Insert(this, entity))
 
     return entity
+  }
+
+  // Find entity by id
+  find(entityId) {
+    return this.state.entities.find((entity) => {
+      return entity.id == entityId
+    })
+  }
+
+  // Add entity to state.entities
+  add(entity) {
+    this.state.entities.push(entity)
+  }
+
+  // Remove entity from state.entities by its ID
+  remove(entityId) {
+    const index = this.state.entities.findIndex((entity) => {
+      return entity.id == entityId
+    })
+
+    if (index != -1) {
+      delete this.state.entities[index]
+      return true
+    }
+
+    return false
   }
 
   canUndo() {

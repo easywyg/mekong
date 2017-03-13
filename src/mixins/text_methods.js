@@ -12,8 +12,8 @@ const TextMethods = (superclass) => class extends superclass {
     }
   }
 
-  setText(newText, start, end) {
-    this.runCommand(new TextCommand(this, this.state, newText, start, end))
+  setText(text, start, end) {
+    this.runCommand(new TextCommand(this.document, this.id, { text, start, end }))
   }
 }
 

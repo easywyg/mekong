@@ -4,31 +4,30 @@ import RemoveCommand from './remove.js';
 // InsertCommand
 // Insert one entity into another entity
 export default class extends Command {
-  constructor(targetEntity, insertEntity) {
+  constructor(targetEntity, entity) {
     super()
 
     this.targetEntity = targetEntity
-    this.insertEntity = insertEntity
+    this.entity = entity
   }
 
+  // Вставка нового entity в DOM
   execute() {
-    this.insertEntity.node = this.targetEntity.node.appendChild(this.insertEntity.node)
-    this.insertEntity.parentEntity = this.targetEntity
-    this.insertEntity.changeState()
+    this.entity.node = this.targetEntity.node.appendChild(this.entity.node)
+    this.entity.parentEntity = this.targetEntity
+    this.entity.changeState()
     return true
   }
 
+  // Отмена вставки entity в DOM
   undo() {
-    return (new RemoveCommand(this.insertEntity)).execute()
+    return (new RemoveCommand(this.entity)).execute()
   }
 
+  // Восстановление entity (отмена undo())
   redo() {
-    l('insert redo')
-    //return true
-
-    // Восстанавливаем удаленный методом undo() элемент
-    this.insertEntity.vtree = this.insertEntity.view.render(this.insertEntity)
-    this.insertEntity.node = this.insertEntity.core.VDOM.create(this.insertEntity.vtree, {
+    this.entity.vtree = this.entity.view.render(this.entity)
+    this.entity.node = this.entity.core.VDOM.create(this.entity.vtree, {
       document: this.targetEntity.node.ownerDocument
     })
 

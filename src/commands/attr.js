@@ -1,25 +1,25 @@
 import Command from '../undo_manager/command.js';
 
 export default class extends Command {
-  constructor(entity, stateReference, name, newValue) {
+  constructor(doc, entityId, name, value) {
     super()
 
-    this.entity = entity
-    this.stateReference = stateReference
-    this.name = name
-    this.oldValue = this.stateReference.attrs[this.name]
-    this.newValue = newValue
+    this.doc      = doc
+    this.entityId = entityId
+    this.entity   = this.doc.find(this.entityId)
+    this.oldState = { name: name, value: this.entity.state.attrs[name] }
+    this.newState = { name, value }
 
-    if (Array.isArray(this.newValue)) {
-      this.newValue = this.newValue.join(' ')
+    if (Array.isArray(this.newState.value)) {
+      this.newState.value = this.newState.value.join(' ')
     }
   }
 
   execute() {
-    if (this.newValue === null && this.stateReference.attrs[this.name]) {
-      delete this.stateReference.attrs[this.name];
+    if (this.newState.value === null && this.oldState.value) {
+      delete this.entity.state.attrs[this.newState.name];
     } else {
-      this.stateReference.attrs[this.name] = this.newValue
+      this.entity.state.attrs[this.newState.name] = this.newState.value
     }
 
     this.entity.changeState()
@@ -27,13 +27,8 @@ export default class extends Command {
   }
 
   undo() {
-    if (this.oldValue === null && this.stateReference.attrs[this.name]) {
-      delete this.stateReference.attrs[this.name];
-    } else {
-      this.stateReference.attrs[this.name] = this.oldValue;
-    }
-
-    this.entity.changeState()
-    return true
+    return new this.constructor(
+      this.doc, this.entityId, this.oldState.name, this.oldState.value
+    ).execute()
   }
 }

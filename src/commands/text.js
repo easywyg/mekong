@@ -1,53 +1,39 @@
+import merge from 'deepmerge';
 import Command from '../undo_manager/command.js';
 import EntityUtils from '../lib/entity_utils.js';
 
+// TextCommand
 export default class extends Command {
-  constructor(entity, stateReference, newText, start, end) {
+  constructor(doc, entityId, newState) {
     super()
 
-    this.entity = entity
-    this.stateReference = stateReference
-    this.oldBounds = {
-      start: this.stateReference.start,
-      end: this.stateReference.end
-    }
-
-    this.oldText = this.stateReference.text
-    this.newText = newText
-    this.start = start
-    this.end = end
-    this.isTextChanged = this.oldText != this.newText
+    this.doc      = doc
+    this.entityId = entityId
+    this.entity   = this.doc.find(this.entityId)
+    this.oldState = merge({}, this.entity.state)
+    this.newState = newState
   }
 
+  // Обновление стейта сущности. Устанавливает новый текст.
   execute() {
-    if (!this.isTextChanged) {
-      return false
-    }
+    const newState = merge(this.entity.state, this.newState)
+    if (this.oldState.text == newState.text) return false
 
-    this.stateReference.text = EntityUtils.updateText(
-      this.oldText, this.newText, this.start, this.end
+    this.entity.state.text = EntityUtils.updateText(
+      this.oldState.text, newState.text, newState.start, newState.end
     )
 
     this.entity.changeState()
-    //this.entity.list.changeState()
-    //l(this.stateReference, this.entity)
-
     return true
   }
 
   undo() {
-    const command = new this.constructor(
-      this.entity, this.stateReference, this.oldText,
-      this.oldBounds.start, this.oldBounds.end
-    )
-
-    return this.entity.runCommand(command, true)
-  }
-
-  // TODO: Удалении entity, будь то entity или particle, ye
-  redo() {
-    //l('redo', this.entity)
-    //return true
-    return this.execute()
+    return new this.constructor(
+      this.doc, this.entityId, {
+        text: this.oldState.text,
+        start: this.oldState.start,
+        end: this.oldState.end
+      }
+    ).execute()
   }
 }
