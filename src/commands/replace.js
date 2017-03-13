@@ -1,3 +1,4 @@
+import merge from 'deepmerge';
 import Command from '../undo_manager/command.js';
 
 // ReplaceCommand
@@ -8,7 +9,7 @@ export default class extends Command {
     this.entity = entity
     this.replacement = replacement
     this.parent = this.entity.node.parentNode
-    this.state = Object.assign({}, this.entity.state)
+    this.state = merge({}, this.entity.state)
   }
 
   execute() {

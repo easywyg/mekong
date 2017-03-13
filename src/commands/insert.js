@@ -19,6 +19,19 @@ export default class extends Command {
   }
 
   undo() {
-    return (new RemoveCommand(this.core, this.root, this.entity)).execute()
+    return (new RemoveCommand(this.insertEntity)).execute()
+  }
+
+  redo() {
+    l('insert redo')
+    //return true
+
+    // Восстанавливаем удаленный методом undo() элемент
+    this.insertEntity.vtree = this.insertEntity.view.render(this.insertEntity)
+    this.insertEntity.node = this.insertEntity.core.VDOM.create(this.insertEntity.vtree, {
+      document: this.targetEntity.node.ownerDocument
+    })
+
+    return this.execute()
   }
 }

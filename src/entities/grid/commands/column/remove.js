@@ -1,3 +1,4 @@
+import merge from 'deepmerge';
 import Command from '../../../../undo_manager/command.js';
 import InsertColumnCommand from './insert.js';
 
@@ -11,7 +12,7 @@ export default class extends Command {
   }
 
   execute() {
-    this.column.state = Object.assign({}, this.column.constructor.defaultState)
+    this.column.state = merge({}, this.column.constructor.defaultState)
 
     const index = this.grid.state.columns.findIndex((column) => {
       return column === this.column

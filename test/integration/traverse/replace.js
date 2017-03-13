@@ -2,8 +2,8 @@ describe('Integration Traverse', () => {
   let p1, p2
 
   before(() => {
-    p1 = mekong.entity('Paragraph', { text: 'Hello world!' })
-    p2 = mekong.entity('Paragraph', { text: 'Replacement' })
+    p1 = mekong.create('Paragraph', { text: 'Hello world!' })
+    p2 = mekong.create('Paragraph', { text: 'Replacement' })
   })
 
   after(() => { clearContent() })

@@ -2,7 +2,7 @@ describe('Integration', () => {
   let p
 
   before(() => {
-    p = mekong.entity('Paragraph')
+    p = mekong.create('Paragraph')
     p.setText('Hello world!')
   })
 

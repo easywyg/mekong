@@ -1,7 +1,7 @@
 describe('Integration', () => {
   let p
 
-  before(() => { p = mekong.entity('Paragraph') })
+  before(() => { p = mekong.create('Paragraph') })
   after(() => { clearContent() })
 
   describe('text', () => {

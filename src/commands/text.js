@@ -7,7 +7,11 @@ export default class extends Command {
 
     this.entity = entity
     this.stateReference = stateReference
-    this.oldBounds = { start: this.stateReference.start, end: this.stateReference.end }
+    this.oldBounds = {
+      start: this.stateReference.start,
+      end: this.stateReference.end
+    }
+
     this.oldText = this.stateReference.text
     this.newText = newText
     this.start = start
@@ -25,14 +29,25 @@ export default class extends Command {
     )
 
     this.entity.changeState()
+    //this.entity.list.changeState()
+    //l(this.stateReference, this.entity)
+
     return true
   }
 
   undo() {
     const command = new this.constructor(
-      this.entity, this.stateReference, this.oldText, this.oldBounds.start, this.oldBounds.end
+      this.entity, this.stateReference, this.oldText,
+      this.oldBounds.start, this.oldBounds.end
     )
 
     return this.entity.runCommand(command, true)
+  }
+
+  // TODO: Удалении entity, будь то entity или particle, ye
+  redo() {
+    //l('redo', this.entity)
+    //return true
+    return this.execute()
   }
 }

@@ -1,3 +1,4 @@
+import merge from 'deepmerge';
 import Command from '../undo_manager/command.js';
 
 export default class extends Command {
@@ -20,7 +21,7 @@ export default class extends Command {
 
     this.index = this.getMarkupIndex(this.tag, this.start, this.end)
     if (this.index != -1) {
-      this.oldAttrs = Object.assign({}, this.stateReference.markup[this.index][3])
+      this.oldAttrs = merge({}, this.stateReference.markup[this.index][3])
     }
   }
 

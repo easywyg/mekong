@@ -2,7 +2,7 @@ describe('Integration', () => {
   let p
 
   before(() => {
-    p = mekong.entity('Paragraph', { tag: 'blockquote', attrs: { class: 'quote' } })
+    p = mekong.create('Paragraph', { tag: 'blockquote', attrs: { class: 'quote' } })
     p.setText('Hello world!')
   })
 

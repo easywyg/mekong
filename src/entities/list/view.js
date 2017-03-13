@@ -1,32 +1,36 @@
 export default function(core) {
   // List view
   return class extends core.View {
-    build(state) {
-      const buildList = (tag, attrs, items) => {
-        let children = [];
+    build(list) {
+      this.vnode = core.VDOM.VNode
+      this.vtext = core.VDOM.VText
+
+      const buildList = (a_list, attrs, items) => {
+        let children = []
 
         items.forEach((item) => {
-          let vitem;
+          let vitem
 
-          if (item.items.length > 0) {
+          if (item.state.items.length > 0) {
             let a = [
-              this.vtext(item.text),
-              buildList(tag, item.attrs, item.items)
+              new this.vtext(item.state.text),
+              buildList(a_list, item.state.attrs, item.state.items)
             ]
-            vitem = this.vnode('li', item.attrs, a);
+
+            vitem = new this.vnode(item, item.state.attrs, a);
           } else {
             // Build item without children
             // TODO: Add markup here
-            vitem = this.vnode('li', item.attrs, [ this.vtext(item.text) ]);
+            vitem = new this.vnode(item, item.state.attrs, [ new this.vtext(item.state.text) ])
           }
 
-          children.push(vitem);
+          children.push(vitem)
         })
 
-        return this.vnode(tag, attrs, children);
+        return new this.vnode(a_list, attrs, children);
       }
 
-      return buildList(state.tag, state.attrs, state.items)
+      return buildList(list, list.state.attrs, list.state.items)
     }
   }
 }

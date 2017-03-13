@@ -1,3 +1,4 @@
+import merge from 'deepmerge';
 import Command from '../../../../undo_manager/command.js';
 import RemoveColumnCommand from './remove.js';
 
@@ -12,7 +13,7 @@ export default class extends Command {
 
   execute() {
     // Update column attrs
-    this.column.state.attrs = Object.assign(
+    this.column.state.attrs = merge(
       this.column.state.attrs, this.attrs
     )
 

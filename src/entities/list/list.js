@@ -22,10 +22,10 @@ export default function(core) {
 
     // Add list item
     createItem() {
-      const klass = Item(core);
-      const item = new klass(this.state.items, this);
+      const klass = Item(core)
+      const item = new klass({}, this)
 
-      return item.createItem();
+      return item.createItem()
     }
   }
 }

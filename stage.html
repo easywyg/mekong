@@ -43,15 +43,14 @@
   var Mekong = require('mekong').default;
   var mekong = new Mekong(document.getElementById('body'));
 
-  //mekong.useEntity('Root');
   mekong.useEntity('Table');
   mekong.useEntity('Paragraph');
   mekong.useEntity('List');
   mekong.useEntity('Grid');
   mekong.useEntity({ Image: function(core) {} });
-
+/*
   // A List
-  /*var list = mekong.entity('List', { tag: 'ol' });
+  var list = mekong.create('List', { tag: 'ol' });
   var item1 = list.createItem();
   item1.setText('item 1');
 
@@ -67,10 +66,17 @@
   var item1_3 = item1.createItem();
   item1_3.setText('item 1.3');
 
-  mekong.document.remove(list)
-  mekong.document.undo()*/
+  var item1_2_1 = item1_2.createItem();
+  item1_2_1.setText('item 1.2.1');
+
+
+  mekong.document.undo()
+  mekong.document.undo()
+  mekong.document.redo()
+  mekong.document.redo()
+*/
   // A Table
-  /*var table = mekong.entity('Table');
+  /*var table = mekong.create('Table');
   var row1 = table.addRow();
 
   column1 = row1.addColumn('text 1', {}, [])
@@ -80,31 +86,32 @@
   column2.update({ text: 'lol' });
   column3.remove();*/
 
+
   // A paragraph
-  var p1 = mekong.entity('Paragraph', { tag: 'p', attrs: {} });
-  p1.setText('Hello world!')
+  var p1 = mekong.create('Paragraph', { tag: 'p', text: 'Hello world!', attrs: {} });
+  //p1.setText('Hello world!')
+  mekong.document.undo()
+  /*mekong.document.undo()
+  mekong.document.redo()
+  mekong.document.redo()
+
+
   p1.setMarkup('strong', 0, 5)
   p1.setMarkup('em', 6, 11)
   p1.setMarkup('u', 4, 7)
-  ////p1.setMarkup('strong', 0, 5)
-  //mekong.document.undo()
-  //mekong.document.redo()
+
+  var p2 = mekong.create('Paragraph', { tag: 'blockquote'});
+  p2.setText('Yay!')
+
+  p2.replace(p1)
+  mekong.document.undo()
 
   // A Grid
-  var grid = mekong.entity('Grid');
+  var grid = mekong.create('Grid');
   grid.setAttr('id', 'grid');
   var column1 = grid.createColumn({ class: 'col-xs-1' });
   var column2 = grid.createColumn();
-  //mekong.document.undo()
-  //column1.remove()
-  //mekong.document.undo()
-  //console.log('a', grid)
-  //grid.setAttr('id', 'lol');
-
-  // Transfer
-  //mekong.document.transfer(p1, column1);
-  //
-  console.log(mekong.document)
+*/
 </script>
 
 </body>

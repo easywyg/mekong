@@ -1,20 +1,11 @@
+import merge from 'deepmerge';
+
 // Entity base class
 export default class {
   constructor(state) {
     this.core = null
-
-    const self = this
-
     this.type = this.constructor.type
-    state = Object.assign(this.constructor.defaultState, state || {})
-
-    this.state = new Proxy(state, {
-      set(target, key, value) {
-        target[key] = value
-        self.onSetProp(target, key, value)
-        return true
-      }
-    })
+    this.state = merge(this.cloneDefaultState(), state || {})
 
     // Callbacks
     this.onStateChange = () => {}
@@ -29,10 +20,19 @@ export default class {
     // Parent entity
     this.parentEntity = null;
 
+    this.id = this.generateId()
     /*this.siblings = {
       prev: null,
       next: null
     }*/
+  }
+
+  generateId() {
+    return Math.random().toString(36).slice(2)
+  }
+
+  cloneDefaultState() {
+    return merge({}, this.constructor.defaultState)
   }
 
   runCommand(command, execCommandItself) {
@@ -64,7 +64,7 @@ export default class {
   remove() {
     if (this.policy.canBeRemoved()) {
       this.runCommand(
-        //new RemoveCommand(this.core, this.root, entity)
+        new this.core.Command.Remove(this)
       )
     }
   }
