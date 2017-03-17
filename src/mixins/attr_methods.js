@@ -1,6 +1,6 @@
-import AttrCommand from '../commands/attr.js';
-import RemoveAttrCommand from '../commands/remove_attr.js';
-import RemoveMarkupCommand from '../commands/remove_markup.js';
+import AttrCommand from '../commands/entity/attr.js';
+import RemoveAttrCommand from '../commands/entity/remove_attr.js';
+import RemoveMarkupCommand from '../commands/entity/remove_markup.js';
 
 const AttrMethods = (superclass) => class extends superclass {
   getAttr(name) {

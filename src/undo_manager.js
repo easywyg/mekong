@@ -9,13 +9,16 @@ export default class {
   execute(command) {
     this._clearRedo();
 
-    const success  = command.execute();
+    const success = command.execute();
 
     if (success) {
       this.commands.push(command);
       this.stackPosition++;
       this.changed();
+      return true
     }
+
+    return false
   }
 
   undo() {

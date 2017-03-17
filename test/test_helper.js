@@ -9,15 +9,18 @@ global.document     = doc;
 global.Element      = doc.defaultView.Element;
 global.expect       = chai.expect;
 global.container    = global.document.getElementById('container')
-global.content      = function() { return global.container.innerHTML }
-global.clearContent = function() { global.container.innerHTML = '' }
+global.content      = function() { return global.container.innerHTML;  }
 global.create       = create;
 global.VText        = VText;
 global.VNode        = VNode;
 
 import Mekong from '../src/api.js';
 global.mekong = new Mekong(global.container);
-global.mekong.useEntity('Paragraph');
+global.mekong.use('Paragraph');
+global.clearContent = function() {
+  global.container.innerHTML = ''
+  //global.mekong.document.removeAll();
+}
 
 // Helper function
 global.builderHtml = (builder) => {

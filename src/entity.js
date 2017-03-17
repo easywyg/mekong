@@ -55,16 +55,16 @@ export default class {
   }*/
 
   // Insert entity
-  insert(entity) {
+  /*insert(entity) {
     if (!this.policy.canAppend(entity)) {
       return false
     }
 
     // TODO
-  }
+  }*/
 
   // Remove entity
-  remove() {
+  /*remove() {
     if (this.policy.canBeRemoved()) {
       this.runCommand(
         new this.core.Command.Remove(this)
@@ -90,6 +90,6 @@ export default class {
         new this.core.Command.Replace(withEntity, this)
       )
     }
-  }
+  }*/
 
 }

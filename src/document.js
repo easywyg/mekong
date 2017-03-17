@@ -14,6 +14,8 @@ export default class extends Entity {
   constructor(core, root) {
     super()
 
+    const self = this
+
     this.undoManager = new UndoManager
     this.core = core
     this.node = root
@@ -23,48 +25,6 @@ export default class extends Entity {
     return new (Policy(this.core))
   }
 
-  // Insert Entity into Document
-  insert(entity) {
-    if (!this.policy.canAppend(entity)) {
-      return false
-    }
-
-    this.add(entity)
-
-    // Run command
-    entity.onCommand = (command, execCommandItself) => {
-      // Run command without putting it in undoManager history
-      if (execCommandItself) {
-        return command.execute()
-      }
-      // Run command and put it into history to make undo/redo in the future
-      else {
-        return this.undoManager.execute(command)
-      }
-    }
-
-    // Update entity when it's state has changed
-    entity.onStateChange = () => {
-      // Update DOM node
-      if (entity.node) {
-        entity.vtree = this.core.VDOM.diff(entity.vtree, entity.view.render(entity))
-        this.core.VDOM.patch(entity.node, entity.vtree);
-      }
-    }
-
-    // Insert entity into DOM first time
-    entity.core = this.core
-    entity.document = this
-    entity.vtree = entity.view.render(entity)
-    entity.node = this.core.VDOM.create(entity.vtree, {
-      document: this.node.ownerDocument
-    })
-
-    this.undoManager.execute(new this.core.Command.Insert(this, entity))
-
-    return entity
-  }
-
   // Find entity by id
   find(entityId) {
     return this.state.entities.find((entity) => {
@@ -72,24 +32,50 @@ export default class extends Entity {
     })
   }
 
-  // Add entity to state.entities
-  add(entity) {
-    this.state.entities.push(entity)
+  // Find entity index by its id
+  findIndex(entityId) {
+    return this.state.entities.findIndex((entity) => {
+      return entity.id == entityId
+    })
+  }
+
+  // Insert Entity into Document
+  insert(entity) {
+    const command = new this.core.Command.Document.Insert(this, this, entity)
+
+    if (this.undoManager.execute(command)) {
+      return entity
+    }
+
+    return null
   }
 
   // Remove entity from state.entities by its ID
-  remove(entityId) {
-    const index = this.state.entities.findIndex((entity) => {
-      return entity.id == entityId
-    })
-
-    if (index != -1) {
-      delete this.state.entities[index]
-      return true
-    }
-
-    return false
+  remove(entity) {
+    const command = new this.core.Command.Document.Remove(this, entity)
+    return this.undoManager.execute(command)
   }
+
+  // Move entity before another entity. If beforeEntity is null, then just transfer
+  // entity into containerEntity
+  move(entity, beforeEntity, containerEntity) {
+    const command = new this.core.Command.Document.Move(this, entity, beforeEntity, containerEntity)
+    return this.undoManager.execute(command)
+  }
+
+  // Replace entity with withEntity
+  replace(entity, withEntity) {
+    const command = new this.core.Command.Document.Remove(this, entity, withEntity)
+    return this.undoManager.execute(command)
+  }
+
+  // Remove all entities
+  // NOTE: Эта команда неоткатываемая. Оставить так или поправить?
+  /*removeAll() {
+    this.state.entities.forEach((entity) => {
+      this.remove(entity)
+    })
+  }*/
 
   canUndo() {
     return this.undoManager.canUndo()

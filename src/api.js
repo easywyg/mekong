@@ -23,17 +23,19 @@ import TableEntity from './entities/table/export.js';
 import ParagraphEntity from './entities/paragraph/export.js';
 import GridEntity from './entities/grid/export.js';
 
-// Commands
-import InsertCommand from './commands/insert.js';
-import RemoveCommand from './commands/remove.js';
-import MoveCommand from './commands/move.js';
-import ReplaceCommand from './commands/replace.js';
-import AttrCommand from './commands/attr.js';
-import RemoveAttrCommand from './commands/remove_attr.js';
-import MarkupCommand from './commands/markup.js';
-import RemoveMarkupCommand from './commands/remove_markup.js';
-import TagCommand from './commands/tag.js';
-import TextCommand from './commands/text.js';
+// Document commands
+import InsertCommand from './commands/document/insert.js';
+import RemoveCommand from './commands/document/remove.js';
+import MoveCommand from './commands/document/move.js';
+import ReplaceCommand from './commands/document/replace.js';
+
+// Entity commands
+import AttrCommand from './commands/entity/attr.js';
+import RemoveAttrCommand from './commands/entity/remove_attr.js';
+import MarkupCommand from './commands/entity/markup.js';
+import RemoveMarkupCommand from './commands/entity/remove_markup.js';
+import TagCommand from './commands/entity/tag.js';
+import TextCommand from './commands/entity/text.js';
 
 // Mixins
 import TextMethods from './mixins/text_methods.js';
@@ -53,16 +55,20 @@ const core = {
     EntityUtils
   },
   Command: {
-    Insert: InsertCommand,
-    Remove: RemoveCommand,
-    Move: MoveCommand,
-    Replace: ReplaceCommand,
-    Attr: AttrCommand,
-    RemoveAttr: RemoveAttrCommand,
-    Markup: MarkupCommand,
-    RemoveMarkup: RemoveMarkupCommand,
-    Tag: TagCommand,
-    Text: TextCommand
+    Document: {
+      Insert: InsertCommand,
+      Remove: RemoveCommand,
+      Move: MoveCommand,
+      Replace: ReplaceCommand
+    },
+    Entity: {
+      Attr: AttrCommand,
+      RemoveAttr: RemoveAttrCommand,
+      Markup: MarkupCommand,
+      RemoveMarkup: RemoveMarkupCommand,
+      Tag: TagCommand,
+      Text: TextCommand
+    }
   },
   Mixin : {
     TextMethods, MarkupMethods,
@@ -87,13 +93,13 @@ export default class Mekong {
     this.usedEntitities = {}
   }
 
-  useEntity(entry) {
+  use(entry) {
     if (typeof entry === 'string' || entry instanceof String) {
-      this.usedEntitities[entry] = this.coreEntities[entry];
+      this.usedEntitities[entry] = this.coreEntities[entry]
     } else {
       for (let key in entry) {
         this.usedEntitities[key] = function(core) {
-          return entry[key];
+          return entry[key]
         }
       }
     }
@@ -102,43 +108,9 @@ export default class Mekong {
   }
 
   create(name, options) {
-    const klass = this.usedEntitities[name](core);
-    const entity = new klass(options);
+    const klass = this.usedEntitities[name](core)
+    const entity = new klass(options)
 
     return this.document.insert(entity)
   }
-
-/*
-
-  return {
-    coreEntities: {
-      List: ListEntity,
-      Root: RootEntity
-    },
-
-    usedEntitities: {
-      //Container: ContainerEntity
-    },
-
-    useEntity: function(entry) {
-      if (typeof entry === 'string' || entry instanceof String) {
-        this.usedEntitities[entry] = this.coreEntities[entry];
-      } else {
-        for (let key in entry) {
-          this.usedEntitities[key] = function(core) {
-            return entry[key];
-          }
-        }
-      }
-
-      return null;
-    },
-
-    entity: function(name, options) {
-      console.log('yay')
-      const klass = this.usedEntitities[name](core);
-      return new klass(options);
-    }
-  };
-*/
 }

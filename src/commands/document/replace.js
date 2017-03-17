@@ -1,11 +1,12 @@
 import merge from 'deepmerge';
-import Command from '../undo_manager/command.js';
+import Command from '../../undo_manager/command.js';
 
 // ReplaceCommand
 export default class extends Command {
-  constructor(entity, replacement) {
+  constructor(doc, entity, replacement) {
     super()
 
+    this.doc = doc
     this.entity = entity
     this.replacement = replacement
     this.parent = this.entity.node.parentNode
@@ -13,6 +14,14 @@ export default class extends Command {
   }
 
   execute() {
+    const index = this.doc.findIndex(this.entity.id)
+
+    if (index == -1 || !this.entity.policy.canBeReplaced(this.replacement)) {
+      return false
+    }
+
+    this.doc.state.entities[index] = this.replacement
+
     // Move replacement near entity
     this.replacement.node = this.parent.insertBefore(
       this.replacement.node, this.entity.node
@@ -39,10 +48,11 @@ export default class extends Command {
     this.entity.node = this.parent.appendChild(this.entity.node)
 
     const command = new this.constructor(
-      this.replacement, this.entity
+      this.doc, this.replacement, this.entity
     )
 
-    return this.replacement.runCommand(command, true)
+    //return this.replacement.runCommand(command, true)
+    return command.execute()
   }
 
   redo() {
