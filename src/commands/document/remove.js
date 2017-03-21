@@ -1,5 +1,5 @@
 import Command from '../../undo_manager/command.js';
-import InsertCommand from './insert.js';
+import CreateCommand from './create.js';
 
 // RemoveCommand
 // Remove entity from DOM
@@ -36,6 +36,6 @@ export default class extends Command {
     })
 
     this.entity.node = this.parent.appendChild(this.entity.node)
-    return (new InsertCommand(this.doc, this.parentEntity, this.entity)).execute()
+    return (new CreateCommand(this.doc, this.parentEntity, this.entity)).execute()
   }
 }

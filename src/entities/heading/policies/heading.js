@@ -1,12 +1,14 @@
 export default function(core) {
   return class extends core.Policy {
-    canAppend(entity) {
-      return entity.type == 'paragraph';
+    static allowedTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+
+    canAppend() {
+      return false;
     }
 
     // Can entity be replaced with another entity
     canBeReplaced(entity) {
-      return false;
+      return true;
     }
 
     canBeRemoved() {
@@ -14,7 +16,7 @@ export default function(core) {
     }
 
     canBeMoved() {
-      return false;
+      return true;
     }
 
     canBeSplitted(position) {

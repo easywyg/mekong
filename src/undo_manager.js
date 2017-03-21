@@ -1,22 +1,35 @@
 // UndoManager
 export default class {
   constructor() {
-    this.commands = [];
-    this.stackPosition = -1;
-    this.savePosition = -1;
+    this.commands = []
+    this.stackPosition = -1
+    this.savePosition = -1
+    this.ready = true
+    this.timeout = null
   }
 
   execute(command) {
     this._clearRedo();
 
-    const success = command.execute();
+    //if (this.ready) {
+      const success = command.execute();
 
-    if (success) {
-      this.commands.push(command);
-      this.stackPosition++;
-      this.changed();
-      return true
+      if (success) {
+        this.commands.push(command);
+        this.stackPosition++;
+        this.changed();
+        this.ready = false
+        return true
+      }
+    //}
+
+    /*if (this.timeout != null) {
+      clearTimeout(this.timeout)
     }
+
+    this.timeout = setTimeout(() => {
+      this.ready = true
+    }, 0)*/
 
     return false
   }

@@ -11,23 +11,24 @@ import EntityUtils from './lib/entity_utils.js';
 
 // Core classes
 import Entity from './entity.js';
-import Container from './container.js';
 import View from './view.js';
 import Policy from './policy.js';
 import Document from './document.js';
 import Command from './undo_manager/command.js';
 
-// Default entities
+// Core entities
 import ListEntity from './entities/list/export.js';
 import TableEntity from './entities/table/export.js';
 import ParagraphEntity from './entities/paragraph/export.js';
 import GridEntity from './entities/grid/export.js';
 
 // Document commands
-import InsertCommand from './commands/document/insert.js';
+import CreateCommand from './commands/document/create.js';
 import RemoveCommand from './commands/document/remove.js';
 import MoveCommand from './commands/document/move.js';
 import ReplaceCommand from './commands/document/replace.js';
+import SplitCommand from './commands/document/split.js';
+import JoinCommand from './commands/document/join.js';
 
 // Entity commands
 import AttrCommand from './commands/entity/attr.js';
@@ -45,7 +46,6 @@ import TagMethods from './mixins/tag_methods.js';
 
 const core = {
   Entity,
-  Container,
   View,
   Policy,
   Command,
@@ -54,12 +54,20 @@ const core = {
     Mix : mix,
     EntityUtils
   },
+  Entities: {
+    List: ListEntity,
+    Table: TableEntity,
+    Paragraph: ParagraphEntity,
+    Grid: GridEntity
+  },
   Command: {
     Document: {
-      Insert: InsertCommand,
+      Create: CreateCommand,
       Remove: RemoveCommand,
       Move: MoveCommand,
-      Replace: ReplaceCommand
+      Replace: ReplaceCommand,
+      Split: SplitCommand,
+      Join: JoinCommand
     },
     Entity: {
       Attr: AttrCommand,
@@ -76,31 +84,21 @@ const core = {
   },
   VDOM : {
     create, diff, patch, VNode, VText
-  },
+  }
 };
 
 export default class Mekong {
   constructor(root) {
-    this.document = new Document(core, root)
-
-    this.coreEntities = {
-      List      : ListEntity,
-      Table     : TableEntity,
-      Paragraph : ParagraphEntity,
-      Grid      : GridEntity
-    }
-
     this.usedEntitities = {}
+    this.document = new Document(this.usedEntitities, core, root)
   }
 
   use(entry) {
-    if (typeof entry === 'string' || entry instanceof String) {
-      this.usedEntitities[entry] = this.coreEntities[entry]
+    if (String.isString(entry)) {
+      this.usedEntitities[entry] = core.Entities[entry]
     } else {
       for (let key in entry) {
-        this.usedEntitities[key] = function(core) {
-          return entry[key]
-        }
+        this.usedEntitities[key] = (core) => { return entry[key] }
       }
     }
 
@@ -108,9 +106,6 @@ export default class Mekong {
   }
 
   create(name, options) {
-    const klass = this.usedEntitities[name](core)
-    const entity = new klass(options)
-
-    return this.document.insert(entity)
+    return this.document.create(name, options)
   }
 }

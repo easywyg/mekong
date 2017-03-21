@@ -1,8 +1,8 @@
 import Command from '../../undo_manager/command.js';
 import RemoveCommand from './remove.js';
 
-// InsertCommand
-// Insert one entity into another entity
+// CreateCommand
+// Create one entity within another entity
 export default class extends Command {
   constructor(doc, targetEntity, entity) {
     super()

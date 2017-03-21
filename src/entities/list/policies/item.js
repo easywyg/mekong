@@ -16,5 +16,13 @@ export default function(core) {
     canBeMoved() {
       return false;
     }
+
+    canBeSplitted(position) {
+      return false
+    }
+
+    canBeJoined(withEntity) {
+      return false
+    }
   }
 }

@@ -11,14 +11,17 @@ export default class extends Entity {
     entities: []
   }
 
-  constructor(core, root) {
-    super()
+  constructor(usedEntitities, core, root) {
+    super(core, root)
 
     const self = this
 
     this.undoManager = new UndoManager
+    this.usedEntitities = usedEntitities
     this.core = core
     this.node = root
+
+    //console.log('core', this.core)
   }
 
   get policy() {
@@ -39,15 +42,20 @@ export default class extends Entity {
     })
   }
 
-  // Insert Entity into Document
-  insert(entity) {
-    const command = new this.core.Command.Document.Insert(this, this, entity)
+  create(name, options, beforeEntity = null) {
+    const klass = this.usedEntitities[name](this.core)
+    const entity = new klass(options)
+    const command = new this.core.Command.Document.Create(this, this, entity, beforeEntity)
 
     if (this.undoManager.execute(command)) {
       return entity
     }
 
     return null
+  }
+
+  mutate() {
+    // todo
   }
 
   // Remove entity from state.entities by its ID
@@ -67,6 +75,26 @@ export default class extends Entity {
   replace(entity, withEntity) {
     const command = new this.core.Command.Document.Remove(this, entity, withEntity)
     return this.undoManager.execute(command)
+  }
+
+  // Split entity into two entities
+  split(entity, position) {
+    const command = new this.core.Command.Document.Split(this, entity, position)
+    if (this.undoManager.execute(command)) {
+      return command.entities
+    }
+
+    return null
+  }
+
+  // Join two entities into one
+  join(entity, withEntity) {
+    const command = new this.core.Command.Document.Join(this, entity, withEntity)
+    if (this.undoManager.execute(command)) {
+      return command.entity
+    }
+
+    return null
   }
 
   // Remove all entities
@@ -95,5 +123,15 @@ export default class extends Entity {
     if (this.canRedo()) {
       this.undoManager.redo()
     }
+  }
+
+  // Load JSON and render document
+  load() {
+
+  }
+
+  // Render document state into HTML
+  html() {
+
   }
 }
