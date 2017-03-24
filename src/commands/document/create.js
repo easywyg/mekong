@@ -4,12 +4,13 @@ import RemoveCommand from './remove.js';
 // CreateCommand
 // Create one entity within another entity
 export default class extends Command {
-  constructor(doc, targetEntity, entity) {
+  constructor(doc, targetEntity, entity, insertPos) {
     super()
 
     this.doc = doc
     this.targetEntity = targetEntity
     this.entity = entity
+    this.insertPos = insertPos
   }
 
   setCallbacks() {
@@ -57,7 +58,20 @@ export default class extends Command {
 
     this.doc.state.entities.push(this.entity)
 
-    this.entity.node = this.targetEntity.node.appendChild(this.entity.node)
+    if (this.insertPos && (this.insertPos.after || this.insertPos.before)) {
+      let refNode = null
+
+      if (this.insertPos.after) {
+        refNode = this.insertPos.after.node.nextSibling
+      } else if (this.insertPos.before) {
+        refNode = this.insertPos.before.node
+      }
+
+      this.entity.node = this.targetEntity.node.insertBefore(this.entity.node, refNode)
+    } else {
+      this.entity.node = this.targetEntity.node.appendChild(this.entity.node)
+    }
+
     this.entity.parentEntity = this.targetEntity
     this.entity.changeState()
     return true

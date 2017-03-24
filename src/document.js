@@ -42,10 +42,10 @@ export default class extends Entity {
     })
   }
 
-  create(name, options, beforeEntity = null) {
-    const klass = this.usedEntitities[name](this.core)
+  create(name, options, insertPos) {
+    const klass = this.usedEntitities[name.toLowerCase()](this.core)
     const entity = new klass(options)
-    const command = new this.core.Command.Document.Create(this, this, entity, beforeEntity)
+    const command = new this.core.Command.Document.Create(this, this, entity, insertPos)
 
     if (this.undoManager.execute(command)) {
       return entity
@@ -54,8 +54,10 @@ export default class extends Entity {
     return null
   }
 
-  mutate() {
-    // todo
+  // Mutate entity to another type of entity
+  mutate(entity, entityType, tag, attrs) {
+    const command = new this.core.Command.Document.Mutate(this, entity, entityType, tag, attrs)
+    return this.undoManager.execute(command)
   }
 
   // Remove entity from state.entities by its ID
@@ -81,7 +83,7 @@ export default class extends Entity {
   split(entity, position) {
     const command = new this.core.Command.Document.Split(this, entity, position)
     if (this.undoManager.execute(command)) {
-      return command.entities
+      return command.newParagraph
     }
 
     return null

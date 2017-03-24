@@ -47,6 +47,8 @@
   mekong.use('Paragraph');
   mekong.use('List');
   mekong.use('Grid');
+  mekong.use('Heading');
+  mekong.use('Preformatted');
   mekong.use({ Image: function(core) {} });
 
   // A List
@@ -91,10 +93,25 @@
 
 
   // A paragraph
-  var p1 = mekong.create('Paragraph', { tag: 'p', attrs: {} });
-  p1.setText('Hello world!')
+  /*var p1 = mekong.create('Paragraph', { tag: 'p', attrs: {} });
+  p1.setMarkup('em', 2, 4)
+  p1.setMarkup('strong', 0, 5)
+  p1.setMarkup('strong', 0, 12)
+  p1.setText('Hello world!')*/
 
-  mekong.document.remove(p1)
+  /*var p2 = mekong.create('Paragraph', { tag: 'p', attrs: {} });
+  p2.setMarkup('em', 2, 5)
+  p2.setText('Nigga please')
+*/
+  //var p2 = mekong.document.split(p1, 5)
+  //mekong.document.join(p1, p2)
+  //console.log(p2)
+
+  //mekong.document.remove(p1)
+  var p1 = mekong.create('Paragraph', { text: 'Hello' })
+  //var p2 = mekong.create('Paragraph', { text: 'world!' })
+
+  mekong.document.mutate(p1, 'Heading', 'h1', { class: 'lol yay' })
   mekong.document.undo()
   mekong.document.redo()
 

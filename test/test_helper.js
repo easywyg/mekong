@@ -17,8 +17,19 @@ global.VNode        = VNode;
 import Mekong from '../src/api.js';
 global.mekong = new Mekong(global.container);
 global.mekong.use('Paragraph');
+global.mekong.use('Table');
+global.mekong.use('List');
+global.mekong.use('Grid');
+global.mekong.use('Heading');
+global.mekong.use('Preformatted');
 global.clearContent = function() {
-  global.container.innerHTML = ''
+  global.container.innerHTML = '';
+  //global.mekong.document.removeAll();
+}
+
+global.clearContentWithEntities = function() {
+  global.container.innerHTML = '';
+  mekong.document.state.entities = [];
   //global.mekong.document.removeAll();
 }
 

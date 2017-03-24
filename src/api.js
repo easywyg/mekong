@@ -21,6 +21,8 @@ import ListEntity from './entities/list/export.js';
 import TableEntity from './entities/table/export.js';
 import ParagraphEntity from './entities/paragraph/export.js';
 import GridEntity from './entities/grid/export.js';
+import HeadingEntity from './entities/heading/export.js';
+import PreformattedEntity from './entities/preformatted/export.js';
 
 // Document commands
 import CreateCommand from './commands/document/create.js';
@@ -29,6 +31,7 @@ import MoveCommand from './commands/document/move.js';
 import ReplaceCommand from './commands/document/replace.js';
 import SplitCommand from './commands/document/split.js';
 import JoinCommand from './commands/document/join.js';
+import MutateCommand from './commands/document/mutate.js';
 
 // Entity commands
 import AttrCommand from './commands/entity/attr.js';
@@ -55,10 +58,12 @@ const core = {
     EntityUtils
   },
   Entities: {
-    List: ListEntity,
-    Table: TableEntity,
-    Paragraph: ParagraphEntity,
-    Grid: GridEntity
+    list: ListEntity,
+    table: TableEntity,
+    paragraph: ParagraphEntity,
+    grid: GridEntity,
+    heading: HeadingEntity,
+    preformatted: PreformattedEntity
   },
   Command: {
     Document: {
@@ -67,7 +72,8 @@ const core = {
       Move: MoveCommand,
       Replace: ReplaceCommand,
       Split: SplitCommand,
-      Join: JoinCommand
+      Join: JoinCommand,
+      Mutate: MutateCommand
     },
     Entity: {
       Attr: AttrCommand,
@@ -95,10 +101,10 @@ export default class Mekong {
 
   use(entry) {
     if (String.isString(entry)) {
-      this.usedEntitities[entry] = core.Entities[entry]
+      this.usedEntitities[entry.toLowerCase()] = core.Entities[entry.toLowerCase()]
     } else {
       for (let key in entry) {
-        this.usedEntitities[key] = (core) => { return entry[key] }
+        this.usedEntitities[key.toLowerCase()] = (core) => { return entry[key.toLowerCase()] }
       }
     }
 

@@ -30,12 +30,6 @@ export default class extends Command {
 
   // Restore in document
   undo() {
-    this.entity.vtree = this.entity.view.render(this.entity)
-    this.entity.node = this.entity.core.VDOM.create(this.entity.vtree, {
-      document: this.parent.ownerDocument
-    })
-
-    this.entity.node = this.parent.appendChild(this.entity.node)
     return (new CreateCommand(this.doc, this.parentEntity, this.entity)).execute()
   }
 }

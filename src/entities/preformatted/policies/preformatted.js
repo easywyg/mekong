@@ -1,6 +1,8 @@
 export default function(core) {
   return class extends core.Policy {
     static allowedTags = ['pre']
+    static allowMutate = ['heading', 'paragraph']
+    static allowJoin = ['paragraph', 'heading', 'preformatted']
 
     canAppend() {
       return false;
@@ -24,7 +26,11 @@ export default function(core) {
     }
 
     canBeJoined(withEntity) {
-      return false
+      return this.constructor.allowJoin.includes(withEntity.type)
+    }
+
+    canBeMutated(entityType) {
+      return this.constructor.allowMutate.includes(entityType.toLowerCase())
     }
   }
 }

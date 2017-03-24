@@ -6,7 +6,7 @@ describe('Integration', () => {
     p.setText('Hello world!')
   })
 
-  after(() => { clearContent() })
+  after(() => { clearContentWithEntities() })
 
   describe('tag', () => {
     it('initialized properly', () => {

@@ -2,7 +2,7 @@ describe('Integration', () => {
   let p
 
   before(() => { p = mekong.create('Paragraph') })
-  after(() => { clearContent() })
+  after(() => { clearContentWithEntities() })
 
   describe('text', () => {
     it('can be set', () => {
