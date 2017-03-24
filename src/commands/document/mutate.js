@@ -29,7 +29,7 @@ export default class extends Command {
 
     // Создаем новую сущность и заменяем на нее текущую сущность
     const klass = this.doc.usedEntitities[this.entityType](this.doc.core)
-    const entity = new klass({ tag: this.tag, attrs: this.attrs }) // TODO: use markup too!!!
+    const entity = new klass({ tag: this.tag, attrs: this.attrs, markup: this.entity.state.markup })
 
     // Заменяем сущность в коллекции документа
     const index = this.doc.findIndex(this.entity.id)

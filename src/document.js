@@ -99,6 +99,11 @@ export default class extends Entity {
     return null
   }
 
+  lineBreak(entity, position) {
+    const command = new this.core.Command.Document.LineBreak(this, entity, this)
+    return this.undoManager.execute(command)
+  }
+
   // Remove all entities
   // NOTE: Эта команда неоткатываемая. Оставить так или поправить?
   /*removeAll() {

@@ -2,7 +2,12 @@ export default function(core) {
   return class extends core.Policy {
     static allowedTags = ['p', 'address']
     static allowMutate = ['heading', 'preformatted']
-    static allowJoin = ['paragraph', 'heading', 'preformatted'] // TODO
+    static allowJoin = ['paragraph', 'heading', 'preformatted']
+    static lineBreak = core.Policy.BREAKS.HTML_BREAK
+    static lineBreakMutate = {
+      'preformatted': core.Policy.BREAKS.NEW_LINE,
+      'heading': core.Policy.BREAKS.SPACE
+    }
 
     canAppend() {
       return false;
@@ -31,6 +36,10 @@ export default function(core) {
 
     canBeMutated(entityType) {
       return this.constructor.allowMutate.includes(entityType.toLowerCase())
+    }
+
+    canLineBreak(position) {
+      return position > 0 && position < this.entity.state.text.length
     }
   }
 }

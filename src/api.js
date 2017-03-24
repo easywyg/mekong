@@ -32,6 +32,7 @@ import ReplaceCommand from './commands/document/replace.js';
 import SplitCommand from './commands/document/split.js';
 import JoinCommand from './commands/document/join.js';
 import MutateCommand from './commands/document/mutate.js';
+import LineBreakCommand from './commands/document/line_break.js';
 
 // Entity commands
 import AttrCommand from './commands/entity/attr.js';
@@ -73,7 +74,8 @@ const core = {
       Replace: ReplaceCommand,
       Split: SplitCommand,
       Join: JoinCommand,
-      Mutate: MutateCommand
+      Mutate: MutateCommand,
+      LineBreak: LineBreakCommand
     },
     Entity: {
       Attr: AttrCommand,
