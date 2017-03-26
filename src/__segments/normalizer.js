@@ -2,8 +2,9 @@
 // Нормализует отрезки, создает новые отрезки. В общем, подготавливает отрезки для
 // дальнейшего использования другими классами.
 export default class {
-  constructor(text, markup = []) {
+  constructor(text, markup = [], lineBreaks = []) {
     this.text = text;
+    this.lineBreaks = [3, 5]
 
     // Нужно ли рассчитывать новые отрезки?
     this.shouldCalcNewSegments = true;
@@ -92,6 +93,8 @@ export default class {
       result.push(x[2]);
     });
 
+    console.log(this.lineBreaks, 'X')
+
     // Возвращаем уникальные значения и сортируем в порядке возрастания
     // Array.from(new Set(result)) даёт уникальность
     return Array.from(new Set(result))
@@ -104,23 +107,42 @@ export default class {
     const points = this.getPoints();
     let len = 0;
 
-    //console.log(points, 'X')
+    console.log(points, 'X')
 
     for (let i = 0; i < points.length; i++) {
       const point = points[i];
       const nextPoint = points[i + 1];
       const slices = this.text.slice(point, nextPoint).split(/(\s+)/);
+      //console.log(slices, 'slices')
 
       slices.forEach((slice) => {
-        if (slice.length > 0) {
-          const segment = [slice, len, (len += slice.length), { type: 3, attrs: {} }];
-          Object.defineProperty(segment, 'whitespace', { value: /\s+/.test(slice) });
-          segments.push(segment);
-        }
-      });
+        if (slice.length == 0) return
+
+        const segment = [slice, len, (len += slice.length), { type: 3, attrs: {} }];
+        Object.defineProperty(segment, 'whitespace', { value: /\s+/.test(slice) });
+        segments.push(segment);
+      })
     }
 
-    return segments;
+/*
+    [
+      ['Hello', 0, 5],
+      [' ', 5, 6],
+      ['world!', 6, 12],
+    ]
+
+    [
+      ['Hel', 0, 3],
+      ['\n', 3, 4],
+      ['lo', 5, 6],
+      ['\n', 6, 7],
+      [' ', 7, 8],
+      ['world!', 8, 14]
+    ]
+*/
+    console.log('segments', segments)
+
+    return segments
   }
 
   // Рассчитать новые отрезки
@@ -130,6 +152,8 @@ export default class {
     } else {
       const result = [];
       const del = []
+
+      console.log('markupz',this.markup)
 
       this.markup.forEach((a) => {
         this.markup.forEach((b) => {

@@ -33,6 +33,7 @@ export default class extends Command {
         this.entity.vtree = this.doc.core.VDOM.diff(
           this.entity.vtree, this.entity.view.render(this.entity)
         )
+        console.log('Update DOM node',this.entity.vtree)
 
         this.doc.core.VDOM.patch(this.entity.node, this.entity.vtree);
       }

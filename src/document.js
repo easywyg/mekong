@@ -1,6 +1,6 @@
-import Entity from './entity.js';
-import UndoManager from './undo_manager.js';
-import Policy from './document_policy.js';
+import Entity from './entity.js'
+import UndoManager from './undo_manager.js'
+import Policy from './document_policy.js'
 
 // A Document
 export default class extends Entity {

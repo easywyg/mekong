@@ -1,58 +1,58 @@
-'use strict';
+'use strict'
 
-import {create, diff, patch, VNode, VText} from './vdom/index.js';
+import {create, diff, patch, VNode, VText} from './vdom/index.js'
 
 // Core extensions
-require('./ext.js');
+require('./ext.js')
 
 // Lib
-import mix from './lib/mix.js';
-import EntityUtils from './lib/entity_utils.js';
+import mix from './lib/mix.js'
+import EntityUtils from './lib/entity_utils.js'
 
 // Core classes
-import Entity from './entity.js';
-import View from './view.js';
-import Policy from './policy.js';
-import Document from './document.js';
-import Command from './undo_manager/command.js';
+import Entity from './entity.js'
+import View from './view.js'
+import Policy from './policy.js'
+import Document from './document.js'
+import Command from './undo_manager/command.js'
 
 // Core entities
-import ListEntity from './entities/list/export.js';
-import TableEntity from './entities/table/export.js';
-import ParagraphEntity from './entities/paragraph/export.js';
-import GridEntity from './entities/grid/export.js';
-import HeadingEntity from './entities/heading/export.js';
-import PreformattedEntity from './entities/preformatted/export.js';
+import ListEntity from './entities/list/export.js'
+import TableEntity from './entities/table/export.js'
+import ParagraphEntity from './entities/paragraph/export.js'
+import GridEntity from './entities/grid/export.js'
+import HeadingEntity from './entities/heading/export.js'
+import PreformattedEntity from './entities/preformatted/export.js'
 
 // Document commands
-import CreateCommand from './commands/document/create.js';
-import RemoveCommand from './commands/document/remove.js';
-import MoveCommand from './commands/document/move.js';
-import ReplaceCommand from './commands/document/replace.js';
-import SplitCommand from './commands/document/split.js';
-import JoinCommand from './commands/document/join.js';
-import MutateCommand from './commands/document/mutate.js';
-import LineBreakCommand from './commands/document/line_break.js';
+import CreateCommand from './commands/document/create.js'
+import RemoveCommand from './commands/document/remove.js'
+import MoveCommand from './commands/document/move.js'
+import ReplaceCommand from './commands/document/replace.js'
+import SplitCommand from './commands/document/split.js'
+import JoinCommand from './commands/document/join.js'
+import MutateCommand from './commands/document/mutate.js'
+import LineBreakCommand from './commands/document/line_break.js'
 
 // Entity commands
-import AttrCommand from './commands/entity/attr.js';
-import RemoveAttrCommand from './commands/entity/remove_attr.js';
-import MarkupCommand from './commands/entity/markup.js';
-import RemoveMarkupCommand from './commands/entity/remove_markup.js';
-import TagCommand from './commands/entity/tag.js';
-import TextCommand from './commands/entity/text.js';
+import AttrCommand from './commands/entity/attr.js'
+import RemoveAttrCommand from './commands/entity/remove_attr.js'
+import MarkupCommand from './commands/entity/markup.js'
+import RemoveMarkupCommand from './commands/entity/remove_markup.js'
+import TagCommand from './commands/entity/tag.js'
+import TextCommand from './commands/entity/text.js'
 
 // Mixins
-import TextMethods from './mixins/text_methods.js';
-import MarkupMethods from './mixins/markup_methods.js';
-import AttrMethods from './mixins/attr_methods.js';
-import TagMethods from './mixins/tag_methods.js';
+import TextMethods from './mixins/text_methods.js'
+import MarkupMethods from './mixins/markup_methods.js'
+import AttrMethods from './mixins/attr_methods.js'
+import TagMethods from './mixins/tag_methods.js'
 
 const core = {
   Entity,
   View,
   Policy,
-  Command,
+  //Command,
   Document,
   Lib : {
     Mix : mix,
@@ -93,7 +93,7 @@ const core = {
   VDOM : {
     create, diff, patch, VNode, VText
   }
-};
+}
 
 export default class Mekong {
   constructor(root) {
@@ -110,7 +110,7 @@ export default class Mekong {
       }
     }
 
-    return null;
+    return null
   }
 
   create(name, options) {

@@ -6,6 +6,6 @@ if (typeof window != 'undefined') {
 
 if (!String.isString) {
   String.isString = (arg) => {
-    return Object.prototype.toString.call(arg) === '[object String]';
-  };
+    return Object.prototype.toString.call(arg) === '[object String]'
+  }
 }

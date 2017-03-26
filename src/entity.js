@@ -1,4 +1,4 @@
-import merge from 'deepmerge';
+import merge from 'deepmerge'
 
 // Entity base class
 export default class {
@@ -18,7 +18,7 @@ export default class {
     this.vtree = null
 
     // Parent entity
-    this.parentEntity = null;
+    this.parentEntity = null
 
     // Link to document
     this.document = null

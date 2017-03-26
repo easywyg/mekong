@@ -108,12 +108,14 @@
   //console.log(p2)
 
   //mekong.document.remove(p1)
-  var p1 = mekong.create('Paragraph', { text: 'Hello' })
+  var p1 = mekong.create('Paragraph', { text: 'Hello world!' })
+  p1.setMarkup('em', 2, 4)
+  //p1.state.lineBreaks = [3, 5]
   //var p2 = mekong.create('Paragraph', { text: 'world!' })
 
-  mekong.document.mutate(p1, 'Heading', 'h1', { class: 'lol yay' })
-  mekong.document.undo()
-  mekong.document.redo()
+  //mekong.document.mutate(p1, 'Heading', 'h1', { class: 'lol yay' })
+  //mekong.document.undo()
+  //mekong.document.redo()
 
   //var p2 = mekong.create('Paragraph', { tag: 'p', attrs: {} });
   //p2.setText('Yellow world!')

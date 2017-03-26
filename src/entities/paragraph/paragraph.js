@@ -8,12 +8,13 @@ export default function(core) {
 
     static type = 'paragraph'
     static defaultState = {
-      tag    : 'p',
-      text   : '',
-      start  : null,
-      end    : null,
-      attrs  : {},
-      markup : []
+      tag        : 'p',
+      text       : '',
+      start      : null,
+      end        : null,
+      attrs      : {},
+      markup     : [],
+      lineBreaks : []
     }
 
     get view() {
