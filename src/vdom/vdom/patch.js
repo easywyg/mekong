@@ -37,7 +37,7 @@ function patchRecursive(rootNode, patches, renderOptions) {
             patches[nodeIndex],
             renderOptions)
 
-        if (patches[nodeIndex].patch.entity) {
+        if (patches[nodeIndex].patch && patches[nodeIndex].patch.entity) {
             rootNode.entity = patches[nodeIndex].patch.entity
             rootNode.entity.node = rootNode
         }

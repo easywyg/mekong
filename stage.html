@@ -108,8 +108,15 @@
   //console.log(p2)
 
   //mekong.document.remove(p1)
-  var p1 = mekong.create('Paragraph', { text: 'Hello world!' })
-  p1.setMarkup('em', 2, 4)
+  var p1 = mekong.create('Paragraph', { text: 'Hello world' , markup: [
+    ['strong', 0, 5],
+    ['em', 5, 11],
+    ['s', 2, 8],
+    ['span', 0, 5]
+  ]})
+
+  p1.setMarkup('u', 0, 5)
+
   //p1.state.lineBreaks = [3, 5]
   //var p2 = mekong.create('Paragraph', { text: 'world!' })
 

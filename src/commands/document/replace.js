@@ -51,7 +51,6 @@ export default class extends Command {
       this.doc, this.replacement, this.entity
     )
 
-    //return this.replacement.runCommand(command, true)
     return command.execute()
   }
 

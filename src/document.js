@@ -20,8 +20,6 @@ export default class extends Entity {
     this.usedEntitities = usedEntitities
     this.core = core
     this.node = root
-
-    //console.log('core', this.core)
   }
 
   get policy() {

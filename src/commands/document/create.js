@@ -15,28 +15,17 @@ export default class extends Command {
 
   setCallbacks() {
     // Run command
-    this.entity.onCommand = (command, execCommandItself) => {
-      // Run command without putting it in undoManager history
-      if (execCommandItself) { // TODO: Походу это больше не нужно
-        return command.execute()
-      }
-      // Run command and put it into history to make undo/redo in the future
-      else {
-        return this.doc.undoManager.execute(command)
-      }
+    this.entity.onCommand = (command) => {
+      return this.doc.undoManager.execute(command)
     }
 
     // Update entity when it's state has changed
     this.entity.onStateChange = () => {
       // Update DOM node
-      if (this.entity.node) {
-        this.entity.vtree = this.doc.core.VDOM.diff(
-          this.entity.vtree, this.entity.view.render(this.entity)
-        )
-        console.log('Update DOM node',this.entity.vtree)
-
-        this.doc.core.VDOM.patch(this.entity.node, this.entity.vtree);
-      }
+      const newTree = this.entity.view.render(this.entity)
+      const patches = this.doc.core.VDOM.diff(this.entity.vtree, newTree)
+      this.doc.core.VDOM.patch(this.entity.node, patches);
+      this.entity.vtree = newTree
     }
   }
 
@@ -45,9 +34,6 @@ export default class extends Command {
     if (!this.targetEntity.policy.canAppend(this.entity)) {
       return false
     }
-
-    // Set callbacks
-    this.setCallbacks()
 
     // Insert entity into DOM first time
     this.entity.core = this.doc.core
@@ -74,7 +60,9 @@ export default class extends Command {
     }
 
     this.entity.parentEntity = this.targetEntity
-    this.entity.changeState()
+
+    // Set callbacks
+    this.setCallbacks()
     return true
   }
 

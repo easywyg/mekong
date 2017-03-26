@@ -13,13 +13,13 @@ export default class extends Command {
     this.newState.attrs = this.newState.attrs || {}
     this.allowedTags = [
       'a', 'em', 'strong', 'small', 's', 'cite', 'quote', 'dfn', 'abbr', 'time', 'code',
-      'var', 'samp', 'kbd', 'sub', 'sup', 'u', 'mark', 'ruby', 'rt', 'rp', 'bdi', 'bdo',
+      'var', 'samp', 'kbd', 'sub', 'sup', 'u', 'span', 'mark', 'ruby', 'rt', 'rp', 'bdi', 'bdo',
       'wbr', 'ins', 'del', 'i', 'b', 'strike', 'q', 'acronym', 'big', 'dir', 'tt'
     ]
 
-    // Keep old state if it exists
+    // Keep old attrs if they exists
     this.index = this.getMarkupIndex(this.newState)
-    if (this.index != -1) {
+    if (this.index != -1 && this.entity.state.markup[this.index][3]) {
       this.oldAttrs = merge({}, this.entity.state.markup[this.index][3])
     }
   }

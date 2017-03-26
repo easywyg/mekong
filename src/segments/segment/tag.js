@@ -6,6 +6,16 @@ export default class extends Base {
     this.attrs = attrs
   }
 
+  toJSON() {
+    return {
+      attrs: this.attrs,
+      data: this.data,
+      start: this.start,
+      end: this.end,
+      type: this.type
+    }
+  }
+
   get type() {
     return 'tag'
   }

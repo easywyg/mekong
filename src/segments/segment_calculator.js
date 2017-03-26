@@ -3,13 +3,25 @@ import TagSegment from './segment/tag.js'
 import WhitespaceSegment from './segment/whitespace.js'
 import LineBreakSegment from './segment/line_break.js'
 
+const ORDER = {
+  whitespace: 1, // First
+  tag: 2, // Second
+  text: 3 // Last
+}
+
+// Приоритет следования тегов
+const PRIORITY = [
+  'a', 'abbr', 'acronym', 'cite', 'code', 'dfn', 'kbd', 'strong', 'b', 'samp', 'time', 'em', 'i',
+  'del', 's', 'u', 'ins', 'bdo', 'br', 'q', 'sub', 'sup', 'var', 'small', 'big', 'tt',
+  's', 'span'
+]
+
 // SegmentCalculator
 // Calculate segments
 export default class Segment {
-  
   constructor(text, markup = [], lineBreaks = []) {
     this.text = text
-    this.markup = this.compactMarkup(markup)
+    this.markup = this.compactMarkup(markup.slice())
     this.lineBreaks = lineBreaks
   }
 
@@ -33,6 +45,9 @@ export default class Segment {
 
       // Trying to find internal markup in result
       const internalResultMarkup = result.find((x) => cur[0] == x[0] && cur[1] >= x[1] && cur[2] <= x[2])
+
+      // Set attrs if not exists
+      cur[3] = cur[3] || {}
 
       if (!internalMarkup && !internalResultMarkup) result.push(cur)
     }
@@ -60,34 +75,7 @@ export default class Segment {
     const segments = []
     const points = this.calculateMarkupPoints()
     const remove = new Set()
-    let pos = 0
-
-    // Tag segments
-    this.markup.forEach((entry) => {
-      segments.push(new TagSegment(entry[0], entry[1], entry[2], entry[3]))
-    })
-
-    // Calculate tags intersections. This produces new tag segments and remove old.
-    segments.forEach((a, i) => {
-      if (a.type != 'tag') return
-
-      segments.forEach((b) => {
-        if (a == b || a.data == b.data) { return }
-        const intersects = Math.max(a.start, b.start) < Math.min(a.end, b.end)
-
-        if (intersects && (b.type == 'whitespace')) {
-          const t1 = Math.min(a.start, b.start)
-          const t2 = Math.min(a.end, b.end)
-          const t3 = Math.max(a.start, b.start)
-          const t4 = Math.max(a.end, b.end)
-
-          if (t1 != t3) segments.push(new TagSegment(a.data, t1, t3, a.attrs))
-          if (t2 != t4) segments.push(new TagSegment(a.data, t2, t4, a.attrs))
-
-          remove.add(i)
-        }
-      })
-    })
+    let pos = 0;
 
     // Text segments
     for (let i = 0; i < points.length; i++) {
@@ -133,8 +121,56 @@ export default class Segment {
       })
     })
 
-    // Clear
-    remove.forEach((i) => { segments.splice(i, 1) })
+    // Tag segments
+    this.markup.forEach((entry) => {
+      segments.push(new TagSegment(entry[0], entry[1], entry[2], entry[3]))
+    })
+
+    // Calculate tags intersections. This produces new tag segments and remove old.
+    segments.forEach((a, i) => {
+      if (a.type != 'tag') return
+
+      segments.forEach((b) => {
+        if (a == b || a.data == b.data) { return }
+        const intersects = Math.max(a.start, b.start) < Math.min(a.end, b.end)
+
+        if (intersects && (b.type == 'whitespace')) {
+          const t1 = Math.min(a.start, b.start)
+          const t2 = Math.min(a.end, b.end)
+          const t3 = Math.max(a.start, b.start)
+          const t4 = Math.max(a.end, b.end)
+
+          if (t1 != t3) {
+            remove.add(i)
+            segments.push(new TagSegment(a.data, t1, t3, a.attrs))
+          }
+
+          if (t2 != t4) {
+            remove.add(i)
+            segments.push(new TagSegment(a.data, t2, t4, a.attrs))
+          }
+        }
+      })
+    })
+
+    // Remove segments that was splitted
+    Array.from(remove).reverse().forEach((i) => {
+      segments.splice(i, 1)
+    })
+
+    this.sortSegments(segments)
     return segments
+  }
+
+  // Сортировка отрезков
+  sortSegments(segments) {
+    segments.sort((a, b) => {
+       if (a.start - b.start != 0) return a.start - b.start
+       if (a.type == 'tag' && b.type == 'tag' && a.start == b.start) {
+         return PRIORITY.indexOf(a.data) > PRIORITY.indexOf(b.data) ? 1 : 0
+       }
+
+       return ORDER[a.type] - ORDER[b.type]
+    })
   }
 }

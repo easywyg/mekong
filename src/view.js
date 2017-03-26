@@ -1,27 +1,24 @@
-//import VdomBuilder from './segments/vdom_builder'
+import {VNode, VText} from './vdom/index.js'
 import SegmentCalculator from './segments/segment_calculator.js'
 import VTreeBuilder from './segments/vtree_builder.js'
-import VTreeListBuilder from './segments/vtree_list_builder.js'
 
 // View abstract class
 // Note: this class cannot be instantiated directly
 export default class {
+  constructor() {
+    this.vnode = VNode
+    this.vtext = VText
+  }
+
   // Обрамить разметкой `markup` текст `text`.
   // Возвращает массив виртуальных нод.
-  /*buildMarkup(text, markup) {
-    //let tagger = new VdomBuilder(text, markup, this.vnode, this.vtext)
-    //return tagger.process()
-    //
-    const sc = new SegmentCalculator(text, markup, [])
+  buildMarkup(text, markup, lineBreaks = []) {
+    const sc = new SegmentCalculator(text, markup, lineBreaks)
     const vtb = new VTreeBuilder(this.vnode, this.vtext)
-    const vtlb = new VTreeListBuilder(sc, vtb)
 
-    return vtlb.build()
-  }*/
+    return vtb.build(sc.calculate())
+  }
 
-  // TODO: Метод patch работает не так, как мне нужно.
-  // В сложных случаях, когда пересекается разметка, он работает неправильно.
-  // Видимо, нужно будет написать свою реализацию виртуального дома. А пока обойдемся без него.
   render(entity) {
     return this.build(entity)
   }

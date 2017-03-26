@@ -7,7 +7,12 @@ export default class {
   }
 
   toJSON() {
-    return { data: this.data, start: this.start, end: this.end }
+    return {
+      data: this.data,
+      start: this.start,
+      end: this.end,
+      type: this.type
+    }
   }
 
   get type() {
