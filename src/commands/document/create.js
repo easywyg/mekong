@@ -21,10 +21,13 @@ export default class extends Command {
 
     // Update entity when it's state has changed
     this.entity.onStateChange = () => {
+      if (!this.entity.node) return
+
       // Update DOM node
       const newTree = this.entity.view.render(this.entity)
+      //console.log('update', newTree)
       const patches = this.doc.core.VDOM.diff(this.entity.vtree, newTree)
-      this.doc.core.VDOM.patch(this.entity.node, patches);
+      this.entity.node = this.doc.core.VDOM.patch(this.entity.node, patches);
       this.entity.vtree = newTree
     }
   }
@@ -39,6 +42,7 @@ export default class extends Command {
     this.entity.core = this.doc.core
     this.entity.document = this.doc
     this.entity.vtree = this.entity.view.render(this.entity)
+    //console.log('create', this.entity.vtree)
     this.entity.node = this.doc.core.VDOM.create(this.entity.vtree, {
       document: this.doc.node.ownerDocument
     })

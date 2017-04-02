@@ -6,63 +6,59 @@ export default class {
     this.vtext = vtext
   }
 
-  // Создаём иерархию для группы отрезков.
-  // Возвращает VNode.
   build(segments) {
-    const result  = []
-    const parents = {}
-    let current = null
+    let parent = null
+    let result  = { children: [] }
+    let pos = 0
+    let tagStack = []
+    let parentEntries = []
 
-    segments.forEach((segment, i) => {
-      switch (segment.type) {
-      case 'tag':
-        if (Array.isArray(segment.attrs['class'])) {
-          segment.attrs['class'] = segment.attrs['class'].join(' ')
+    while (segments.length > 0) {
+      let seg = segments.shift()
+      parent = parentEntries[parentEntries.length - 1] || result
+      // || seg.type == 'whitespace' && parentEntries.length == 0
+
+      if (seg.type == 'tag') {
+        if (Array.isArray(seg.attrs['class'])) {
+          seg.attrs['class'] = seg.attrs['class'].join(' ')
         }
 
-        const vnode = new this.vnode(segment.data, { attributes: segment.attrs }, [])
-        let currentWasCleared = current == null
+        const entry = new this.vnode(seg.data, { attributes: seg.attrs }, [])
+        parent.children.push(entry)
+        parentEntries.push(entry)
+        parentEntries.map((x) => x.count++ )
+        tagStack.push(seg)
+        parent = entry
+      } else if (['text', 'whitespace'].includes(seg.type)) {
+        parent.children.push(new this.vtext(seg.data))
+        parentEntries.map((x) => x.count++ )
 
-        if (current) {
-          parents[JSON.stringify(segment.toJSON())] = current
-          current.children.push(vnode)
-          current.count++
-        }
-
-        current = vnode
-        if (result.length == 0 || currentWasCleared) result.push(current)
-        break
-      case 'text':
-      case 'whitespace':
-        if (segment.type == 'whitespace') current = null
-
-        if (current) {
-          current.children.push(new this.vtext(segment.data))
-          current.count++
-        } else {
-          result.push(new this.vtext(segment.data))
-        }
-
-        // При выходе из тега, нужно находить родительский vnode
-        let prev = segments[i - 1]
-        if (prev && segment.start == prev.start && segment.end == prev.end) {
-          current = parents[JSON.stringify(prev.toJSON())]
-
-          if (current) {
-            current.count++
+        const curTag = tagStack[tagStack.length - 1]
+        if (curTag && curTag.end == seg.end) {
+          const countMatchedTags = tagStack.filter((x) => curTag.end == x.end).length
+          for (let i of Array(countMatchedTags).keys()) {
+            tagStack.pop()
+            parentEntries.pop()
           }
+          //console.log('countMatchedTags', [...Array(countMatchedTags)])
+          //tagStack.pop()
+          //parentEntries.pop()
         }
 
-        break
-      case 'line_break':
-        if (current) {
-          current.children.push(new this.vnode('br', { attributes: segment.attrs }, []))
-          current.count++
+        // Вытаскиваем из стека - но когда?
+        /*let curTag = tagStack[tagStack.length - 1]
+        if (curTag && curTag.end == seg.end) { // curTag.start == seg.start && 
+          parentEntries.pop()
+          tagStack.pop()
+          parent = parentEntries.pop()
         }
-        break
+
+        if (seg.type == 'whitespace') {
+          console.log('parentEntries', parentEntries)
+        }*/
       }
-    })
+    }
 
-    return result
+    return result.children
   }
 }

@@ -2,6 +2,8 @@ import TextSegment from './segment/text.js'
 import TagSegment from './segment/tag.js'
 import WhitespaceSegment from './segment/whitespace.js'
 import LineBreakSegment from './segment/line_break.js'
+import NewSegmentCalculator from './new_segment_calculator.js'
+import NewTextSegmentCalculator from './new_text_segment_calculator.js'
 
 const ORDER = {
   whitespace: 1, // First
@@ -55,14 +57,6 @@ export default class Segment {
     return result
   }
 
-  calculateMarkupPoints() {
-    const points = this.markup.map((x) => x[1])
-      .concat(this.markup.map((x) => x[2]))
-      .concat([0, this.text.length])
-
-    return Array.from(new Set(points)).sort((a, b) => a - b)
-  }
-
   calculate() {
     if (this.markup.length == 0 && this.lineBreaks.length == 0) {
       return [new TextSegment(this.text, 0, this.text.length)]
@@ -73,26 +67,15 @@ export default class Segment {
 
   calculateSegments() {
     const segments = []
-    const points = this.calculateMarkupPoints()
-    const remove = new Set()
-    let pos = 0;
 
-    // Text segments
-    for (let i = 0; i < points.length; i++) {
-      const start = points[i]
-      const end = points[i + 1]
-      const slices = this.text.slice(start, end).split(/(\s+)/)
+    // Add tag segments
+    this.markup.forEach((entry) => {
+      segments.push(new TagSegment(entry[0], entry[1], entry[2], entry[3]))
+    })
 
-      slices.forEach((slice) => {
-        if (slice.length == 0) return
-
-        if (/\s+/.test(slice)) {
-          segments.push(new WhitespaceSegment(slice, pos, (pos += slice.length)))
-        } else {
-          segments.push(new TextSegment(slice, pos, (pos += slice.length)))
-        }
-      })
-    }
+    // Add new calculated text segments
+    const ntsc = new NewTextSegmentCalculator(this.text, this.markup)
+    ntsc.calculate().forEach((seg) => segments.push(seg))
 
     // Line breaks segments
     this.lineBreaks.forEach((pos) => {
@@ -116,49 +99,25 @@ export default class Segment {
 
         segments.push(new TextSegment(slices[0], a.start, end))
         segments.push(new TextSegment(slices[1], end, end + slices[1].length))
-
         remove.add(i)
       })
     })
 
-    // Tag segments
-    this.markup.forEach((entry) => {
-      segments.push(new TagSegment(entry[0], entry[1], entry[2], entry[3]))
-    })
-
-    // Calculate tags intersections. This produces new tag segments and remove old.
-    segments.forEach((a, i) => {
-      if (a.type != 'tag') return
-
-      segments.forEach((b) => {
-        if (a == b || a.data == b.data) { return }
-        const intersects = Math.max(a.start, b.start) < Math.min(a.end, b.end)
-
-        if (intersects && (b.type == 'whitespace')) {
-          const t1 = Math.min(a.start, b.start)
-          const t2 = Math.min(a.end, b.end)
-          const t3 = Math.max(a.start, b.start)
-          const t4 = Math.max(a.end, b.end)
-
-          if (t1 != t3) {
-            remove.add(i)
-            segments.push(new TagSegment(a.data, t1, t3, a.attrs))
-          }
-
-          if (t2 != t4) {
-            remove.add(i)
-            segments.push(new TagSegment(a.data, t2, t4, a.attrs))
-          }
-        }
-      })
-    })
+    // Calculate new tag segments and segments to remove
+    const nsc = new NewSegmentCalculator(segments)
+    const result = nsc.calculate()
 
     // Remove segments that was splitted
-    Array.from(remove).reverse().forEach((i) => {
+    Array.from(result.removeSegments).reverse().forEach((i) => {
       segments.splice(i, 1)
     })
 
+    // Add new calculated tag segments
+    result.newSegments.forEach((seg) => segments.push(seg))
+
     this.sortSegments(segments)
+    //console.log('---------------')
+    //segments.forEach((x) => console.log(x.type, x))
     return segments
   }
 
