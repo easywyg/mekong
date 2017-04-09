@@ -1,8 +1,8 @@
-import Command from '../../undo_manager/command.js';
+import Command from 'undo_manager/command.js';
 import CreateCommand from './create.js';
 import JoinCommand from './join.js';
 import MarkupCommand from '../entity/markup.js';
-import EntityUtils from '../../lib/entity_utils.js';
+import EntityUtils from 'lib/entity_utils.js';
 
 // SplitCommand
 export default class extends Command {

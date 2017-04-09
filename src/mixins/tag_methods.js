@@ -1,4 +1,4 @@
-import TagCommand from '../commands/entity/tag.js';
+import TagCommand from 'commands/entity/tag.js';
 
 const TagMethods = (superclass) => class extends superclass {
   getTag() {

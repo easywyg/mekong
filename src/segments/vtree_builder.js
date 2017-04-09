@@ -16,7 +16,6 @@ export default class {
     while (segments.length > 0) {
       let seg = segments.shift()
       parent = parentEntries[parentEntries.length - 1] || result
-      // || seg.type == 'whitespace' && parentEntries.length == 0
 
       if (seg.type == 'tag') {
         if (Array.isArray(seg.attrs['class'])) {
@@ -40,22 +39,7 @@ export default class {
             tagStack.pop()
             parentEntries.pop()
           }
-          //console.log('countMatchedTags', [...Array(countMatchedTags)])
-          //tagStack.pop()
-          //parentEntries.pop()
         }
-
-        // Вытаскиваем из стека - но когда?
-        /*let curTag = tagStack[tagStack.length - 1]
-        if (curTag && curTag.end == seg.end) { // curTag.start == seg.start && 
-          parentEntries.pop()
-          tagStack.pop()
-          parent = parentEntries.pop()
-        }
-
-        if (seg.type == 'whitespace') {
-          console.log('parentEntries', parentEntries)
-        }*/
       }
     }
 

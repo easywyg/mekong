@@ -1,5 +1,5 @@
 import merge from 'deepmerge';
-import Command from '../../undo_manager/command.js';
+import Command from 'undo_manager/command.js';
 
 // ReplaceCommand
 export default class extends Command {

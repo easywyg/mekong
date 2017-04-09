@@ -1,4 +1,4 @@
-import Command from '../../undo_manager/command.js';
+import Command from 'undo_manager/command.js';
 
 // LineBreakCommand
 export default class extends Command {

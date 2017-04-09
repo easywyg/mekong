@@ -1,5 +1,5 @@
 import merge from 'deepmerge';
-import Command from '../../undo_manager/command.js';
+import Command from 'undo_manager/command.js';
 import RemoveMarkupCommand from './remove_markup.js';
 
 // TODO: Нужно сделать от дельную команду для изменения атрибутов маркапа

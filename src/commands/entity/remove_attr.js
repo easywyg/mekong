@@ -1,4 +1,4 @@
-import Command from '../../undo_manager/command.js';
+import Command from 'undo_manager/command.js';
 import AttrCommand from './attr.js';
 
 // RemoveAttrCommand

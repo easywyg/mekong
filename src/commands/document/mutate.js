@@ -1,5 +1,5 @@
 import merge from 'deepmerge';
-import Command from '../../undo_manager/command.js';
+import Command from 'undo_manager/command.js';
 
 // MutateCommand
 export default class extends Command {
